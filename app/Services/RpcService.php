@@ -6,6 +6,20 @@ namespace App\Services;
 class RpcService
 {
 
+
+    /**
+     * rpc
+     * @param $method
+     * @param $params
+     * @return mixed
+     */
+    public function rpc($method,$params)
+    {
+        $id = str_random(3);
+        $param = '{"jsonrpc":"2.0","method":"'.$method.'","params":'.$params.',"id":'.$id.'}';
+        $data = json_decode($this->curlPost($param),true);
+        return $data;
+    }
     /**
      * 获得区块
      * @param $data
@@ -45,7 +59,7 @@ class RpcService
 
         return $blockString;
     }
-
+ 
     /**
      * post请求
      * @param $data
