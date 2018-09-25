@@ -47,6 +47,18 @@ class RpcService
     }
 
     /**
+     * 根据hash获取区块详情
+     * @param $hash
+     * @return mixed
+     */
+    public function getBlockByHash($hash)
+    {
+        $jsonString = '{"jsonrpc":"2.0","method":"eth_getBlockByHash","params":["'.$hash.'", true],"id":1}';
+        $blockInfo = json_decode($this->curlPost($jsonString),true);
+        return $blockInfo;
+    }
+
+    /**
      * post请求
      * @param $data
      * @return mixed
