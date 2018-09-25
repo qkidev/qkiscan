@@ -2,25 +2,24 @@
 
 namespace App\Http\Controllers;
 
-use App\Model\Account;
-use App\Model\Transaction;
-use App\Model\Block;
-use App\Model\TxOut;
-use App\Service\txService;
-use BitcoinPHP\BitcoinECDSA\BitcoinECDSA;
-use GuzzleHttp\Client;
-use Illuminate\Http\Request;
-use App\Service\TransactionService;
-use App\Service\BlockService;
-use App\Model\TxIn;
+use App\Services\RpcService;
 class TxController extends Controller
 {
-    public function index()
+    /**
+     * 交易详细
+     * @param $hash
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function index($hash)
     {
 
+        $RpcService = new RpcService();
 
-        return view("tx.index");
+        $params = [$hash];
+
+        $data = $RpcService->rpc("eth_getTransactionByHash",$params);
+
+        return view("tx.index",$data);
     }
-
 
 }

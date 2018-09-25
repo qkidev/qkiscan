@@ -16,13 +16,13 @@ class RpcService
     public function rpc($method,$params)
     {
         $id = rand(1,100);
+
         $param = [
             'jsonrpc'=>"2.0",
             "method"=>$method,
             "params"=>$params,
             "id"=>$id
             ];
-
         $param = json_encode($param);
         $data = json_decode($this->curlPost($param),true);
         return $data;
@@ -44,8 +44,9 @@ class RpcService
      */
     public function lastBlockHeightNumber()
     {
-        $lastBlock = '{"jsonrpc":"2.0","method":"eth_getBlockByNumber","params":["latest",false],"id":1}';
-        $blockHeight = json_decode($this->curlPost($lastBlock),true);
+        $params = ['latest','true'];
+        $blockHeight = json_decode($this->rpc('eth_getBlockByNumber',$params),true);
+
         return $blockHeight['result']['number'];
     }
 
