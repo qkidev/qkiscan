@@ -64,6 +64,8 @@ class BlockController extends Controller
             $data['number'] = base_convert($blockInfo['number'],16,10);
             $data['created_at'] = date("Y-m-d H:i:s",base_convert($blockInfo['timestamp'],16,10)+28800);
             $data['tx_count'] = count($blockInfo['transactions']);
+            $data['size'] = bcdiv(base_convert($blockInfo['size'],16,10),1000,3);
+            $data['miner'] = $blockInfo['miner'];
             $data['transactions'] = [];
             foreach($blockInfo['transactions'] as $k => $v)
             {

@@ -24,12 +24,19 @@
                             <li data-v-cd5b40a0="" class="item">
                                 <span data-v-cd5b40a0="" class="vcolor-192330 strong">时间</span>
                                 <span data-v-cd5b40a0="" id="block-time" class="vcolor-192330" data-original-title="" title="">{{$created_at}}</span>
-
                             </li>
-
                             <li data-v-cd5b40a0="" class="item">
                                 <span data-v-cd5b40a0="" class="vcolor-192330 strong">笔数</span>
-                                <span data-v-cd5b40a0="" class="vcolor-192330">{{$tx_count}}</span></li>
+                                <span data-v-cd5b40a0="" class="vcolor-192330">{{$tx_count}}</span>
+                            </li>
+                            <li data-v-cd5b40a0="" class="item">
+                                <span data-v-cd5b40a0="" class="vcolor-192330 strong">大小（KB）</span>
+                                <span data-v-cd5b40a0="" class="vcolor-192330">{{$size}}</span>
+                            </li>
+                            <li data-v-cd5b40a0="" class="item">
+                                <span data-v-cd5b40a0="" class="vcolor-192330 strong">出快方</span>
+                                <span data-v-cd5b40a0="" class="vcolor-192330"><a href="/address/{{$miner}}" class="text3 vtext-monospace">{{$miner}}</a></span>
+                            </li>
 
                         </ul>
                     </div>
