@@ -15,8 +15,15 @@ class RpcService
      */
     public function rpc($method,$params)
     {
-        $id = str_random(3);
-        $param = '{"jsonrpc":"2.0","method":"'.$method.'","params":'.$params.',"id":'.$id.'}';
+        $id = rand(1,100);
+        $param = [
+            'jsonrpc'=>"2.0",
+            "method"=>$method,
+            "params"=>$params,
+            "id"=>$id
+            ];
+
+        $param = json_encode($param);
         $data = json_decode($this->curlPost($param),true);
         return $data;
     }
@@ -59,7 +66,7 @@ class RpcService
 
         return $blockString;
     }
- 
+
     /**
      * 根据hash获取区块详情
      * @param $hash
