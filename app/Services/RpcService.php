@@ -75,8 +75,8 @@ class RpcService
     public function getBlockByHash($hash)
     {
         $method = 'eth_getBlockByHash';
-        $jsonString = '{"jsonrpc":"2.0","method":"eth_getBlockByHash","params":["'.$hash.'", true],"id":1}';
-        $blockInfo = json_decode($this->curlPost($jsonString),true);
+        $param = [$hash,true];
+        $blockInfo = $this->rpc($method,$param);
         return $blockInfo;
     }
 
