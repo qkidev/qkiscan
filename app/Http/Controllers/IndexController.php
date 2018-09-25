@@ -25,8 +25,6 @@ class IndexController extends Controller
     {
         $rpcService = new RpcService();
         $lastBlock = $rpcService->lastBlockHeightNumber();
-        echo $lastBlock;
-        exit();
         $lastBlock = base_convert($lastBlock,16,10);
         $blockString = $rpcService->getBlockString($lastBlock);
         $block = $rpcService->getBlockByNumber($blockString);

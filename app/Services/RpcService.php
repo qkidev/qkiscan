@@ -44,8 +44,8 @@ class RpcService
      */
     public function lastBlockHeightNumber()
     {
-        $params = ['latest','true'];
-        $blockHeight = json_decode($this->rpc('eth_getBlockByNumber',$params),true);
+        $params = ['latest',true];
+        $blockHeight = $this->rpc('eth_getBlockByNumber',$params);
 
         return $blockHeight['result']['number'];
     }
