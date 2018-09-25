@@ -18,4 +18,4 @@ Route::get('/address/{address}', 'AddressController@index');
 
 Route::get('/block/detail', 'BlockController@detail');
 
-Route::get('/tx', 'TxController@index');
+Route::get('/tx/{hash}', 'TxController@index');
