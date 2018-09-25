@@ -49,10 +49,10 @@
                         <div data-v-8701ced6="" data-v-cd5b40a0="" class="tx-detail">
                             <div data-v-8701ced6="" class="hash-section">
                                 <i data-v-8701ced6="" class="vicon icon-hash d-none d-lg-inline-block"></i>
-                                <a data-v-8701ced6="" href="/tx/93e053e56aa2e1391301555335e825d471a55ad12c0c11dcdb81406724c805c7" class="hash font-hash-title">
+                                <a data-v-8701ced6="" href="/tx/{{$v['hash']}}" class="hash font-hash-title">
                                     <span data-v-8701ced6="" class="d-lg-inline-block">{{$v['hash']}}</span>
                                 </a>
-                                <span data-v-8701ced6="" class="output font-coin-title"> {{$v['value']}} QKI</span>
+                                <span data-v-8701ced6="" class="output font-coin-title"> {{float_format($v['value'])}} QKI</span>
                                 <!----></div>
 
                         </div>
