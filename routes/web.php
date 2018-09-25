@@ -11,6 +11,4 @@
 |
 */
 
-Route::get('/', function () {
-    Route::get('/', 'IndexController@index');
-});
+Route::get('/', 'IndexController@index');

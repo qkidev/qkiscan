@@ -18,22 +18,22 @@
                         </thead>
                         <!---->
                         <tbody class="">
-                            @foreach($list as $item)
-                                <tr class="">
-                                    <td aria-colindex="1" class="">
-                                        <a href="/block/detail?hash={{$item->hash_id}}" class="text3">{{$item->height}}</a>
-                                    <td aria-colindex="2" class="">
-                                        <span class="block-time" style="text-align: center;">{{$item->created_at}}</span>
-                                    </td>
-                                    <td aria-colindex="3" class="">{{$item->tx_count}}</td>
-                                    <td aria-colindex="4" class="pc-hash">
-                                        <a href="/block/detail?hash={{$item->hash_id}}" class="text3 vtext-monospace">{{$item->hash_id}}</a>
-                                    </td>
-                                    <td aria-colindex="4" class="web-hash">
-                                        <a href="/block/detail?hash={{$item->hash_id}}" class="text3 vtext-monospace">{{mb_substr($item->hash_id,0,18,'utf-8')}}</a>
-                                    </td>
-                                </tr>
-                            @endforeach
+                            {{--@foreach($list as $item)--}}
+                                {{--<tr class="">--}}
+                                    {{--<td aria-colindex="1" class="">--}}
+                                        {{--<a href="/block/detail?hash={{$item->hash_id}}" class="text3">{{$item->height}}</a>--}}
+                                    {{--<td aria-colindex="2" class="">--}}
+                                        {{--<span class="block-time" style="text-align: center;">{{$item->created_at}}</span>--}}
+                                    {{--</td>--}}
+                                    {{--<td aria-colindex="3" class="">{{$item->tx_count}}</td>--}}
+                                    {{--<td aria-colindex="4" class="pc-hash">--}}
+                                        {{--<a href="/block/detail?hash={{$item->hash_id}}" class="text3 vtext-monospace">{{$item->hash_id}}</a>--}}
+                                    {{--</td>--}}
+                                    {{--<td aria-colindex="4" class="web-hash">--}}
+                                        {{--<a href="/block/detail?hash={{$item->hash_id}}" class="text3 vtext-monospace">{{mb_substr($item->hash_id,0,18,'utf-8')}}</a>--}}
+                                    {{--</td>--}}
+                                {{--</tr>--}}
+                            {{--@endforeach--}}
                         </tbody>
                     </table>
                 </div>
@@ -47,31 +47,31 @@
                             <ul class="vsection vshadow">
                                 <li class="item">
                                     <span class="text2 strong">全网算力</span>
-                                    <span class="text2">{{$total_power}}万</span>
+                                    {{--<span class="text2">{{$total_power}}万</span>--}}
                                 </li>
                                 <li class="item">
                                     <span class="text2 strong">总积分数</span>
-                                    <span class="text2">{{$amount}}万 QKI</span>
+                                    {{--<span class="text2">{{$amount}}万 QKI</span>--}}
                                 </li>
                                 <li class="item">
                                     <span class="text2 strong">有积分的地址数</span>
-                                    <span class="text2">{{$address_available}}</span>
+                                    {{--<span class="text2">{{$address_available}}</span>--}}
                                 </li>
                                 <li class="item">
                                     <span class="text2 strong">总节点数</span>
-                                    <span class="text2">{{$node_num}}</span>
+                                    {{--<span class="text2">{{$node_num}}</span>--}}
                                 </li>
                                 <li class="item">
                                     <span class="text2 strong">总用户数</span>
-                                    <span class="text2">{{$user_num}}</span>
+                                    {{--<span class="text2">{{$user_num}}</span>--}}
                                 </li>
                                 <li class="item">
                                     <span class="text2 strong">总冻结数</span>
-                                    <span class="text2">{{$freeze_amount}}万 QKI</span>
+                                    {{--<span class="text2">{{$freeze_amount}}万 QKI</span>--}}
                                 </li>
                                 <li class="item">
                                     <span class="text2 strong">24小时交易笔数</span>
-                                    <span class="text2">{{$transaction_num}}</span>
+                                    {{--<span class="text2">{{$transaction_num}}</span>--}}
                                 </li>
                             </ul>
                         </div>
