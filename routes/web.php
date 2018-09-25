@@ -13,5 +13,5 @@
 
 Route::get('/', 'IndexController@index');
 Route::get('/block', 'BlockController@index');
-Route::get('/address', 'AddressController@index');
+Route::get('/address/{address}', 'AddressController@index');
 Route::get('/tx', 'TxController@index');
