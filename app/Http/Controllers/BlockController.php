@@ -11,7 +11,14 @@ class BlockController extends Controller
         return view("block.index");
     }
 
+    /**
+     * 区块详细页
+     */
+    public function detail()
+    {
 
+        return view("block.detail");
+    }
 
 
 
