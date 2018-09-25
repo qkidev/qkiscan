@@ -26,8 +26,9 @@ class IndexController extends Controller
         $rpcService = new RpcService();
         $lastBlock = $rpcService->lastBlockHeightNumber();
         $lastBlock = base_convert($lastBlock,16,10);
-        $blockString = $rpcService->getBlockString($lastBlock);
-        $block = $rpcService->getBlockByNumber($blockString);
+
+        $blockArray = $rpcService->getBlockString($lastBlock);
+        $block = $rpcService->getBlockByNumber($blockArray);
         $blockList = array();
         foreach ($block as $key => $item)
         {
