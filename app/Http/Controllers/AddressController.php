@@ -22,7 +22,6 @@ class AddressController extends Controller
 
         $data = $RpcService->rpc("eth_getBalance",$params);
 
-
         return view("address.index");
     }
 }
