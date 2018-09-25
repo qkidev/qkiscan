@@ -35,19 +35,6 @@
                         <a href="/block">区块</a>
                     </li>
                 </ul>
-                <div class="search-container d-lg-block d-none">
-                    <div class="vsearch-panel" data-v-2f615f5c="">
-                        <div class="vsearch" data-v-2f615f5c="">
-                            <div class="vsearch-inner" data-v-2f615f5c="">
-                                <div class="search-bar" data-v-2f615f5c="">
-                                    <input placeholder="QKI地址、区块高度、Hash值" value="" class="input-search" id="pc-search-input" data-v-2f615f5c="">
-                                    <i class="btn-search search-btn"  data-v-2f615f5c=""></i>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="placeholder" data-v-2f615f5c=""></div>
-                    </div>
-                </div>
                 <div class="mobile-menu d-block d-lg-none">
                     <button type="button" aria-label="Toggle navigation" aria-controls="nav_search" aria-expanded="false" id="button_nav_search" class="nav-toggle navbar-toggler">
                         <span class="icon-button icon-search"></span>
@@ -57,19 +44,6 @@
                     </button>
                 </div>
             </div>
-            <div id="nav_search" class="navbar-collapse collapse" style="">
-                <ul class="navbar-nav">
-                    <div class="mobile-search-container">
-                        <div class="vsearch-panel" data-v-2f615f5c="">
-                            <div class="vsearch" data-v-2f615f5c="">
-                                <div class="vsearch-inner" data-v-2f615f5c="">
-                                    <div class="search-bar" data-v-2f615f5c="">
-                                        <input placeholder="QKI地址、区块高度、Hash值" value="" class="input-search" id="web-search-input" data-v-2f615f5c=""><i class="btn-search search-btn" data-v-2f615f5c=""></i></div></div></div><div class="placeholder" data-v-2f615f5c="">
-                            </div>
-                        </div>
-                    </div>
-                </ul>
-            </div>
 
             <div id="nav_menu" class="navbar-collapse collapse" style="display: none;"><div class="menu-container">
                     <ul class="navbar-nav nav-links">
@@ -78,12 +52,7 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a rel="noopener" href="/block"  class="nav-link">区块
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a rel="noopener" href="/ranking/qki"  class="nav-link">地址排行榜
-                            </a>
+                            <a rel="noopener" href="/block"  class="nav-link">区块</a>
                         </li>
                     </ul>
                 </div>
