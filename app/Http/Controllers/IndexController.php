@@ -27,13 +27,7 @@ class IndexController extends Controller
         $lastBlock = $rpcService->lastBlockHeightNumber();
 
         $lastBlock = base_convert($lastBlock,16,10);
-        $blockString = "[";
-        for($i=0;$i<10;$i++)
-        {
-            $blockString = $blockString . '{"jsonrpc":"2.0","method":"eth_getBlockByNumber","params":["0x'.base_convert($lastBlock--,10,16).'",true],"id":1},';
-        }
-        $blockString = rtrim($blockString,",");
-        $blockString = $blockString . "]";
+        $blockString = $rpcService->getBlockString($lastBlock);
         $block = $rpcService->getBlockByNumber($blockString);
         $blockList = array();
         foreach ($block as $key => $item)
