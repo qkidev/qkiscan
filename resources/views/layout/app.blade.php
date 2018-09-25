@@ -34,12 +34,6 @@
                     <li class="nuxt-link-exact-active nuxt-link-active nav-item @if(isset($currentPage) && $currentPage=='block') current @endif">
                         <a href="/block">区块</a>
                     </li>
-                    <li class="nuxt-link-exact-active nuxt-link-active nav-item @if(isset($currentPage) && $currentPage=='unpackaged') current @endif">
-                        <a href="/block/unpackaged">未打包交易</a>
-                    </li>
-                    <li class="nuxt-link-exact-active nuxt-link-active nav-item @if(isset($currentPage) && $currentPage=='ranking-qki') current @endif">
-                        <a href="/ranking/qki">地址排行榜</a>
-                    </li>
                 </ul>
                 <div class="search-container d-lg-block d-none">
                     <div class="vsearch-panel" data-v-2f615f5c="">
