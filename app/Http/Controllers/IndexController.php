@@ -9,6 +9,7 @@ use App\Model\Transaction;
 use App\Model\TxOut;
 use App\Service\APIService;
 use App\Service\SyncService;
+use App\Services\RpcService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
@@ -22,7 +23,28 @@ class IndexController extends Controller
      */
     public function index()
     {
-        $data['currentPage'] = 'index';
+        $rpcService = new RpcService();
+        $lastBlock = $rpcService->lastBlockHeightNumber();
+
+        $lastBlock = base_convert($lastBlock,16,10);
+        $blockString = "[";
+        for($i=0;$i<10;$i++)
+        {
+            $blockString = $blockString . '{"jsonrpc":"2.0","method":"eth_getBlockByNumber","params":["0x'.base_convert($lastBlock--,10,16).'",true],"id":1},';
+        }
+        $blockString = rtrim($blockString,",");
+        $blockString = $blockString . "]";
+        $block = $rpcService->getBlockByNumber($blockString);
+        $blockList = array();
+        foreach ($block as $key => $item)
+        {
+            $blockList[$key] = $item['result'];
+            $blockList[$key]['height'] = base_convert($blockList[$key]['number'],16,10);
+            $blockList[$key]['created_at'] = date("Y-m-d H:i:s",base_convert($blockList[$key]['timestamp'],16,10)+28800);
+            $blockList[$key]['tx_count'] = count($blockList[$key]['transactions']);
+        }
+
+        $data['block'] = $blockList;
         return view("index.index",$data);
     }
 
