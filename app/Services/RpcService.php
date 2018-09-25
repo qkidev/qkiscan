@@ -5,8 +5,6 @@ namespace App\Services;
 
 class RpcService
 {
-
-
     /**
      * rpc
      * @param $method
@@ -15,26 +13,32 @@ class RpcService
      */
     public function rpc($method,$params)
     {
-        $id = rand(1,100);
-
-        $param = [
-            'jsonrpc'=>"2.0",
-            "method"=>$method,
-            "params"=>$params,
-            "id"=>$id
+        $param = array();
+        foreach ($params as $key => $item)
+        {
+            $id = rand(1,100);
+            $param[$key] = [
+                'jsonrpc'=>"2.0",
+                "method"=>$method,
+                "params"=>$item,
+                "id"=>$id
             ];
+        }
+
         $param = json_encode($param);
-        $data = json_decode($this->curlPost($param),true);
+        $data_str = $this->curlPost($param);
+        $data = json_decode($data_str,true);
         return $data;
     }
+
     /**
      * 获得区块
-     * @param $data
+     * @param $param
      * @return mixed
      */
-    public function getBlockByNumber($data)
+    public function getBlockByNumber($param)
     {
-        $block = json_decode($this->curlPost($data),true);
+        $block = $this->rpc('eth_getBlockByNumber',$param);
         return $block;
     }
 
@@ -44,28 +48,28 @@ class RpcService
      */
     public function lastBlockHeightNumber()
     {
-        $params = ['latest',true];
+        $params = array(
+            ['latest',true]
+        );
         $blockHeight = $this->rpc('eth_getBlockByNumber',$params);
 
-        return $blockHeight['result']['number'];
+        return $blockHeight[0]['result']['number'];
     }
 
     /**
-     * 获取区块字符串
+     * 获取区块数组
      * @param $lastBlock
-     * @return string
+     * @return array
      */
     public function getBlockString($lastBlock)
     {
-        $blockString = "[";
+        $blockArray = array();
         for($i=0;$i<10;$i++)
         {
-            $blockString = $blockString . '{"jsonrpc":"2.0","method":"eth_getBlockByNumber","params":["0x'.base_convert($lastBlock--,10,16).'",true],"id":1},';
+            $blockArray[$i] = ['0x'.base_convert($lastBlock--,10,16),true];
         }
-        $blockString = rtrim($blockString,",");
-        $blockString = $blockString . "]";
-
-        return $blockString;
+        print_r($blockArray);
+        return $blockArray;
     }
 
     /**
