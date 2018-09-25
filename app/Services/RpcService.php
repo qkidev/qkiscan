@@ -5,7 +5,6 @@ namespace App\Services;
 
 class RpcService
 {
-    protected $url = "http://localhost:8545";
 
     /**
      * 获得区块
@@ -30,14 +29,33 @@ class RpcService
     }
 
     /**
+     * 获取区块字符串
+     * @param $lastBlock
+     * @return string
+     */
+    public function getBlockString($lastBlock)
+    {
+        $blockString = "[";
+        for($i=0;$i<10;$i++)
+        {
+            $blockString = $blockString . '{"jsonrpc":"2.0","method":"eth_getBlockByNumber","params":["0x'.base_convert($lastBlock--,10,16).'",true],"id":1},';
+        }
+        $blockString = rtrim($blockString,",");
+        $blockString = $blockString . "]";
+
+        return $blockString;
+    }
+
+    /**
      * post请求
      * @param $data
      * @return mixed
      */
     public function curlPost($data)
     {
+        $url = env('RPC_HOST');
         $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, $this->url);
+        curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
         // post数据
         curl_setopt($ch, CURLOPT_POST, 1);
