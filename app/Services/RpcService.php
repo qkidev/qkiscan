@@ -68,7 +68,6 @@ class RpcService
         {
             $blockArray[$i] = ['0x'.base_convert($lastBlock--,10,16),true];
         }
-        print_r($blockArray);
         return $blockArray;
     }
 
