@@ -36,6 +36,7 @@ class IndexController extends Controller
             $blockList[$key]['height'] = base_convert($blockList[$key]['number'],16,10);
             $blockList[$key]['created_at'] = date("Y-m-d H:i:s",base_convert($blockList[$key]['timestamp'],16,10)+28800);
             $blockList[$key]['tx_count'] = count($blockList[$key]['transactions']);
+            $blockList[$key]['size'] = bcdiv(base_convert($blockList[$key]['size'],16,10),1000,3);
         }
 
         $data['block'] = $blockList;
