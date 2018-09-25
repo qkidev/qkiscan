@@ -64,7 +64,7 @@ class RpcService
     public function getBlockString($lastBlock)
     {
         $blockArray = array();
-        for($i=0;$i<10;$i++)
+        for($i=0;$i<20;$i++)
         {
             $blockArray[$i] = ['0x'.base_convert($lastBlock--,10,16),true];
         }
