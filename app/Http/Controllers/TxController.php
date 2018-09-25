@@ -15,10 +15,13 @@ class TxController extends Controller
 
         $RpcService = new RpcService();
 
-        $params = [$hash];
+        $params = array(
+            [$hash]
+        );
 
-        $data = $RpcService->rpc("eth_getTransactionByHash",$params)['result'];
+        $data = $RpcService->rpc("eth_getTransactionByHash",$params);
 
+        $data = isset($data[0]['result'])?$data[0]['result']:null;
         if($data){
 
             $data['gas'] = base_convert($data['gas'],16,10);

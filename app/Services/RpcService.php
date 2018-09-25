@@ -28,6 +28,7 @@ class RpcService
         $param = json_encode($param);
         $data_str = $this->curlPost($param);
         $data = json_decode($data_str,true);
+
         return $data;
     }
 
