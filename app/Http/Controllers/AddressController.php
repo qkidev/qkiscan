@@ -18,9 +18,17 @@ class AddressController extends Controller
 
         $RpcService = new RpcService();
 
-        $params = [$address,"latest"];
+        $params = array(
+            [$address,"latest"]
+        );
 
         $data = $RpcService->rpc("eth_getBalance",$params);
+
+        $data = isset($data[0])?$data[0]:array();
+   
+        $data['result'] = float_format(bcdiv(gmp_strval($data['result']) ,gmp_pow(10,18),18));
+
+        $data['address'] = $address;
 
         return view("address.index",$data);
     }
