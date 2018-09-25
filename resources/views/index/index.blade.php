@@ -24,19 +24,22 @@
                                 <tr class="">
                                     <td aria-colindex="1" class="">
                                         <a href="/block/detail?hash={{$item['hash']}}" class="text3">{{$item['height']}}</a>
-                                    <td aria-colindex="1" class="">
+                                    <td aria-colindex="2" class="">
                                         <span class="block-time" style="text-align: center;">{{$item['created_at']}}</span>
                                     </td>
-                                    <td aria-colindex="2" class="">{{$item['tx_count']}}</td>
-                                    <td aria-colindex="3" class="">{{$item['size']}}</td>
-                                    <td aria-colindex="4" class="pc-hash">
+                                    <td aria-colindex="3" class="">{{$item['tx_count']}}</td>
+                                    <td aria-colindex="4" class="">{{$item['size']}}</td>
+                                    <td aria-colindex="5" class="pc-hash">
                                         <a href="/address?hash={{$item['miner']}}" class="text3 vtext-monospace">{{$item['miner']}}</a>
                                     </td>
-                                    <td aria-colindex="5" class="pc-hash">
+                                    <td aria-colindex="6" class="pc-hash">
                                         <a href="/block/detail?hash={{$item['hash']}}" class="text3 vtext-monospace">{{$item['hash']}}</a>
                                     </td>
+                                    <td aria-colindex="5" class="web-hash">
+                                        <a href="/address?hash={{$item['miner']}}" class="text3 vtext-monospace">{{mb_substr($item['miner'],0,5,'utf-8')}}</a>
+                                    </td>
                                     <td aria-colindex="6" class="web-hash">
-                                        <a href="/block/detail?hash={{$item['hash']}}" class="text3 vtext-monospace">{{mb_substr($item['hash'],0,18,'utf-8')}}</a>
+                                        <a href="/block/detail?hash={{$item['hash']}}" class="text3 vtext-monospace">{{mb_substr($item['hash'],0,5,'utf-8')}}</a>
                                     </td>
                                 </tr>
                             @endforeach
