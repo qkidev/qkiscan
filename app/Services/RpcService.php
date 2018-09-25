@@ -79,9 +79,11 @@ class RpcService
     public function getBlockByHash($hash)
     {
         $method = 'eth_getBlockByHash';
-        $param = [$hash,true];
+        $param = array(
+            [$hash,true]
+        );
         $blockInfo = $this->rpc($method,$param);
-        return $blockInfo;
+        return $blockInfo[0];
     }
 
     /**
