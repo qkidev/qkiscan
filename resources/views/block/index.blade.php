@@ -18,6 +18,8 @@
                     <th aria-colindex="1" class="">区块高度</th>
                     <th aria-colindex="2" class="time-label">出块时间</th>
                     <th aria-colindex="3" class="">交易数量</th>
+                    <th aria-colindex="4" class="">大小(KB)</th>
+                    <th aria-colindex="5" class="">出块方</th>
                     <th aria-colindex="4" class="">区块Hash</th></tr>
                 </tr>
                 </thead>
@@ -31,6 +33,10 @@
                             <span class="block-time" style="text-align: center;">{{$item['created_at']}}</span>
                         </td>
                         <td aria-colindex="3" class="">{{$item['tx_count']}}</td>
+                        <td aria-colindex="4" class="">{{$item['size']}}</td>
+                        <td aria-colindex="5" class="pc-hash">
+                            <a href="/address/{{$item['miner']}}" class="text3 vtext-monospace">{{$item['miner']}}</a>
+                        </td>
                         <td aria-colindex="4" class="pc-hash">
                             <a href="/block/detail?hash={{$item['hash']}}" class="text3 vtext-monospace">{{$item['hash']}}</a>
                         </td>

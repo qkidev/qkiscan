@@ -30,7 +30,7 @@
                                     <td aria-colindex="3" class="">{{$item['tx_count']}}</td>
                                     <td aria-colindex="4" class="">{{$item['size']}}</td>
                                     <td aria-colindex="5" class="pc-hash">
-                                        <a href="/address?hash={{$item['miner']}}" class="text3 vtext-monospace">{{$item['miner']}}</a>
+                                        <a href="/address/{{$item['miner']}}" class="text3 vtext-monospace">{{$item['miner']}}</a>
                                     </td>
                                     <td aria-colindex="6" class="pc-hash">
                                         <a href="/block/detail?hash={{$item['hash']}}" class="text3 vtext-monospace">{{$item['hash']}}</a>
