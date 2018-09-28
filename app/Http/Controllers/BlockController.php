@@ -32,6 +32,7 @@ class BlockController extends Controller
             $blockList[$key]['created_at'] = date("Y-m-d H:i:s",base_convert($blockList[$key]['timestamp'],16,10)+28800);
             $blockList[$key]['tx_count'] = count($blockList[$key]['transactions']);
             $blockList[$key]['size'] = bcdiv(base_convert($blockList[$key]['size'],16,10),1000,3);
+            $blockList[$key]['difficulty'] = base_convert($blockList[$key]['difficulty'],16,10);
         }
 
         $data['first_block'] = 0;
@@ -66,6 +67,7 @@ class BlockController extends Controller
             $data['tx_count'] = count($blockInfo['transactions']);
             $data['size'] = bcdiv(base_convert($blockInfo['size'],16,10),1000,3);
             $data['miner'] = $blockInfo['miner'];
+            $data['difficulty'] = base_convert($blockInfo['difficulty'],16,10);
             $data['transactions'] = [];
             foreach($blockInfo['transactions'] as $k => $v)
             {
