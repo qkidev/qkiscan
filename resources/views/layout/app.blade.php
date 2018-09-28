@@ -14,7 +14,7 @@
 
     <link data-n-head="true" rel="stylesheet" type="text/css" charset="utf-8" href="/css/bootstrap.min.css">
     <link rel="stylesheet" href="/css/style.css">
-    <link rel="stylesheet" href="/css/app.css?v=5">
+    <link rel="stylesheet" href="/css/app.css?v={{time()}}">
     <link rel="stylesheet" href="/css/jquery-confirm.css" />
     <link rel="stylesheet" href="/fonts/iconfont.css" />
     <script src="/js/jquery.min.js"></script>

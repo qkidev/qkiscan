@@ -3143,7 +3143,7 @@ ul {
 
     .page {
         padding-top: 0;
-        padding-bottom: 50px
+            padding-bottom: 100px
     }
 
     .page .header {
@@ -8818,7 +8818,7 @@ ul[data-v-0c97b89a] {
 }
 @media (max-width:1200px) {
     .web-hash{
-        display: block;
+        display: table-cell;
     }
     .pc-hash{
         display: none;
