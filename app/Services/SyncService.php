@@ -17,8 +17,13 @@ class SyncService
     {
         //获取setting表中记录的下一个要同步的区块高度
         $last_block_height = Settings::where('key','last_block_height')->first();
+        if(!$last_block_height){
+            $last_block_height = new Settings();
+            $last_block_height->key = 'last_block_height';
+            $last_block_height->value = 1;
+            $last_block_height->save();
+        }
         $lastBlock = $last_block_height->value;
-        $block_height = $last_block_height;
         $blockArray = array();
         for($i=0;$i<500;$i++)
         {

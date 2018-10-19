@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 
+use App\Models\Settings;
 use App\Services\RpcService;
 use Illuminate\Http\Request;
 
@@ -42,6 +43,7 @@ class BlockController extends Controller
         }
         $data['last_block'] = $blockList[count($blockList)-1]['height'];
         $data['block'] = $blockList;
+        $data['last_block_height'] = Settings::getValueByKey("last_block_height");
         return view("block.index",$data);
     }
 

@@ -6,7 +6,7 @@
                 <li role="presentation" class="breadcrumb-item">
                     <a href="/block" class="active" target="_self">区块</a></li>
                 <li role="presentation" class="breadcrumb-item active">
-                    <span aria-current="location">QKI区块列表</span></li>
+                    <span aria-current="location">QKI区块列表(当前高度已同步至{{$last_block_height}})</span></li>
             </ol>
         </div>
         <div class="vshadow clearfix data-panel">
