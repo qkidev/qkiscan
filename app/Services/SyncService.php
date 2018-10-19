@@ -15,6 +15,24 @@ class SyncService
      */
     public function synchronizeTransactions()
     {
+        ini_set('max_execution_time', 60);
+        $end_time = time() + 55;
+        while (true)
+        {
+            if($end_time <= time()){
+                break;
+            }
+            if(!$this->syncTx())
+            {
+                break;
+            }
+        }
+
+        echo "区块同步成功";
+    }
+
+    public function syncTx()
+    {
         //获取setting表中记录的下一个要同步的区块高度
         $last_block_height = Settings::where('key','last_block_height')->first();
         if(!$last_block_height){
@@ -82,13 +100,15 @@ class SyncService
                 $block_height = $last_block_height->value;
                 //记录下一个要同步的区块高度
                 Settings::where('key','last_block_height')->update(['value' => $block_height]);
+                return false;
             }
             DB::commit();
             echo '同步成功 \n';
+            return true;
         } catch (\Exception $e) {
             DB::rollback();
             echo $e->getMessage();
+            return false;
         }
-
     }
 }
