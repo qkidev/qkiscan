@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 
+use App\Models\Transactions;
 use Illuminate\Http\Request;
 use App\Services\RpcService;
 
@@ -29,6 +30,8 @@ class AddressController extends Controller
         $data['result'] = float_format(bcdiv(gmp_strval($data['result']) ,gmp_pow(10,18),18));
 
         $data['address'] = $address;
+
+        $data['transactions'] = Transactions::where('from',$address)->orWhere('to',$address)->orderBy('id','desc')->paginate(20);
 
         return view("address.index",$data);
     }
