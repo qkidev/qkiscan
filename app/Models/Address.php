@@ -30,6 +30,10 @@ class Address extends Model
      */
     public static function saveAddress($address)
     {
+        if(!$address)
+        {
+            return true;
+        }
         $is_exist = self::where('address',$address)->count();
         if(!$is_exist)
         {
