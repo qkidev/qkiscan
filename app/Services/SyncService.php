@@ -76,7 +76,7 @@ class SyncService
                                 //写入交易记录表
                                 $transactionsModel = new Transactions();
                                 $transactionsModel->from = $v['from'];
-                                $transactionsModel->to = $v['to'];
+                                $transactionsModel->to = $v['to']??'';
                                 $transactionsModel->hash = $v['hash'];
                                 $transactionsModel->block_hash = $v['blockHash'];
                                 $transactionsModel->block_number = base_convert($v['blockNumber'],16,10);
