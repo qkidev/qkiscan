@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Services\RpcService;
+use EthereumRPC\Response\TransactionInputTransfer;
+
 class TxController extends Controller
 {
     /**
@@ -28,6 +30,16 @@ class TxController extends Controller
             $data['blockNumber'] = base_convert($data['blockNumber'],16,10);
             $data['value'] = float_format(bcdiv(gmp_strval($data['value']) ,gmp_pow(10,18),18));
 
+        }
+
+        $data['is_token_tx'] = false;
+        //获取通证交易记录
+        if (substr($data['input'], 0, 10) === '0xa9059cbb') {
+            $data['is_token_tx'] = true;
+            //保存通证交易
+            $token_tx =  new TransactionInputTransfer($data['input']);
+            $data['token_tx_amount'] = bcdiv(base_convert($token_tx->amount,16,10),1000000000000000000,8);
+            $data['token_tx_to'] = $token_tx->payee;
         }
 
         return view("tx.index",$data);

@@ -5,11 +5,19 @@ namespace App\Services;
 
 use App\Models\Address;
 use App\Models\Settings;
+use App\Models\Token;
+use App\Models\TokenTx;
 use App\Models\Transactions;
+use ERC20\ERC20;
+use EthereumRPC\EthereumRPC;
+use EthereumRPC\Response\TransactionInputTransfer;
 use Illuminate\Support\Facades\DB;
 
 class SyncService
 {
+    public $address = [];
+    public $token = [];
+
     /**
      * 同步交易
      */
@@ -67,12 +75,16 @@ class SyncService
                 {
                     if($block['result'])
                     {
+                        dd($block['result']);
                         $transactions = $block['result']['transactions'];
                         //如果此区块有交易
                         if(isset($transactions) && count($transactions) > 0)
                         {
                             foreach($transactions as $v)
                             {
+                                //保存出块方地址、保存通证
+                                $this->saveAddress($v['miner'],$this->checkAddressType($v['miner']));
+
                                 //写入交易记录表
                                 $transactionsModel = new Transactions();
                                 $transactionsModel->from = $v['from'];
@@ -83,9 +95,18 @@ class SyncService
                                 $transactionsModel->gas_price = 0;
                                 $transactionsModel->amount = bcdiv(base_convert($v['value'],16,10) ,gmp_pow(10,18),18);
                                 $transactionsModel->save();
-                                //记录地址
-                                Address::saveAddress($v['from']);
-                                Address::saveAddress($v['to']);
+
+                                //记录地址、保存通证
+                                $this->saveAddress($v['from'],$this->checkAddressType($v['from']));
+                                $this->saveAddress($v['to'],$this->checkAddressType($v['to']));
+
+                                // 通证转账
+                                if (substr($v['input'], 0, 10) === '0xa9059cbb') {
+                                    //保存通证交易
+                                    $token_tx =  new TransactionInputTransfer($v['input']);
+                                    $token_tx_amount = bcdiv(base_convert($token_tx->amount,16,10),1000000000000000000,8);
+                                    $this->saveTokenTx($this->token[$v['to']],$token_tx_amount);
+                                }
                             }
                         }
 
@@ -110,5 +131,125 @@ class SyncService
             echo $e->getMessage();
             return false;
         }
+    }
+
+    /**
+     * 判断地址是否为合约地址
+     * @param $address
+     * @return int
+     * @throws \EthereumRPC\Exception\ConnectionException
+     * @throws \EthereumRPC\Exception\GethException
+     * @throws \HttpClient\Exception\HttpClientException
+     */
+    public function checkAddressType($address)
+    {
+        //判断是否为合约地址
+        $geth = new EthereumRPC(env('ETH_RPC_HOST'), env('ETH_RPC_PORT'));
+        $request = $geth->jsonRPC("eth_getCode",null,[$address,"latest"]);
+        $res = $request->get("result");
+        if($res == "0x")
+        {
+            //普通地址
+            return Address::TYPE_NORMAL_ADDRESS;
+        }else{
+            //合约地址
+            return Address::TYPE_CONTRACT_ADDRESS;
+        }
+    }
+
+    /**
+     * 保存地址
+     * @param $address
+     * @param $type
+     * @return bool|int
+     * @throws \ERC20\Exception\ERC20Exception
+     * @throws \EthereumRPC\Exception\ConnectionException
+     * @throws \EthereumRPC\Exception\ContractABIException
+     * @throws \EthereumRPC\Exception\ContractsException
+     * @throws \EthereumRPC\Exception\GethException
+     * @throws \HttpClient\Exception\HttpClientException
+     */
+    public function saveAddress($address,$type)
+    {
+        if(!$address)
+        {
+            return true;
+        }
+        if(isset($this->address[$address]))
+            return true;
+        $is_exist = Address::where('address',$address)->first();
+        if(empty($is_exist))
+        {
+            $addressModel = new Address();
+            $addressModel->type = $type;
+            $addressModel->address = $address;
+            $addressModel->amount = 0;
+            $addressModel->save();
+            $this->address[$address] = $addressModel->id;
+
+            //如果为合约地址，保存通证
+            if($type == 2)
+            {
+                $this->saveToken($address);
+            }
+            return $addressModel->id;
+        }else{
+            $this->address[$address] = $is_exist->id;
+            return true;
+        }
+    }
+
+    /**
+     * 保存通证
+     * @param $address
+     * @return bool
+     * @throws \ERC20\Exception\ERC20Exception
+     * @throws \EthereumRPC\Exception\ConnectionException
+     * @throws \EthereumRPC\Exception\ContractABIException
+     * @throws \EthereumRPC\Exception\ContractsException
+     * @throws \EthereumRPC\Exception\GethException
+     * @throws \HttpClient\Exception\HttpClientException
+     */
+    public function saveToken($address)
+    {
+        //判断通证是否存在
+        if(isset($this->token[$address]))
+            return true;
+        $token_is_exist = Token::where('contract_address',$address)->first();
+        if(!empty($token_is_exist))
+        {
+            $this->token[$address] = $token_is_exist->id;
+            return true;
+        }
+        //实例化通证
+        $geth = new EthereumRPC(env('ETH_RPC_HOST'), env('ETH_RPC_PORT'));
+        $erc20 = new ERC20($geth);
+        $token = $erc20->token($address);
+        $tokenModel = new Token();
+        $tokenModel->token_name = $token->name();
+        $tokenModel->token_symbol = $token->symbol();
+        $tokenModel->contract_address = $address;
+        $tokenModel->save();
+        $this->token[$address] = $tokenModel->id;
+
+        return true;
+    }
+
+    /**
+     * 保存通证交易记录
+     * @param $token_id
+     * @param $amount
+     * @return bool
+     */
+    public function saveTokenTx($token_id,$amount)
+    {
+        $tokenTx = new TokenTx();
+        $tokenTx->token_id = $token_id;
+        $tokenTx->form_address_id = '';
+        $tokenTx->to_address_id = '';
+        $tokenTx->amount = $amount;
+        $tokenTx->tx_id = '';
+
+        return $tokenTx->save();
     }
 }

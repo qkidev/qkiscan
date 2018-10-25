@@ -36,6 +36,27 @@
                 </ul>
             </div>
         </div>
+        <div data-v-0c97b89a="" class="base">
+            <p data-v-0c97b89a="" class="title mobile-padding">通证交易</p>
+            <div data-v-0c97b89a="" class="d-block d-lg-flex vshadow">
+                <ul data-v-0c97b89a="" class="vsection base-left">
+                    <li data-v-0c97b89a="" class="item">
+                        <span data-v-0c97b89a="" class="text2 strong">金额</span>
+                        <span data-v-0c97b89a="" class="text2" data-original-title="" title="" style="padding-left: 170px;">{{$token_tx_amount}}</span>
+                    </li>
+
+                </ul>
+                <ul data-v-0c97b89a="" class="vsection base-right">
+                    <li data-v-0c97b89a="" class="item">
+                        <span data-v-0c97b89a="" class="text2 strong">来源</span>
+                        <span data-v-0c97b89a="" class="text2"><a data-v-0c97b89a="" href="/address/{{$from}}" class="hash font-hash-content">{{$from}}</a></span></li>
+                    <li data-v-0c97b89a="" class="item">
+                        <span data-v-0c97b89a="" class="text2 strong">接收</span>
+                        <span data-v-0c97b89a="" class="text2"><a data-v-0c97b89a="" href="/address/{{$token_tx_to}}" class="hash font-hash-content">{{$token_tx_to}}</a></span></li>
+
+                </ul>
+            </div>
+        </div>
 
 
     </div>
