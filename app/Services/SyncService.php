@@ -142,7 +142,8 @@ class SyncService
     public function checkAddressType($address)
     {
         //判断是否为合约地址
-        $geth = new EthereumRPC(env('TOKEN_HOST'), env('TOKEN_PORT'));
+        $url_arr = parse_url(env("RPC_HOST"));
+        $geth = new EthereumRPC($url_arr['host'], $url_arr['port']);
         $request = $geth->jsonRPC("eth_getCode",null,[$address,"latest"]);
         $res = $request->get("result");
         if($res == "0x")
@@ -220,7 +221,8 @@ class SyncService
             return true;
         }
         //实例化通证
-        $geth = new EthereumRPC(env('TOKEN_HOST'), env('TOKEN_PORT'));
+        $url_arr = parse_url(env("RPC_HOST"));
+        $geth = new EthereumRPC($url_arr['host'], $url_arr['port']);
         $erc20 = new ERC20($geth);
         $token = $erc20->token($address);
         $tokenModel = new Token();
