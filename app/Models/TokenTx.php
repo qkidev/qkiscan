@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Model;
  *
  * @property int $id
  * @property int $token_id 索引表id
- * @property int $form_address_id 转入地址id
+ * @property int $from_address_id 转入地址id
  * @property int $to_address_id 转出地址id
  * @property float $amount 数量
  * @property int $tx_id 交易ID

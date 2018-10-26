@@ -75,16 +75,14 @@ class SyncService
                 {
                     if($block['result'])
                     {
-                        dd($block['result']);
+                        //保存出块方地址、保存通证
+                        $this->saveAddress($block['result']['miner'],$this->checkAddressType($block['result']['miner']));
                         $transactions = $block['result']['transactions'];
                         //如果此区块有交易
                         if(isset($transactions) && count($transactions) > 0)
                         {
                             foreach($transactions as $v)
                             {
-                                //保存出块方地址、保存通证
-                                $this->saveAddress($v['miner'],$this->checkAddressType($v['miner']));
-
                                 //写入交易记录表
                                 $transactionsModel = new Transactions();
                                 $transactionsModel->from = $v['from'];
@@ -105,7 +103,7 @@ class SyncService
                                     //保存通证交易
                                     $token_tx =  new TransactionInputTransfer($v['input']);
                                     $token_tx_amount = bcdiv(base_convert($token_tx->amount,16,10),1000000000000000000,8);
-                                    $this->saveTokenTx($this->token[$v['to']],$token_tx_amount);
+                                    $this->saveTokenTx($this->token[$v['to']],$token_tx_amount,$this->address[$v['from']],$this->address[$v['to']],$transactionsModel->id);
                                 }
                             }
                         }
@@ -239,16 +237,19 @@ class SyncService
      * 保存通证交易记录
      * @param $token_id
      * @param $amount
+     * @param $from_address_id
+     * @param $to_address_id
+     * @param $tx_id
      * @return bool
      */
-    public function saveTokenTx($token_id,$amount)
+    public function saveTokenTx($token_id,$amount,$from_address_id,$to_address_id,$tx_id)
     {
         $tokenTx = new TokenTx();
         $tokenTx->token_id = $token_id;
-        $tokenTx->form_address_id = '';
-        $tokenTx->to_address_id = '';
+        $tokenTx->from_address_id = $from_address_id;
+        $tokenTx->to_address_id = $to_address_id;
         $tokenTx->amount = $amount;
-        $tokenTx->tx_id = '';
+        $tokenTx->tx_id = $tx_id;
 
         return $tokenTx->save();
     }

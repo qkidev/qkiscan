@@ -36,27 +36,41 @@
                 </ul>
             </div>
         </div>
-        <div data-v-0c97b89a="" class="base">
-            <p data-v-0c97b89a="" class="title mobile-padding">通证交易</p>
-            <div data-v-0c97b89a="" class="d-block d-lg-flex vshadow">
-                <ul data-v-0c97b89a="" class="vsection base-left">
-                    <li data-v-0c97b89a="" class="item">
-                        <span data-v-0c97b89a="" class="text2 strong">金额</span>
-                        <span data-v-0c97b89a="" class="text2" data-original-title="" title="" style="padding-left: 170px;">{{$token_tx_amount}}</span>
-                    </li>
+        @if($is_token_tx)
+            <div data-v-0c97b89a="" class="base">
+                <p data-v-0c97b89a="" class="title mobile-padding">通证交易</p>
+                <div data-v-0c97b89a="" class="d-block d-lg-flex vshadow">
+                    <ul data-v-0c97b89a="" class="vsection base-left">
+                        <li data-v-0c97b89a="" class="item">
+                            <span data-v-0c97b89a="" class="text2 strong">金额</span>
+                            <span data-v-0c97b89a="" class="text2" data-original-title="" title="" style="padding-left: 170px;">{{$token_tx_amount}}</span>
+                        </li>
+                        <li data-v-0c97b89a="" class="item">
+                            <span data-v-0c97b89a="" class="text2 strong">来源</span>
+                            <span data-v-0c97b89a="" class="text2"><a data-v-0c97b89a="" href="/address/{{$from}}" class="hash font-hash-content">{{$from}}</a></span></li>
+                        <li data-v-0c97b89a="" class="item">
+                            <span data-v-0c97b89a="" class="text2 strong">接收</span>
+                            <span data-v-0c97b89a="" class="text2"><a data-v-0c97b89a="" href="/address/{{$token_tx_to}}" class="hash font-hash-content">{{$token_tx_to}}</a></span></li>
 
-                </ul>
-                <ul data-v-0c97b89a="" class="vsection base-right">
-                    <li data-v-0c97b89a="" class="item">
-                        <span data-v-0c97b89a="" class="text2 strong">来源</span>
-                        <span data-v-0c97b89a="" class="text2"><a data-v-0c97b89a="" href="/address/{{$from}}" class="hash font-hash-content">{{$from}}</a></span></li>
-                    <li data-v-0c97b89a="" class="item">
-                        <span data-v-0c97b89a="" class="text2 strong">接收</span>
-                        <span data-v-0c97b89a="" class="text2"><a data-v-0c97b89a="" href="/address/{{$token_tx_to}}" class="hash font-hash-content">{{$token_tx_to}}</a></span></li>
+                    </ul>
+                    <ul data-v-0c97b89a="" class="vsection base-right">
+                        <li data-v-0c97b89a="" class="item">
+                            <span data-v-0c97b89a="" class="text2 strong">通证名称</span>
+                            <span data-v-0c97b89a="" class="text2" data-original-title="" title="" style="padding-left: 170px;">{{$token->token_name}}</span>
+                        </li>
+                        <li data-v-0c97b89a="" class="item">
+                            <span data-v-0c97b89a="" class="text2 strong">通证符号</span>
+                            <span data-v-0c97b89a="" class="text2" data-original-title="" title="" style="padding-left: 170px;">{{$token->token_symbol}}</span>
+                        </li>
 
-                </ul>
+                        <li data-v-0c97b89a="" class="item">
+                            <span data-v-0c97b89a="" class="text2 strong">合约地址</span>
+                            <span data-v-0c97b89a="" class="text2"><a data-v-0c97b89a="" href="/token/{{$token->contract_address}}" class="hash font-hash-content">{{$token->contract_address}}</a></span>
+                        </li>
+                    </ul>
+                </div>
             </div>
-        </div>
+        @endif
 
 
     </div>
