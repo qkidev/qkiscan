@@ -37,15 +37,17 @@ class TokenController extends Controller
         $geth = new EthereumRPC($url_arr['host'], $url_arr['port']);
         $erc20 = new ERC20($geth);
         $token_obj = $erc20->token($address);
-        $data['symbol'] = $token_obj->symbol();
+        $data['token'] = $token;
+        $data['decimals'] = $token_obj->decimals();
         $data['result'] = float_format($token_obj->totalSupply());
-
         $data['address'] = $address;
-
-        $data['transactions'] = TokenTx::select(DB::raw("token_tx.*,transactions.hash as hash"))
-            ->where('token_id',$token->id)
-            ->leftJoin('transactions', 'token_tx.tx_id', '=', 'transactions.id')
-            ->orderBy('id','desc')->paginate(20);
+        $data['tx'] = TokenTx::select(DB::raw('token_tx.*,token.contract_address,token.token_symbol,a.address as from_address,b.address as to_address,t.hash'))
+            ->leftJoin("token","token_tx.token_id","token.id")
+            ->leftJoin("address as a",'token_tx.from_address_id','a.id')
+            ->leftJoin("address as b",'token_tx.to_address_id','b.id')
+            ->leftJoin("transactions as t",'token_tx.tx_id','t.id')
+            ->where('token_tx.id',$token->id)
+            ->paginate(20);
 
         return view("token.index",$data);
     }
