@@ -22,5 +22,3 @@ Route::get('/tx/{hash}', 'TxController@index');
 
 //合约地址
 Route::get('/token/{address}', 'TokenController@index');
-//合约交易
-Route::get('/token-tx/{hash}', 'TokenTxController@index');

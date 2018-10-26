@@ -33,7 +33,7 @@ class TokenController extends Controller
 
         //查询通证总量
         //实例化通证
-        $geth = new EthereumRPC(env('ETH_RPC_HOST'), env('ETH_RPC_PORT'));
+        $geth = new EthereumRPC(env('TOKEN_HOST'), env('TOKEN_PORT'));
         $erc20 = new ERC20($geth);
         $token_obj = $erc20->token($address);
         $data['symbol'] = $token_obj->symbol();

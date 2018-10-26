@@ -30,7 +30,7 @@
                             <div data-v-8701ced6="" data-v-cd5b40a0="" class="tx-detail">
                                 <div data-v-8701ced6="" class="hash-section">
                                     <i data-v-8701ced6="" class="vicon icon-hash d-none d-lg-inline-block"></i>
-                                    <a data-v-8701ced6="" href="/token-tx/{{$v['hash']}}" class="hash font-hash-title">
+                                    <a data-v-8701ced6="" href="/tx/{{$v['hash']}}" class="hash font-hash-title">
                                         <span data-v-8701ced6="" class="d-lg-inline-block">{{$v['hash']}}</span>
                                     </a>
                                     <span data-v-8701ced6="" style="color: #00b275;" class="output font-coin-title"> {{float_format($v['amount'])}} {{$symbol}}</span>
