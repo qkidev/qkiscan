@@ -96,8 +96,10 @@ class SyncService
 
                                 //记录地址、保存通证
                                 $this->saveAddress($v['from'],$this->checkAddressType($v['from']));
-                                $this->saveAddress($v['to'],$this->checkAddressType($v['to']));
-
+                                if($v['to'])
+                                {
+                                    $this->saveAddress($v['to'],$this->checkAddressType($v['to']));
+                                }
                                 // 通证转账
                                 if (substr($v['input'], 0, 10) === '0xa9059cbb') {
                                     //保存通证交易
@@ -194,6 +196,11 @@ class SyncService
             return $addressModel->id;
         }else{
             $this->address[$address] = $is_exist->id;
+            if($type == 2)
+            {
+                $token = Token::where('contract_address',$address)->first();
+                $this->token[$address] = $token->id;
+            }
             return true;
         }
     }
