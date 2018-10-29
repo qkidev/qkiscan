@@ -46,7 +46,7 @@ class TokenController extends Controller
             ->leftJoin("address as a",'token_tx.from_address_id','a.id')
             ->leftJoin("address as b",'token_tx.to_address_id','b.id')
             ->leftJoin("transactions as t",'token_tx.tx_id','t.id')
-            ->where('token_tx.id',$token->id)
+            ->where('token_tx.token_id',$token->id)
             ->paginate(20);
 
         return view("token.index",$data);
