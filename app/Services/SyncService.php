@@ -33,10 +33,9 @@ class SyncService
             }
             if(!$this->syncTx())
             {
+                sleep(1);
                 break;
             }
-            else
-                sleep(1);
         }
 
         echo "区块同步成功";
@@ -94,6 +93,13 @@ class SyncService
                         }
 
                         $block_height = bcadd(base_convert($block['result']['number'],16,10),1,0);
+                    }
+                    else
+                    {
+                        Settings::where('key','last_block_height')->update(['value' => $block_height]);
+                        DB::commit();
+                        echo "同步成功，当前高度:$block_height\n";
+                        return false;
                     }
                 }
 
