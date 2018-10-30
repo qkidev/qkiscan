@@ -27,13 +27,16 @@ class SyncService
         $end_time = time() + 55;
         while (true)
         {
-            if($end_time <= time()){
+            if($end_time <= time())
+            {
                 break;
             }
             if(!$this->syncTx())
             {
                 break;
             }
+            else
+                sleep(1);
         }
 
         echo "区块同步成功";
