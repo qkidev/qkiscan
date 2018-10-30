@@ -81,7 +81,7 @@ class SyncService
                     if($block['result'])
                     {
                         //保存出块方地址、保存通证
-                        $this->saveAddress($block['result']['miner'],$this->checkAddressType($block['result']['miner']));
+                        $this->saveAddress($block['result']['miner']);
                         $transactions = $block['result']['transactions'];
                         //如果此区块有交易
                         if(isset($transactions) && count($transactions) > 0)
@@ -148,7 +148,7 @@ class SyncService
      * @throws \EthereumRPC\Exception\GethException
      * @throws \HttpClient\Exception\HttpClientException
      */
-    public function saveAddress($address,$type)
+    public function saveAddress($address)
     {
         if(!$address)
         {
@@ -157,25 +157,28 @@ class SyncService
         //判断地址是否保存过
         if(isset($this->address[$address]))
             return true;
+
+        $address_type = $this->checkAddressType($address);
+
         $is_exist = Address::where('address',$address)->first();
         if(empty($is_exist))
         {
             $addressModel = new Address();
-            $addressModel->type = $type;
+            $addressModel->type = $address_type;
             $addressModel->address = $address;
             $addressModel->amount = 0;
             $addressModel->save();
             $this->address[$address] = $addressModel->id;
 
             //如果为合约地址，保存通证
-            if($type == 2)
+            if($address_type == 2)
             {
                 $this->saveToken($address);
             }
             return $addressModel->id;
         }else{
             $this->address[$address] = $is_exist->id;
-            if($type == 2)
+            if($address_type == 2)
             {
                 $token = Token::where('contract_address',$address)->first();
                 $this->token[$address] = $token->id;
@@ -264,10 +267,10 @@ class SyncService
         $tx->save();
 
         //记录地址、保存通证
-        $this->saveAddress($v['from'],$this->checkAddressType($v['from']));
+        $this->saveAddress($v['from']);
         if($v['to'])
         {
-            $this->saveAddress($v['to'],$this->checkAddressType($v['to']));
+            $this->saveAddress($v['to']);
         }
         //input可能为空
         $input = $v['input'] ?? '';
