@@ -269,10 +269,13 @@ class SyncService
         {
             $this->saveAddress($v['to'],$this->checkAddressType($v['to']));
         }
+        //input可能为空
+        $input = $v['input'] ?? '';
+
         // 通证转账
-        if (substr($v['input'], 0, 10) === '0xa9059cbb') {
+        if (substr($input, 0, 10) === '0xa9059cbb') {
             //保存通证交易
-            $token_tx =  new TransactionInputTransfer($v['input']);
+            $token_tx =  new TransactionInputTransfer($input);
             //保存通证接收方地址
             $this->saveAddress($token_tx->payee,$this->checkAddressType($token_tx->payee));
             $token_tx_amount = bcdiv(base_convert($token_tx->amount,16,10),1000000000000000000,8);
