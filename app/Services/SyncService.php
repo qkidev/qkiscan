@@ -34,7 +34,6 @@ class SyncService
             if(!$this->syncTx())
             {
                 sleep(1);
-                break;
             }
         }
 
