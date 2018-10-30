@@ -115,7 +115,6 @@ class SyncService
                         }
 
                         $block_height = bcadd(base_convert($block['result']['number'],16,10),1,0);
-                        echo "区块高度：" . $block_height." \n";
                         //记录下一个要同步的区块高度
                         Settings::where('key','last_block_height')->update(['value' => $block_height]);
                     }else{
