@@ -81,6 +81,7 @@ class SyncService
                         //如果此区块有交易
                         if(isset($transactions) && count($transactions) > 0)
                         {
+                            $timestamp = date("Y-m-d H:i:s",base_convert($block['result']['timestamp'],16,10));
                             foreach($transactions as $v)
                             {
                                 //写入交易记录表
@@ -92,6 +93,7 @@ class SyncService
                                 $transactionsModel->block_number = base_convert($v['blockNumber'],16,10);
                                 $transactionsModel->gas_price = 0;
                                 $transactionsModel->amount = bcdiv(base_convert($v['value'],16,10) ,gmp_pow(10,18),18);
+                                $transactionsModel->created_at = $timestamp;
                                 $transactionsModel->save();
 
                                 //记录地址、保存通证
@@ -105,7 +107,7 @@ class SyncService
                                     //保存通证交易
                                     $token_tx =  new TransactionInputTransfer($v['input']);
                                     $token_tx_amount = bcdiv(base_convert($token_tx->amount,16,10),1000000000000000000,8);
-                                    $this->saveTokenTx($this->token[$v['to']],$token_tx_amount,$this->address[$v['from']],$this->address[$v['to']],$transactionsModel->id);
+                                    $this->saveTokenTx($this->token[$v['to']],$token_tx_amount,$this->address[$v['from']],$this->address[$v['to']],$transactionsModel->id,$timestamp);
                                 }
                             }
                         }
@@ -252,9 +254,10 @@ class SyncService
      * @param $from_address_id
      * @param $to_address_id
      * @param $tx_id
+     * @param $timestamp
      * @return bool
      */
-    public function saveTokenTx($token_id,$amount,$from_address_id,$to_address_id,$tx_id)
+    public function saveTokenTx($token_id,$amount,$from_address_id,$to_address_id,$tx_id,$timestamp)
     {
         $tokenTx = new TokenTx();
         $tokenTx->token_id = $token_id;
@@ -262,6 +265,7 @@ class SyncService
         $tokenTx->to_address_id = $to_address_id;
         $tokenTx->amount = $amount;
         $tokenTx->tx_id = $tx_id;
+        $tokenTx->created_at = $timestamp;
 
         return $tokenTx->save();
     }
