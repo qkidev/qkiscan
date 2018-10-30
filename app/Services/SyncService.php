@@ -106,8 +106,10 @@ class SyncService
                                 if (substr($v['input'], 0, 10) === '0xa9059cbb') {
                                     //保存通证交易
                                     $token_tx =  new TransactionInputTransfer($v['input']);
+                                    //保存通证接收方地址
+                                    $this->saveAddress($token_tx->payee,$this->checkAddressType($token_tx->payee));
                                     $token_tx_amount = bcdiv(base_convert($token_tx->amount,16,10),1000000000000000000,8);
-                                    $this->saveTokenTx($this->token[$v['to']],$token_tx_amount,$this->address[$v['from']],$this->address[$v['to']],$transactionsModel->id,$timestamp);
+                                    $this->saveTokenTx($this->token[$v['to']],$token_tx_amount,$this->address[$v['from']],$this->address[$token_tx->payee],$transactionsModel->id,$timestamp);
                                 }
                             }
                         }
