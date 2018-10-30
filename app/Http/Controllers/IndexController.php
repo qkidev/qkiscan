@@ -25,6 +25,7 @@ class IndexController extends Controller
     {
         $rpcService = new RpcService();
         $lastBlock = $rpcService->lastBlockHeightNumber();
+
         $lastBlock = base_convert($lastBlock,16,10);
 
         $blockArray = $rpcService->getBlockString($lastBlock);
@@ -52,51 +53,46 @@ class IndexController extends Controller
      * @param Request $request
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function search(Request $request)
+    public function search(Request $request, RpcService $rpcService)
     {
         $keyword = $request->input('keyword');
 
         //判断是否为数字，如果为数字，优先查询区块
         if(is_numeric($keyword))
         {
-            $res = Block::where('height',$keyword)->first();
-            if(isset($res) && $res->hash_id)
+            $keyword = [['0x'.base_convert($keyword,10,16),true]];
+            $result = $rpcService->getBlockByNumber($keyword);
+            $blockInfo = $result[0]['result'];
+            if(isset($blockInfo) && $blockInfo['hash'])
             {
-                $url = "/block/detail?hash=".$res->hash_id;
+                $url = "/block/detail?hash=".$blockInfo['hash'];
                 return redirect($url);
-
             }else{
                 //todo 跳转404页面
                 return back();
             }
         }else{
-            //如果不为数字，优先查询交易
-            $res = Transaction::where('tx_hash',$keyword)->count();
-            if($res > 0)
+            $hash_leng = strlen($keyword);
+            if($hash_leng == 42)
             {
-                $url = "/tx/".$keyword;
+                //地址查询
+                $url = "/address/".$keyword;
                 return redirect($url);
-            }else{
-                //如果不是交易，则查询是否为区块
-                $res = Block::where('hash_id',$keyword)->count();
-                if($res > 0)
+            }else if($hash_leng == 66){
+                //hash查询
+                $result = $rpcService->getBlockByHash($keyword);
+                $blockInfo = $result['result'];
+                if(isset($blockInfo) && $blockInfo['hash'])
                 {
-                    $url = "/block/detail?hash=".$keyword;
+                    $url = "/block/detail?hash=".$blockInfo['hash'];
                     return redirect($url);
                 }else{
-                    //如果不为区块，则查询是否为地址
-                    $res = Account::where('address',$keyword)->count();
-                    if($res > 0)
-                    {
-                        $url = "/address/".$keyword;
-                        return redirect($url);
-                    }else{
-                        //todo 跳转404页面
-                        return back();
-                    }
+                    //todo 跳转404页面
+                    return back();
                 }
-
-
+            }else{
+                //todo 跳转404页面
+                return back();
             }
         }
     }

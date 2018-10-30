@@ -40,7 +40,7 @@
                         <div class="vsearch" data-v-2f615f5c="">
                             <div class="vsearch-inner" data-v-2f615f5c="">
                                 <div class="search-bar" data-v-2f615f5c="">
-                                    <input placeholder="QKI地址、交易Hash、区块高度、区块Hash" value="" class="input-search" id="pc-search-input" data-v-2f615f5c="">
+                                    <input placeholder="QKI地址、区块高度、Hash值" value="" class="input-search" id="pc-search-input" data-v-2f615f5c="">
                                     <i class="btn-search search-btn"  data-v-2f615f5c=""></i>
                                 </div>
                             </div>
