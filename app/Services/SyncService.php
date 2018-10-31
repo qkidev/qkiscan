@@ -27,12 +27,13 @@ class SyncService
         $end_time = time() + 55;
         while (true)
         {
-            if($end_time <= time()){
+            if($end_time <= time())
+            {
                 break;
             }
             if(!$this->syncTx())
             {
-                break;
+                sleep(1);
             }
         }
 
@@ -68,6 +69,8 @@ class SyncService
         $blocks = $rpcService->getBlockByNumber($blockArray);
         DB::beginTransaction();
         try{
+
+            $block_height = $last_block_height->value;
             if($blocks)
             {
                 echo "区块获取成功 \n";
@@ -76,60 +79,35 @@ class SyncService
                     if($block['result'])
                     {
                         //保存出块方地址、保存通证
-                        $this->saveAddress($block['result']['miner'],$this->checkAddressType($block['result']['miner']));
+                        $this->saveAddress($block['result']['miner']);
                         $transactions = $block['result']['transactions'];
                         //如果此区块有交易
                         if(isset($transactions) && count($transactions) > 0)
                         {
                             $timestamp = date("Y-m-d H:i:s",base_convert($block['result']['timestamp'],16,10));
-                            foreach($transactions as $v)
+                            foreach($transactions as $tx)
                             {
-                                //写入交易记录表
-                                $transactionsModel = new Transactions();
-                                $transactionsModel->from = $v['from'];
-                                $transactionsModel->to = $v['to']??'';
-                                $transactionsModel->hash = $v['hash'];
-                                $transactionsModel->block_hash = $v['blockHash'];
-                                $transactionsModel->block_number = base_convert($v['blockNumber'],16,10);
-                                $transactionsModel->gas_price = 0;
-                                $transactionsModel->amount = bcdiv(base_convert($v['value'],16,10) ,gmp_pow(10,18),18);
-                                $transactionsModel->created_at = $timestamp;
-                                $transactionsModel->save();
-
-                                //记录地址、保存通证
-                                $this->saveAddress($v['from'],$this->checkAddressType($v['from']));
-                                if($v['to'])
-                                {
-                                    $this->saveAddress($v['to'],$this->checkAddressType($v['to']));
-                                }
-                                // 通证转账
-                                if (substr($v['input'], 0, 10) === '0xa9059cbb') {
-                                    //保存通证交易
-                                    $token_tx =  new TransactionInputTransfer($v['input']);
-                                    $token_tx_amount = bcdiv(base_convert($token_tx->amount,16,10),1000000000000000000,8);
-                                    $this->saveTokenTx($this->token[$v['to']],$token_tx_amount,$this->address[$v['from']],$this->address[$v['to']],$transactionsModel->id,$timestamp);
-                                }
+                                $this->saveTx($tx, $timestamp);
                             }
                         }
 
                         $block_height = bcadd(base_convert($block['result']['number'],16,10),1,0);
-                        echo "区块高度：" . $block_height." \n";
-                        //记录下一个要同步的区块高度
+                    }
+                    else
+                    {
                         Settings::where('key','last_block_height')->update(['value' => $block_height]);
-                    }else{
                         DB::commit();
+                        echo "同步成功，当前高度:$block_height\n";
                         return false;
                     }
                 }
 
-            }else{
-                $block_height = $last_block_height->value;
-                //记录下一个要同步的区块高度
-                Settings::where('key','last_block_height')->update(['value' => $block_height]);
-                return false;
             }
+
+            //记录下一个要同步的区块高度
+            Settings::where('key','last_block_height')->update(['value' => $block_height]);
             DB::commit();
-            echo '同步成功 \n';
+            echo "同步成功，当前高度:$block_height\n";
             return true;
         } catch (\Exception $e) {
             DB::rollback();
@@ -175,33 +153,37 @@ class SyncService
      * @throws \EthereumRPC\Exception\GethException
      * @throws \HttpClient\Exception\HttpClientException
      */
-    public function saveAddress($address,$type)
+    public function saveAddress($address)
     {
         if(!$address)
         {
             return true;
         }
+        //判断地址是否保存过
         if(isset($this->address[$address]))
             return true;
+
+        $address_type = $this->checkAddressType($address);
+
         $is_exist = Address::where('address',$address)->first();
         if(empty($is_exist))
         {
             $addressModel = new Address();
-            $addressModel->type = $type;
+            $addressModel->type = $address_type;
             $addressModel->address = $address;
             $addressModel->amount = 0;
             $addressModel->save();
             $this->address[$address] = $addressModel->id;
 
             //如果为合约地址，保存通证
-            if($type == 2)
+            if($address_type == 2)
             {
                 $this->saveToken($address);
             }
             return $addressModel->id;
         }else{
             $this->address[$address] = $is_exist->id;
-            if($type == 2)
+            if($address_type == 2)
             {
                 $token = Token::where('contract_address',$address)->first();
                 $this->token[$address] = $token->id;
@@ -268,5 +250,45 @@ class SyncService
         $tokenTx->created_at = $timestamp;
 
         return $tokenTx->save();
+    }
+
+    /**
+     * @param $v
+     * @param $timestamp
+     * @return Transactions
+     * @throws
+     */
+    public function saveTx($v, $timestamp): Transactions
+    {
+        $tx = new Transactions();
+        $tx->from = $v['from'];
+        $tx->to = $v['to'] ?? '';
+        $tx->hash = $v['hash'];
+        $tx->block_hash = $v['blockHash'];
+        $tx->block_number = base_convert($v['blockNumber'], 16, 10);
+        $tx->gas_price = 0;
+        $tx->amount = bcdiv(base_convert($v['value'], 16, 10), gmp_pow(10, 18), 18);
+        $tx->created_at = $timestamp;
+        $tx->save();
+
+        //记录地址、保存通证
+        $this->saveAddress($v['from']);
+        if($v['to'])
+        {
+            $this->saveAddress($v['to']);
+        }
+        //input可能为空
+        $input = $v['input'] ?? '';
+
+        // 通证转账
+        if (substr($input, 0, 10) === '0xa9059cbb') {
+            //保存通证交易
+            $token_tx =  new TransactionInputTransfer($input);
+            //保存通证接收方地址
+            $this->saveAddress($token_tx->payee,$this->checkAddressType($token_tx->payee));
+            $token_tx_amount = bcdiv(base_convert($token_tx->amount,16,10),1000000000000000000,8);
+            $this->saveTokenTx($this->token[$v['to']],$token_tx_amount,$this->address[$v['from']],$this->address[$token_tx->payee],$tx->id,$timestamp);
+        }
+        return $tx;
     }
 }

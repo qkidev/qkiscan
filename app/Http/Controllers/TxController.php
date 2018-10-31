@@ -36,7 +36,7 @@ class TxController extends Controller
 
         $data['is_token_tx'] = false;
         //获取通证交易记录
-        if (substr($data['input'], 0, 10) === '0xa9059cbb') {
+        if (substr($data['input']??"", 0, 10) === '0xa9059cbb') {
             $data['is_token_tx'] = true;
             //保存通证交易
             $token_tx =  new TransactionInputTransfer($data['input']);
