@@ -87,8 +87,18 @@ class IndexController extends Controller
                     $url = "/block/detail?hash=".$blockInfo['hash'];
                     return redirect($url);
                 }else{
-                    //todo 跳转404页面
-                    return view("error.404");
+                    $params = array(
+                        [$keyword]
+                    );
+                    $data = $rpcService->rpc("eth_getTransactionByHash",$params);
+                    if(isset($data) && $data[0]['result'])
+                    {
+                        $url = "/tx/".$keyword;
+                        return redirect($url);
+                    }else{
+                        //todo 跳转404页面
+                        return view("error.404");
+                    }
                 }
             }else{
                 //todo 跳转404页面
