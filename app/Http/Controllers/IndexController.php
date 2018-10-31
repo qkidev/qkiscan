@@ -69,7 +69,7 @@ class IndexController extends Controller
                 return redirect($url);
             }else{
                 //todo 跳转404页面
-                return back();
+                return view("error.404");
             }
         }else{
             $hash_leng = strlen($keyword);
@@ -88,11 +88,11 @@ class IndexController extends Controller
                     return redirect($url);
                 }else{
                     //todo 跳转404页面
-                    return back();
+                    return view("error.404");
                 }
             }else{
                 //todo 跳转404页面
-                return back();
+                return view("error.404");
             }
         }
     }
