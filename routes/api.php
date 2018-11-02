@@ -21,4 +21,6 @@ Route::group(['namespace' => 'Api'], function () {
     Route::get('get-token-balance', 'BalanceController@getTokenBalance');
     Route::get('get-token-tx', 'TransactionsController@getTokenTx');
     Route::get('get-qki-tx', 'TransactionsController@getTransactions');
+    Route::get('get-qki-balance', 'BalanceController@getQkiBalance');
+    Route::get('get-block', 'BlockController@getBlock');
 });
