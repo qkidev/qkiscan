@@ -19,4 +19,6 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 Route::group(['namespace' => 'Api'], function () {
     Route::get('get-token-balance', 'BalanceController@getTokenBalance');
+    Route::get('get-token-tx', 'TransactionsController@getTokenTx');
+    Route::get('get-qki-tx', 'TransactionsController@getTransactions');
 });
