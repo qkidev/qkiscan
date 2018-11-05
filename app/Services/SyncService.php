@@ -23,6 +23,10 @@ class SyncService
      */
     public function synchronizeTransactions()
     {
+        if ($this->isLock('create')) {
+            return;
+        }
+        $this->lock('create');
         ini_set('max_execution_time', 60);
         $end_time = time() + 55;
         while (true)
@@ -36,6 +40,7 @@ class SyncService
                 sleep(1);
             }
         }
+        $this->unlock('create');
 
         echo "区块同步成功";
     }
@@ -290,5 +295,31 @@ class SyncService
             $this->saveTokenTx($this->token[$v['to']],$token_tx_amount,$this->address[$v['from']],$this->address[$token_tx->payee],$tx->id,$timestamp);
         }
         return $tx;
+    }
+
+    /**
+     * 定时任务是否锁定
+     */
+    protected function isLock($key)
+    {
+        return file_exists(storage_path($key)) ? true : false;
+    }
+
+    /**
+     * 锁定定时任务
+     */
+    protected function lock($key)
+    {
+        file_put_contents(storage_path($key), '1');
+    }
+
+    /**
+     * 解锁定时任务
+     */
+    protected function unlock($key)
+    {
+        if ($this->isLock($key)) {
+            unlink(storage_path($key));
+        }
     }
 }

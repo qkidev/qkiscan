@@ -22,12 +22,14 @@ class BlockController extends Controller
         $blockArray = $rpcService->getBlockString($lastBlock);
         $block = $rpcService->getBlockByNumber($blockArray);
         $blockList = array();
-        foreach ($block as $key => $item)
-        {
-            $blockList[$key]['height'] = base_convert($item['result']['number'],16,10);
-            $blockList[$key]['created_at'] = date("Y-m-d H:i:s",base_convert($item['result']['timestamp'],16,10)+28800);
-            $blockList[$key]['tx_count'] = count($item['result']['transactions']);
-            $blockList[$key]['hash '] = $item['result']['hash'];
+
+        if ($block) {
+            foreach ($block as $key => $item) {
+                $blockList[$key]['height'] = base_convert($item['result']['number'], 16, 10);
+                $blockList[$key]['created_at'] = date("Y-m-d H:i:s", base_convert($item['result']['timestamp'], 16, 10) + 28800);
+                $blockList[$key]['tx_count'] = count($item['result']['transactions']);
+                $blockList[$key]['hash '] = $item['result']['hash'];
+            }
         }
 
         return response()->json(['code' => 0, 'message' => 'OK', 'data' => $blockList]);

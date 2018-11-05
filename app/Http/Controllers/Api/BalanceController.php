@@ -55,6 +55,9 @@ class BalanceController extends Controller
         if (empty($address)) {
             return response()->json(['code' => 500, 'message' => '缺少参数：address', 'data' => '']);
         }
+        if (!Validator::Address($address)) {
+            return response()->json(['code' => 500, 'message' => '无效的地址', 'data' => '']);
+        }
 
         $RpcService = new RpcService();
 
