@@ -27,11 +27,12 @@ class TxController extends Controller
 
         $data = isset($data[0]['result'])?$data[0]['result']:null;
         if($data){
-
-            $data['gas'] = base_convert($data['gas'],16,10);
+            $gas = $RpcService->rpc('eth_getTransactionReceipt',[[$hash]]);
+            $gas = isset($gas[0]['result'])?$gas[0]['result']:null;
+            $data['gas'] = base_convert($gas['gasUsed'],16,10)??0;
+            $data['gasPrice'] = float_format(bcdiv(base_convert($data['gasPrice'],16,10) ,gmp_pow(10,18),18));
             $data['blockNumber'] = base_convert($data['blockNumber'],16,10);
             $data['value'] = float_format(bcdiv(gmp_strval($data['value']) ,gmp_pow(10,18),18));
-
         }
 
         $data['is_token_tx'] = false;

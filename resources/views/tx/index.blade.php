@@ -15,13 +15,16 @@
                         </div>
                     </li>
                     <li data-v-0c97b89a="" class="item">
-                        <span data-v-0c97b89a="" class="text2 strong">gas</span>
+                        <span data-v-0c97b89a="" class="text2 strong">使用gas</span>
                         <span data-v-0c97b89a="" id="hash-time" class="text2" data-original-title="" title="">{{$gas}}</span>
-
                     </li>
                     <li data-v-0c97b89a="" class="item">
-                        <span data-v-0c97b89a="" class="text2 strong">金额</span>
-                        <span data-v-0c97b89a="" class="text2" data-original-title="" title="" style="padding-left: 170px;">{{$value}}</span>
+                        <span data-v-0c97b89a="" class="text2 strong">gas价格</span>
+                        <span data-v-0c97b89a="" id="hash-time" class="text2" data-original-title="" title="">{{$gasPrice}} QKI</span>
+                    </li>
+                    <li data-v-0c97b89a="" class="item">
+                        <span data-v-0c97b89a="" class="text2 strong">矿工费</span>
+                        <span data-v-0c97b89a="" id="hash-time" class="text2" data-original-title="" title="">{{float_format(bcmul($gas,$gasPrice,18))}} QKI</span>
                     </li>
 
                 </ul>
@@ -32,6 +35,10 @@
                     <li data-v-0c97b89a="" class="item">
                         <span data-v-0c97b89a="" class="text2 strong">接收</span>
                         <span data-v-0c97b89a="" class="text2"><a data-v-0c97b89a="" href="/address/{{$to}}" class="hash font-hash-content">{{$to}}</a></span></li>
+                    <li data-v-0c97b89a="" class="item">
+                        <span data-v-0c97b89a="" class="text2 strong">金额</span>
+                        <span data-v-0c97b89a="" class="text2" data-original-title="" title="" style="padding-left: 170px;">{{$value}}</span>
+                    </li>
                     <li data-v-0c97b89a="" class="item">
                         <span data-v-0c97b89a="" class="text2 strong">input</span>
                         <textarea class="form-control" rows="1" readonly style="width: 65%; min-width: 278px; max-width: 324px">{{ $input }}</textarea>
