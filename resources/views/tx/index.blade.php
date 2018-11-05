@@ -53,8 +53,8 @@
                 <div data-v-0c97b89a="" class="d-block d-lg-flex vshadow">
                     <ul data-v-0c97b89a="" class="vsection base-left">
                         <li data-v-0c97b89a="" class="item">
-                            <span data-v-0c97b89a="" class="text2 strong">金额</span>
-                            <span data-v-0c97b89a="" class="text2" data-original-title="" title="" style="padding-left: 170px;">{{$token_tx_amount}}</span>
+                            <span data-v-0c97b89a="" class="text2 strong">数量</span>
+                            <span data-v-0c97b89a="" class="text2" data-original-title="" title="" style="padding-left: 170px;">{{float_format($token_tx_amount)}}</span>
                         </li>
                         <li data-v-0c97b89a="" class="item">
                             <span data-v-0c97b89a="" class="text2 strong">来源</span>
