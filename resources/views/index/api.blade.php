@@ -29,7 +29,7 @@
         <span class='le'><em>1.获取通证余额接口</em> <b>描述:获取通证余额接口</b></span>
         <span class='ri'>方式:<em> GET</em></span>
         <span class='ri'>示例URL:<em> <a href='/api/get-token-balance?address=0x16543062385673b637d7ce16efb0dd56a1a832bc&contract_address=0xf20a1b8f61a186f8485a037549149079c0f3b493' target='_blank'>http://new-block-browser.quarkblockchain.cn/api/get-token-balance?address=0x16543062385673b637d7ce16efb0dd56a1a832bc&contract_address=0xf20a1b8f61a186f8485a037549149079c0f3b493</a> </em></span>
-        <div class='says'>传参说明：1.address（钱包地址，<span class="tips-red">必选</span>），2.contract_address（合约地址,<span class="tips-red">必选</span>）</div>
+        <div class='says'>传参说明：1.address（钱包地址，<span class="tips-red">必选</span>），2.contract_address（合约地址，<span class="tips-red">必选</span>）</div>
         <div class='says'>返回结构示例：
             <pre class="intersays">
 {
@@ -43,8 +43,8 @@
         <span class='le'><em>2.qki余额接口</em> <b>描述:qki余额接口</b> </span>
         <span class='ri'>方式:<em> GET</em></span>
         <span class='ri'>示例URL:<em> <a href='/api/get-qki-balance?address=0x16543062385673b637d7ce16efb0dd56a1a832bc' target='_blank'>http://new-block-browser.quarkblockchain.cn/api/get-qki-balance?address=0x16543062385673b637d7ce16efb0dd56a1a832bc</a> </em></span>
-        <div class='says'>传参说明：1.address（钱包地址,<span class="tips-red">必选</span>）</div>
-        <div class='says'>返回说明：
+        <div class='says'>传参说明：1.address（钱包地址，<span class="tips-red">必选</span>）</div>
+        <div class='says'>返回结构示例：
             <pre class="intersays">
 {
     code: 0,
@@ -58,7 +58,7 @@
         <span class='ri'>方式:<em> GET</em></span>
         <span class='ri'>示例URL:<em> <a href='/api/get-token-tx?address=0x16543062385673b637d7ce16efb0dd56a1a832bc&contract_address=0xf20a1b8f61a186f8485a037549149079c0f3b493&page=1&pageSize=20' target='_blank'>http://new-block-browser.quarkblockchain.cn/api/get-token-tx?address=0x16543062385673b637d7ce16efb0dd56a1a832bc&contract_address=0xf20a1b8f61a186f8485a037549149079c0f3b493&page=1&pageSize=20</a> </em></span>
         <div class='says'>传参说明：1.address（钱包地址，<span class="tips-red">必选</span>），2.contract_address（合约地址，<span class="tips-red">必选</span>），3.page（分页，<span class="api-tips">可选，默认1</span>），4.pageSize（每页数量，<span class="api-tips">可选，默认20</span>）</div>
-        <div class='says'>返回说明：
+        <div class='says'>返回结构示例：
             <pre class="intersays">
 {
     code: 0,
@@ -83,7 +83,7 @@
         <span class='ri'>方式:<em> GET</em></span>
         <span class='ri'>示例URL:<em> <a href='/api/get-qki-tx?address=0x16543062385673b637d7ce16efb0dd56a1a832bc&page=1&pageSize=20' target='_blank'>http://new-block-browser.quarkblockchain.cn/api/get-qki-tx?address=0x16543062385673b637d7ce16efb0dd56a1a832bc&page=1&pageSize=20</a> </em></span>
         <div class='says'>传参说明：1.address（钱包地址，<span class="tips-red">必选</span>），2.page（分页，<span class="api-tips">可选，默认1</span>），3.pageSize（每页数量，<span class="api-tips">可选，默认20</span>）</div>
-        <div class='says'>返回说明：
+        <div class='says'>返回结构示例：
             <pre class="intersays">
 {
 code: 0,
@@ -119,7 +119,7 @@ data: [
         <span class='ri'>方式:<em> GET</em></span>
         <span class='ri'>示例URL:<em> <a href='/api/get-block?page=1' target='_blank'>http://new-block-browser.quarkblockchain.cn/api/get-block?page=1</a> </em></span>
         <div class='says'>传参说明：1.page（分页，<span class="api-tips">可选，默认1</span>）</div>
-        <div class='says'>返回说明：
+        <div class='says'>返回结构示例：
             <pre class="intersays">
 {
 code: 0,
@@ -153,7 +153,7 @@ data: [
         <span class='ri'>方式:<em> GET</em></span>
         <span class='ri'>示例URL:<em> <a href='/api/block?hash=0xc45a12819557c954e3edd0c8b72a387097c7b164fca2fe5a95a949367e862fad' target='_blank'>http://new-block-browser.quarkblockchain.cn/api/block?hash=0xc45a12819557c954e3edd0c8b72a387097c7b164fca2fe5a95a949367e862fad</a> </em></span>
         <div class='says'>传参说明：1.hash（区块hash，<span class="tips-red">必选</span>）</div>
-        <div class='says'>返回说明：
+        <div class='says'>返回结构示例：
             <pre class="intersays">
 {
 code: 0,
