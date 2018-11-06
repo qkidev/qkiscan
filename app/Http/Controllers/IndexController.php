@@ -107,4 +107,13 @@ class IndexController extends Controller
         }
     }
 
+    /**
+     * 接口页面
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function api()
+    {
+        return view("index.api");
+    }
+
 }

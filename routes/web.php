@@ -24,3 +24,5 @@ Route::get('/tx/{hash}', 'TxController@index');
 
 //合约地址
 Route::get('/token/{address}', 'TokenController@index');
+//api页面
+Route::get('/apis', 'IndexController@api');

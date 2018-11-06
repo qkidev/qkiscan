@@ -59,7 +59,7 @@ class TransactionsController extends Controller
         {
             foreach ($list as $k => $tx)
             {
-                $result[$k]['amount'] = float_format($tx->amount);
+                $result[$k]['amount'] = $tx->amount;
                 $result[$k]['created_at'] = $tx->created_at->format('Y-m-d H:i:s');
                 if($tx->from_address_id == $user_address->id)
                 {
@@ -69,7 +69,7 @@ class TransactionsController extends Controller
             }
         }
 
-        return response()->json(['code' => 0, 'message' => '获取成功', 'data' => $result]);
+        return response()->json(['code' => 0, 'message' => 'OK', 'data' => $result]);
 
     }
 
@@ -97,9 +97,9 @@ class TransactionsController extends Controller
         {
             foreach ($transactions as $k => $tx)
             {
-                $result[$k]['amount'] = float_format($tx->amount);
+                $result[$k]['amount'] = $tx->amount;
                 $result[$k]['created_at'] = $tx->created_at->format('Y-m-d H:i:s');
-                if($tx->from == $address)
+                if($tx->from == $address && $result[$k]['amount'] != 0)
                 {
                     $result[$k]['amount'] = '-'.$result[$k]['amount'];
                 }
@@ -107,6 +107,6 @@ class TransactionsController extends Controller
             }
         }
 
-        return response()->json(['code' => 0, 'message' => '获取成功', 'data' => $result]);
+        return response()->json(['code' => 0, 'message' => 'OK', 'data' => $result]);
     }
 }
