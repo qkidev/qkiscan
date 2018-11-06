@@ -14,7 +14,7 @@ class AddTxStatusToTransactions extends Migration
     public function up()
     {
         Schema::table('transactions', function (Blueprint $table) {
-            $table->unsignedTinyInteger('tx_status')->default(1)->comment('交易状态，1成功，2失败');
+            $table->unsignedTinyInteger('tx_status')->default(1)->comment('交易状态，1成功，0失败');
         });
     }
 
