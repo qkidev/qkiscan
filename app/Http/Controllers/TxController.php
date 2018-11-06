@@ -33,6 +33,20 @@ class TxController extends Controller
             $data['gasPrice'] = float_format(bcdiv(base_convert($data['gasPrice'],16,10) ,gmp_pow(10,18),18));
             $data['blockNumber'] = base_convert($data['blockNumber'],16,10);
             $data['value'] = float_format(bcdiv(gmp_strval($data['value']) ,gmp_pow(10,18),18));
+            //查询交易是否成功
+            $receipt = $RpcService->rpc("eth_getTransactionReceipt",[[$hash]]);
+            if(isset($receipt[0]['result']))
+            {
+                $tx_status = base_convert($receipt[0]['result']['status'],16,10);
+                if($tx_status == 1)
+                {
+                    $data['tx_status'] = "交易成功";
+                }else{
+                    $data['tx_status'] = "交易失败";
+                }
+            }else{
+                $data['tx_status'] = '交易状态获取失败';
+            }
         }
 
         $data['is_token_tx'] = false;

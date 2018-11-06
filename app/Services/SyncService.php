@@ -57,7 +57,18 @@ class SyncService
         }
         $lastBlock = $last_block_height->value;
         $blockArray = array();
-        for($i=0;$i<500;$i++)
+        //获取最后一个高度
+        $real_last_block = (new RpcService())->rpc('eth_getBlockByNumber',[['latest',true]]);
+        $last_block_number = $real_last_block[0]['result']['number'] ?? 0;
+        $num = 500;
+        if($last_block_number)
+        {
+            if(bccomp($last_block_number,$lastBlock,0) < 10)
+            {
+                $num = 10;
+            }
+        }
+        for($i=0;$i<$num;$i++)
         {
             //组装参数
             if($lastBlock < 10)
@@ -242,9 +253,10 @@ class SyncService
      * @param $to_address_id
      * @param $tx_id
      * @param $timestamp
+     * @param $tx_status
      * @return bool
      */
-    public function saveTokenTx($token_id,$amount,$from_address_id,$to_address_id,$tx_id,$timestamp)
+    public function saveTokenTx($token_id,$amount,$from_address_id,$to_address_id,$tx_id,$timestamp,$tx_status)
     {
         $tokenTx = new TokenTx();
         $tokenTx->token_id = $token_id;
@@ -253,6 +265,7 @@ class SyncService
         $tokenTx->amount = $amount;
         $tokenTx->tx_id = $tx_id;
         $tokenTx->created_at = $timestamp;
+        $tokenTx->tx_status = $tx_status;
 
         return $tokenTx->save();
     }
@@ -265,6 +278,13 @@ class SyncService
      */
     public function saveTx($v, $timestamp): Transactions
     {
+        //查询交易是否成功
+        $receipt = (new RpcService())->rpc("eth_getTransactionReceipt",[[$v['hash']]]);
+        if(isset($receipt[0]['result'])) {
+            $tx_status = base_convert($receipt[0]['result']['status'], 16, 10);
+        }else{
+            $tx_status = 0;
+        }
         $tx = new Transactions();
         $tx->from = $v['from'];
         $tx->to = $v['to'] ?? '';
@@ -274,6 +294,7 @@ class SyncService
         $tx->gas_price = 0;
         $tx->amount = bcdiv(base_convert($v['value'], 16, 10), gmp_pow(10, 18), 18);
         $tx->created_at = $timestamp;
+        $tx->tx_status = $tx_status;
         $tx->save();
 
         //记录地址、保存通证
@@ -292,7 +313,7 @@ class SyncService
             //保存通证接收方地址
             $this->saveAddress($token_tx->payee,$this->checkAddressType($token_tx->payee));
             $token_tx_amount = bcdiv(base_convert($token_tx->amount,16,10),1000000000000000000,8);
-            $this->saveTokenTx($this->token[$v['to']],$token_tx_amount,$this->address[$v['from']],$this->address[$token_tx->payee],$tx->id,$timestamp);
+            $this->saveTokenTx($this->token[$v['to']],$token_tx_amount,$this->address[$v['from']],$this->address[$token_tx->payee],$tx->id,$timestamp,$tx_status);
         }
         return $tx;
     }

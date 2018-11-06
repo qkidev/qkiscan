@@ -28,6 +28,8 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Transactions whereTo($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Transactions whereUpdatedAt($value)
  * @mixin \Eloquent
+ * @property int $tx_status 交易状态，1成功，2失败
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Transactions whereTxStatus($value)
  */
 class Transactions extends Model
 {
