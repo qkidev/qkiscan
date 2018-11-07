@@ -30,7 +30,7 @@ class TxController extends Controller
             $gas = $RpcService->rpc('eth_getTransactionReceipt',[[$hash]]);
             $gas = isset($gas[0]['result'])?$gas[0]['result']:null;
             $data['gas'] = base_convert($gas['gasUsed'],16,10)??0;
-            $data['gasPrice'] = float_format(bcdiv(base_convert($data['gasPrice'],16,10) ,gmp_pow(10,18),18));
+            $data['gasPrice'] = bcdiv(base_convert($data['gasPrice'],16,10) ,gmp_pow(10,18),18);
             $data['blockNumber'] = base_convert($data['blockNumber'],16,10);
             $data['value'] = float_format(bcdiv(gmp_strval($data['value']) ,gmp_pow(10,18),18));
             //查询交易是否成功

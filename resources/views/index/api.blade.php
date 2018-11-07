@@ -177,6 +177,31 @@ data: [
 }
 </pre>
         </div>
+
+
+        <span class='le'><em>6.获取通证交易详情接口</em> <b>描述:获取通证交易详情接口</b> </span>
+        <span class='ri'>方式:<em> GET</em></span>
+        <span class='ri'>示例URL:<em> <a href='/api/token-tx-info?hash=0x77d939383c2fcd180488ed16465e806626d03ad1d4d7ec25ea61584c94edaaae' target='_blank'>http://new-block-browser.quarkblockchain.cn/api/token-tx-info?hash=0x77d939383c2fcd180488ed16465e806626d03ad1d4d7ec25ea61584c94edaaae</a> </em></span>
+        <div class='says'>传参说明：1.hash（交易hash，<span class="tips-red">必选</span>）</div>
+        <div class='says'>返回结构示例：
+            <pre class="intersays">
+{
+code: 0,
+message: "OK",
+data: {
+        from: "0x52f2b729fceb39a9d3411107c394658a455c45c5",<span class="api-tips">//来源</span>
+        to: "0x16543062385673b637d7ce16efb0dd56a1a832bc",<span class="api-tips">//接收</span>
+        gas_price: "0.000053388",<span class="api-tips">//矿工费，单位QKI</span>
+        token_name: "erc_mm",<span class="api-tips">//通证名称</span>
+        token_symbol: "erc_mm",<span class="api-tips">//通证符号</span>
+        contract_address: "0xf20a1b8f61a186f8485a037549149079c0f3b493",<span class="api-tips">//合约地址</span>
+        amount: "1000.00000000",<span class="api-tips">//交易数量</span>
+        height: 207103,<span class="api-tips">//区块高度</span>
+        created_at: "2018-10-24 02:57:57"<span class="api-tips">//交易时间</span>
+    }
+}
+</pre>
+        </div>
     </div>
 </div>
 <div id="foot">

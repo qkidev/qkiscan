@@ -59,11 +59,11 @@ class SyncService
         $blockArray = array();
         //获取最后一个高度
         $real_last_block = (new RpcService())->rpc('eth_getBlockByNumber',[['latest',true]]);
-        $last_block_number = $real_last_block[0]['result']['number'] ?? 0;
+        $last_block_number = base_convert($real_last_block[0]['result']['number'],16,10) ?? 0;
         $num = 500;
         if($last_block_number)
         {
-            if(bccomp($last_block_number,$lastBlock,0) < 10)
+            if($lastBlock + 10 >= $last_block_number)
             {
                 $num = 10;
             }
@@ -291,7 +291,7 @@ class SyncService
         $tx->hash = $v['hash'];
         $tx->block_hash = $v['blockHash'];
         $tx->block_number = base_convert($v['blockNumber'], 16, 10);
-        $tx->gas_price = 0;
+        $tx->gas_price = bcdiv(base_convert($v['gasPrice'],16,10) ,gmp_pow(10,18),18);
         $tx->amount = bcdiv(base_convert($v['value'], 16, 10), gmp_pow(10, 18), 18);
         $tx->created_at = $timestamp;
         $tx->tx_status = $tx_status;

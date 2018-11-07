@@ -23,5 +23,6 @@ Route::group(['namespace' => 'Api'], function () {
     Route::get('get-token-tx', 'TransactionsController@getTokenTx');//获取通证交易记录
     Route::get('get-qki-tx', 'TransactionsController@getTransactions');//获取QKI交易记录
     Route::get('get-block', 'BlockController@getBlock');//获取区块列表
-    Route::get('block', 'BlockController@blockDetail');//获取区块列表
+    Route::get('block', 'BlockController@blockDetail');//获取区块详情
+    Route::get('token-tx-info', 'TransactionsController@getTokenTxInfo');//获取通证交易详情
 });
