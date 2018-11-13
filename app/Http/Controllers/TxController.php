@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Token;
+use App\Models\Transactions;
 use App\Services\RpcService;
 use EthereumRPC\Response\TransactionInputTransfer;
 
@@ -63,4 +64,11 @@ class TxController extends Controller
         return view("tx.index",$data);
     }
 
+    public function list()
+    {
+        $data['transactions'] = Transactions::orderBy("id","desc")
+            ->paginate(20);
+        $data['currentPage'] = 'tx-list';
+        return view("tx.list",$data);
+    }
 }

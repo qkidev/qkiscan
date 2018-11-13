@@ -10,18 +10,20 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
-
+//首页
 Route::get('/', 'IndexController@index');
+//搜索
 Route::get('search', 'IndexController@search');
-
+//区块列表
 Route::get('/block', 'BlockController@index');
-
-Route::get('/address/{address}', 'AddressController@index');
-
+//区块详情
 Route::get('/block/detail', 'BlockController@detail');
-
+//地址详情
+Route::get('/address/{address}', 'AddressController@index');
+//交易列表
+Route::get('/tx-list', 'TxController@list');
+//交易详情
 Route::get('/tx/{hash}', 'TxController@index');
-
 //合约地址
 Route::get('/token/{address}', 'TokenController@index');
 //api页面

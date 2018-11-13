@@ -44,6 +44,7 @@ class BlockController extends Controller
         $data['last_block'] = $blockList[count($blockList)-1]['height'];
         $data['block'] = $blockList;
         $data['last_block_height'] = Settings::getValueByKey("last_block_height");
+        $data['currentPage'] = "block";
         return view("block.index",$data);
     }
 

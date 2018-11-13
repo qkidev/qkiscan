@@ -45,6 +45,7 @@ class IndexController extends Controller
         }
 
         $data['block'] = $blockList;
+        $data['currentPage'] = "index";
         return view("index.index",$data);
     }
 
