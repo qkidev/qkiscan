@@ -50,17 +50,15 @@ function getMultiple($unit)
  */
 function float_format($num){
 
-    if($num<0.0001 && $num>0){
+    $temp = explode ( '.', $num );
 
-        $num = number_format($num,8);
-
+    if (sizeof ( $temp ) > 1) {
         $num = rtrim($num,'0');
+    }
+    $temp1 = explode ( '.', $num );
 
-    }else{
-
-
-        $num = floatval($num);
-
+    if($temp1[1]==null){
+        $num = rtrim($num,'.');
     }
 
     return $num;

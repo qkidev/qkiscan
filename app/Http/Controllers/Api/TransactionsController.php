@@ -60,7 +60,7 @@ class TransactionsController extends Controller
         {
             foreach ($list as $k => $tx)
             {
-                $result[$k]['amount'] = $tx->amount;
+                $result[$k]['amount'] = float_format($tx->amount);
                 $result[$k]['created_at'] = $tx->created_at->format('Y-m-d H:i:s');
                 if($tx->from_address_id == $user_address->id)
                 {
@@ -98,7 +98,7 @@ class TransactionsController extends Controller
         {
             foreach ($transactions as $k => $tx)
             {
-                $result[$k]['amount'] = $tx->amount;
+                $result[$k]['amount'] = float_format($tx->amount);
                 $result[$k]['created_at'] = $tx->created_at->format('Y-m-d H:i:s');
                 if($tx->from == $address && $result[$k]['amount'] != 0)
                 {
@@ -143,7 +143,7 @@ class TransactionsController extends Controller
         $result['token_name'] = $token->token_name;
         $result['token_symbol'] = $token->token_symbol;
         $result['contract_address'] = $token->contract_address;
-        $result['amount'] = $token_tx->amount;
+        $result['amount'] = float_format($token_tx->amount);
         $result['height'] = $tx->block_number;
         $result['created_at'] = $token_tx->created_at->format('Y-m-d H:i:s');
 
