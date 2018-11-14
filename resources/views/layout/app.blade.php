@@ -37,6 +37,9 @@
                     <li class="nuxt-link-exact-active nuxt-link-active nav-item @if(isset($currentPage) && $currentPage=='tx-list') current @endif">
                         <a href="/tx-list">交易</a>
                     </li>
+                    <li class="nuxt-link-exact-active nuxt-link-active nav-item @if(isset($currentPage) && $currentPage=='unpacked-tx-list') current @endif">
+                        <a href="/unpacked-tx-list">未打包交易</a>
+                    </li>
                 </ul>
                 <div class="search-container d-lg-block d-none">
                     <div class="vsearch-panel" data-v-2f615f5c="">

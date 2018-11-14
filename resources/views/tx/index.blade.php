@@ -47,6 +47,10 @@
                         <span data-v-0c97b89a="" class="text2 strong">input</span>
                         <textarea class="form-control" rows="1" readonly style="width: 65%; min-width: 278px; max-width: 324px">{{ $input }}</textarea>
                     </li>
+                    <li data-v-0c97b89a="" class="item">
+                        <span data-v-0c97b89a="" class="text2 strong">nonce</span>
+                        <span data-v-0c97b89a="" class="text2" data-original-title="" title="" style="padding-left: 170px;">{{$nonce}}</span>
+                    </li>
 
                 </ul>
             </div>

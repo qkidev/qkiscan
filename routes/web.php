@@ -24,6 +24,8 @@ Route::get('/address/{address}', 'AddressController@index');
 Route::get('/tx-list', 'TxController@list');
 //交易详情
 Route::get('/tx/{hash}', 'TxController@index');
+//未打包交易列表
+Route::get('/unpacked-tx-list', 'TxController@unpackedTxList');
 //合约地址
 Route::get('/token/{address}', 'TokenController@index');
 //api页面

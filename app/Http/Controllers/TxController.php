@@ -34,6 +34,7 @@ class TxController extends Controller
             $data['gasPrice'] = bcdiv(base_convert($data['gasPrice'],16,10) ,gmp_pow(10,18),18);
             $data['blockNumber'] = base_convert($data['blockNumber'],16,10);
             $data['value'] = float_format(bcdiv(gmp_strval($data['value']) ,gmp_pow(10,18),18));
+            $data['nonce'] = base_convert($data['nonce'],16,10);
             //查询交易是否成功
             $receipt = $RpcService->rpc("eth_getTransactionReceipt",[[$hash]]);
             if(isset($receipt[0]['result']))
@@ -64,11 +65,31 @@ class TxController extends Controller
         return view("tx.index",$data);
     }
 
+    /**
+     * 交易列表
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function list()
     {
         $data['transactions'] = Transactions::orderBy("id","desc")
             ->paginate(20);
         $data['currentPage'] = 'tx-list';
         return view("tx.list",$data);
+    }
+
+    /**
+     * 未打包交易列表
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function unpackedTxList()
+    {
+        $rpcService = new RpcService();
+
+        $arr = $rpcService->rpc("txpool_content",[[]]);
+
+        $data['transactions'] = $arr[0]['result'] ?? [];
+        $data['currentPage'] = 'unpacked-tx-list';
+
+        return view('tx.unpacked-list',$data);
     }
 }

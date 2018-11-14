@@ -57,7 +57,7 @@ function float_format($num){
     }
     $temp1 = explode ( '.', $num );
 
-    if($temp1[1]==null){
+    if(isset($temp1[1]) && $temp1[1]==null){
         $num = rtrim($num,'.');
     }
 

@@ -18,7 +18,7 @@
                                 <a data-v-8701ced6="" href="/tx/{{$v['hash']}}" class="hash font-hash-title">
                                     <span data-v-8701ced6="" class="d-lg-inline-block">{{$v['hash']}}</span>
                                 </a>
-                                <span data-v-8701ced6="" class="output font-coin-title"> {{float_format($v['value'])}} QKI</span>
+                                <span data-v-8701ced6="" class="output font-coin-title"> {{float_format($v['amount'])}} QKI</span>
                                 <!----></div>
 
                         </div>
