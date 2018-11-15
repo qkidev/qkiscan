@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Token;
 use App\Models\Transactions;
 use App\Services\RpcService;
+use ERC20\ERC20;
+use EthereumRPC\EthereumRPC;
 use EthereumRPC\Response\TransactionInputTransfer;
 
 class TxController extends Controller
@@ -54,10 +56,16 @@ class TxController extends Controller
         $data['is_token_tx'] = false;
         //获取通证交易记录
         if (substr($data['input']??"", 0, 10) === '0xa9059cbb') {
+            //实例化通证
+            $url_arr = parse_url(env("RPC_HOST"));
+            $geth = new EthereumRPC($url_arr['host'], $url_arr['port']);
+            $erc20 = new ERC20($geth);
+            $token = $erc20->token($data['to']);
+            $decimals = $token->decimals();
             $data['is_token_tx'] = true;
             //保存通证交易
             $token_tx =  new TransactionInputTransfer($data['input']);
-            $data['token_tx_amount'] = bcdiv(base_convert($token_tx->amount,16,10),1000000000000000000,18);
+            $data['token_tx_amount'] = bcdiv(base_convert($token_tx->amount,16,10),gmp_pow(10,$decimals),18);
             $data['token_tx_to'] = $token_tx->payee;
             $data['token'] = Token::where('contract_address',$data['to'])->first();
         }
