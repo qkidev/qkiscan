@@ -312,7 +312,7 @@ class SyncService
             $token_tx =  new TransactionInputTransfer($input);
             //保存通证接收方地址
             $this->saveAddress($token_tx->payee,$this->checkAddressType($token_tx->payee));
-            $token_tx_amount = bcdiv(base_convert($token_tx->amount,16,10),1000000000000000000,8);
+            $token_tx_amount = bcdiv(base_convert($token_tx->amount,16,10),1000000000000000000,18);
             $this->saveTokenTx($this->token[$v['to']],$token_tx_amount,$this->address[$v['from']],$this->address[$token_tx->payee],$tx->id,$timestamp,$tx_status);
         }
         return $tx;

@@ -57,7 +57,7 @@ class TxController extends Controller
             $data['is_token_tx'] = true;
             //保存通证交易
             $token_tx =  new TransactionInputTransfer($data['input']);
-            $data['token_tx_amount'] = bcdiv(base_convert($token_tx->amount,16,10),1000000000000000000,8);
+            $data['token_tx_amount'] = bcdiv(base_convert($token_tx->amount,16,10),1000000000000000000,18);
             $data['token_tx_to'] = $token_tx->payee;
             $data['token'] = Token::where('contract_address',$data['to'])->first();
         }
