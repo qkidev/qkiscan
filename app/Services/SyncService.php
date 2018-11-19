@@ -312,8 +312,14 @@ class SyncService
             $token_tx =  new TransactionInputTransfer($input);
             //保存通证接收方地址
             $this->saveAddress($token_tx->payee,$this->checkAddressType($token_tx->payee));
-            $token_tx_amount = bcdiv(base_convert($token_tx->amount,16,10),1000000000000000000,18);
-            $this->saveTokenTx($this->token[$v['to']],$token_tx_amount,$this->address[$v['from']],$this->address[$token_tx->payee],$tx->id,$timestamp,$tx_status);
+            //实例化通证
+            $url_arr = parse_url(env("RPC_HOST"));
+            $geth = new EthereumRPC($url_arr['host'], $url_arr['port']);
+            $erc20 = new ERC20($geth);
+            $token = $erc20->token($v['to']);
+            $decimals = $token->decimals();
+            $token_tx_amount = bcdiv(base_convert($token_tx->amount,16,10),gmp_pow(10, $decimals),18);
+            $this->saveTokenTx($this->token[$v['to']],float_format($token_tx_amount),$this->address[$v['from']],$this->address[$token_tx->payee],$tx->id,$timestamp,$tx_status);
         }
         return $tx;
     }
