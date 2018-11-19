@@ -48,6 +48,7 @@ class TxController extends Controller
                 }else{
                     $data['tx_status'] = "交易失败";
                 }
+                $data['contract_address'] = isset($receipt[0]['result']['contractAddress'])?$receipt[0]['result']['contractAddress']:'';
             }else{
                 $data['tx_status'] = '交易状态获取失败';
             }
