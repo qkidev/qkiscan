@@ -100,7 +100,7 @@ class TransactionsController extends Controller
             {
                 $result[$k]['amount'] = float_format($tx->amount);
                 $result[$k]['created_at'] = $tx->created_at->format('Y-m-d H:i:s');
-                if($tx->from == $address && $result[$k]['amount'] != 0)
+                if(strtolower($tx->from) == strtolower($address) && $result[$k]['amount'] != 0)
                 {
                     $result[$k]['amount'] = '-'.$result[$k]['amount'];
                 }
