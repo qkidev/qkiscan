@@ -96,15 +96,20 @@ class TransactionsController extends Controller
         $result = [];
         if($transactions)
         {
+            $i = 0;
             foreach ($transactions as $k => $tx)
             {
-                $result[$k]['amount'] = float_format($tx->amount);
-                $result[$k]['created_at'] = $tx->created_at->format('Y-m-d H:i:s');
-                if(strtolower($tx->from) == strtolower($address) && $result[$k]['amount'] != 0)
+                if($tx->amount != 0)
                 {
-                    $result[$k]['amount'] = '-'.$result[$k]['amount'];
+                    $result[$i]['amount'] = float_format($tx->amount);
+                    $result[$i]['created_at'] = $tx->created_at->format('Y-m-d H:i:s');
+                    if(strtolower($tx->from) == strtolower($address))
+                    {
+                        $result[$i]['amount'] = '-'.$result[$k]['amount'];
+                    }
+                    $result[$i]['hash'] = $tx->hash;
+                    $i++;
                 }
-                $result[$k]['hash'] = $tx->hash;
             }
         }
 
