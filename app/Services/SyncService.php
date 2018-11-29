@@ -24,7 +24,8 @@ class SyncService
     public function synchronizeTransactions()
     {
         if ($this->isLock('create')) {
-            return "已锁";
+            echo "已锁";
+            return;
         }
         $this->lock('create');
         ini_set('max_execution_time', 60);
