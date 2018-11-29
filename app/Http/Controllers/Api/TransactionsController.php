@@ -50,8 +50,8 @@ class TransactionsController extends Controller
 
         $list = TokenTx::select(DB::raw('token_tx.*,t.hash'))
             ->leftJoin('transactions as t', 'token_tx.tx_id', 't.id')
-            ->where([['token_id', '=', $token->id],['from_address_id', '=', $user_address->id]])
-            ->orWhere([['token_id', '=', $token->id],['to_address_id', '=', $user_address->id]])
+            ->where([['token_id', '=', $token->id],['from_address_id', '=', $user_address->id],['t.tx_status', '=', 1]])
+            ->orWhere([['token_id', '=', $token->id],['to_address_id', '=', $user_address->id],['t.tx_status', '=', 1]])
             ->orderBy('id','desc')
             ->paginate($pageSize);
 
