@@ -66,7 +66,7 @@ class SyncService
         {
             $last_block_number = $real_last_block;
         }else{
-            $last_block_number = bcsub(base_convert($real_last_block[0]['result']['number'], 16, 10),1,0);
+            $last_block_number = bcsub($real_last_block,1,0);
         }
         $num = 500;
         if($last_block_number)
