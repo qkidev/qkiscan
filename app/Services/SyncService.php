@@ -37,10 +37,8 @@ class SyncService
             {
                 break;
             }
-            if(!$this->syncTx())
-            {
-                sleep(1);
-            }
+            $this->syncTx();
+            sleep(1);
         }
         $this->unlock('create');
 
@@ -300,7 +298,11 @@ class SyncService
             echo "没有回执:" . $v['hash'] . "\n";
             $tx_status = 0;
         }
-        $tx = new Transactions();
+//        $exist = Transactions::where('hash',$v['hash'])->first();
+//        if($exist)
+//            $tx = $exist;
+//        else
+            $tx = new Transactions();
         $tx->from = $v['from'];
         $tx->to = $v['to'] ?? '';
         $tx->hash = $v['hash'];
