@@ -296,6 +296,7 @@ class SyncService
                 $tx_status = base_convert($receipt[0]['result']['status'], 16, 10);
             }
         }else{
+            echo "没有回执:" . $v['hash'] . "\n";
             $tx_status = 0;
         }
         $tx = new Transactions();
