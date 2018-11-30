@@ -71,7 +71,7 @@ class RpcService
         }else{
             $num = 20;
         }
-        for($i=0;$i<$num;$i++)
+        for($i=0;$i<=$num;$i++)
         {
             $blockArray[$i] = ['0x'.base_convert($lastBlock--,10,16),true];
         }
