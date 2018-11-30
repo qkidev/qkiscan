@@ -95,8 +95,8 @@ class SyncService
                     if($block['result'])
                     {
                         $block_time = base_convert($block['result']['timestamp'],16,10);
-                        //太新的区块，不处理,至少要求10秒钟以上
-                        if(time() - $block_time < 10)
+                        //太新的区块，不处理,至少要求30秒钟以上
+                        if(time() - $block_time < 30)
                         {
                             break;
                         }
