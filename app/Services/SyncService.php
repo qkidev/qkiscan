@@ -63,9 +63,9 @@ class SyncService
         $real_last_block = (new RpcService())->rpc('eth_getBlockByNumber',[['latest',true]]);
         $real_last_block = base_convert($real_last_block[0]['result']['number'], 16, 10) ?? 0;
         $num = 500;
-        if($last_block_number)
+        if($real_last_block)
         {
-            if($lastBlock + 10 >= $last_block_number)
+            if($lastBlock + 10 >= $real_last_block)
             {
                 $num = 10;
             }
