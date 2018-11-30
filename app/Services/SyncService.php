@@ -61,7 +61,13 @@ class SyncService
         $blockArray = array();
         //获取最后一个高度
         $real_last_block = (new RpcService())->rpc('eth_getBlockByNumber',[['latest',true]]);
-        $last_block_number = base_convert($real_last_block[0]['result']['number'],16,10) ?? 0;
+        $real_last_block = base_convert($real_last_block[0]['result']['number'], 16, 10) ?? 0;
+        if($real_last_block <= 1)
+        {
+            $last_block_number = $real_last_block;
+        }else{
+            $last_block_number = bcsub(base_convert($real_last_block[0]['result']['number'], 16, 10),1,0);
+        }
         $num = 500;
         if($last_block_number)
         {
