@@ -96,18 +96,19 @@ class SyncService
                 {
                     if($block['result'])
                     {
+                        $block_time = base_convert($block['result']['timestamp'],16,10);
+                        //太新的区块，不处理,至少要求10秒钟以上
+                        if(time() - $block_time < 10)
+                        {
+                            break;
+                        }
+
                         //保存出块方地址、保存通证
                         $this->saveAddress($block['result']['miner']);
                         $transactions = $block['result']['transactions'];
                         //如果此区块有交易
                         if(isset($transactions) && count($transactions) > 0)
                         {
-                            $block_time = base_convert($block['result']['timestamp'],16,10);
-                            //太新的区块，不处理,至少要求10秒钟以上
-                            if(time() - $block_time < 10)
-                            {
-                               break;
-                            }
                             $timestamp = date("Y-m-d H:i:s",$block_time);
                             foreach($transactions as $tx)
                             {
