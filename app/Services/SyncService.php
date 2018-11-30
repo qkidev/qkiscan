@@ -23,6 +23,7 @@ class SyncService
      */
     public function synchronizeTransactions()
     {
+        $this->unlock('create');
         if ($this->isLock('create')) {
             echo "已锁";
             return;
@@ -282,7 +283,12 @@ class SyncService
         //查询交易是否成功
         $receipt = (new RpcService())->rpc("eth_getTransactionReceipt",[[$v['hash']]]);
         if(isset($receipt[0]['result'])) {
-            $tx_status = base_convert($receipt[0]['result']['status'], 16, 10);
+            if(isset($receipt[0]['result']['root']))
+            {
+                $tx_status = 1;
+            }else{
+                $tx_status = base_convert($receipt[0]['result']['status'], 16, 10);
+            }
         }else{
             $tx_status = 0;
         }
