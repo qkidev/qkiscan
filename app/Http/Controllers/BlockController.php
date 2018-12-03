@@ -14,7 +14,7 @@ class BlockController extends Controller
         $requestLastBlock = $request->input('last_block');
 
         $lastBlock = $rpcService->lastBlockHeightNumber();
-        $lastBlock = base_convert($lastBlock,16,10);
+        $lastBlock = HexDec2($lastBlock);
         if($requestLastBlock)
         {
             if($requestLastBlock <= $lastBlock)
@@ -29,11 +29,11 @@ class BlockController extends Controller
         foreach ($block as $key => $item)
         {
             $blockList[$key] = $item['result'];
-            $blockList[$key]['height'] = base_convert($blockList[$key]['number'],16,10);
-            $blockList[$key]['created_at'] = date("Y-m-d H:i:s",base_convert($blockList[$key]['timestamp'],16,10)+28800);
+            $blockList[$key]['height'] = HexDec2($blockList[$key]['number']);
+            $blockList[$key]['created_at'] = date("Y-m-d H:i:s",HexDec2($blockList[$key]['timestamp'])+28800);
             $blockList[$key]['tx_count'] = count($blockList[$key]['transactions']);
-            $blockList[$key]['size'] = bcdiv(base_convert($blockList[$key]['size'],16,10),1000,3);
-            $blockList[$key]['difficulty'] = base_convert($blockList[$key]['difficulty'],16,10);
+            $blockList[$key]['size'] = bcdiv(HexDec2($blockList[$key]['size']),1000,3);
+            $blockList[$key]['difficulty'] = HexDec2($blockList[$key]['difficulty']);
         }
 
         $data['first_block'] = 0;
@@ -65,17 +65,17 @@ class BlockController extends Controller
         if ($blockInfo)
         {
             $data['hash'] = $hash;
-            $data['number'] = base_convert($blockInfo['number'],16,10);
-            $data['created_at'] = date("Y-m-d H:i:s",base_convert($blockInfo['timestamp'],16,10)+28800);
+            $data['number'] = HexDec2($blockInfo['number']);
+            $data['created_at'] = date("Y-m-d H:i:s",HexDec2($blockInfo['timestamp'])+28800);
             $data['tx_count'] = count($blockInfo['transactions']);
-            $data['size'] = bcdiv(base_convert($blockInfo['size'],16,10),1000,3);
+            $data['size'] = bcdiv(HexDec2($blockInfo['size']),1000,3);
             $data['miner'] = $blockInfo['miner'];
-            $data['difficulty'] = base_convert($blockInfo['difficulty'],16,10);
+            $data['difficulty'] = HexDec2($blockInfo['difficulty']);
             $data['transactions'] = [];
             foreach($blockInfo['transactions'] as $k => $v)
             {
                 $data['transactions'][$k]['hash'] = $v['hash'];
-                $data['transactions'][$k]['value'] = bcdiv(base_convert($v['value'],16,10) ,gmp_pow(10,18),18);
+                $data['transactions'][$k]['value'] = bcdiv(HexDec2($v['value']) ,gmp_pow(10,18),18);
             }
         }
         return view("block.detail",$data);

@@ -32,16 +32,16 @@ class TxController extends Controller
         if($data){
             $gas = $RpcService->rpc('eth_getTransactionReceipt',[[$hash]]);
             $gas = isset($gas[0]['result'])?$gas[0]['result']:null;
-            $data['gas'] = base_convert($gas['gasUsed'],16,10)??0;
-            $data['gasPrice'] = bcdiv(base_convert($data['gasPrice'],16,10) ,gmp_pow(10,18),18);
-            $data['blockNumber'] = base_convert($data['blockNumber'],16,10);
+            $data['gas'] = HexDec2($gas['gasUsed'])??0;
+            $data['gasPrice'] = bcdiv(HexDec2($data['gasPrice']) ,gmp_pow(10,18),18);
+            $data['blockNumber'] = HexDec2($data['blockNumber']);
             $data['value'] = float_format(bcdiv(gmp_strval($data['value']) ,gmp_pow(10,18),18));
-            $data['nonce'] = base_convert($data['nonce'],16,10);
+            $data['nonce'] = HexDec2($data['nonce']);
             //查询交易是否成功
             $receipt = $RpcService->rpc("eth_getTransactionReceipt",[[$hash]]);
             if(isset($receipt[0]['result']))
             {
-                $tx_status = base_convert($receipt[0]['result']['status'],16,10);
+                $tx_status = HexDec2($receipt[0]['result']['status']);
                 if($tx_status == 1)
                 {
                     $data['tx_status'] = "交易成功";
@@ -66,7 +66,7 @@ class TxController extends Controller
             $data['is_token_tx'] = true;
             //保存通证交易
             $token_tx =  new TransactionInputTransfer($data['input']);
-            $data['token_tx_amount'] = bcdiv(base_convert($token_tx->amount,16,10),gmp_pow(10,$decimals),18);
+            $data['token_tx_amount'] = bcdiv(HexDec2($token_tx->amount),gmp_pow(10,$decimals),18);
             $data['token_tx_to'] = $token_tx->payee;
             $data['token'] = Token::where('contract_address',$data['to'])->first();
         }

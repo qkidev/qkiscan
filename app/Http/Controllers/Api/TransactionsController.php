@@ -138,7 +138,7 @@ class TransactionsController extends Controller
         //计算矿工费
         $rpc = new RpcService();
         $gas = $rpc->rpc('eth_getTransactionReceipt',[[$hash]]);
-        $used_gas = base_convert($gas[0]['result']['gasUsed'],16,10)??0;
+        $used_gas = HexDec2($gas[0]['result']['gasUsed'])??0;
         //获取通证
         $token = Token::find($token_tx->token_id);
 

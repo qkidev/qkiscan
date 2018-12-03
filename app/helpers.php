@@ -63,3 +63,18 @@ function float_format($num){
 
     return $num;
 }
+
+/**
+ * 16进制转10进制
+ * @param string $hex
+ * @return int|string
+ */
+function HexDec2(string $hex)
+{
+    $dec = 0;
+    $len = strlen($hex);
+    for ($i = 1; $i <= $len; $i++) {
+        $dec = bcadd($dec, bcmul(strval(hexdec($hex[$i - 1])), bcpow('16', strval($len - $i))));
+    }
+    return $dec;
+}

@@ -59,7 +59,7 @@ class SyncService
         $blockArray = array();
         //获取最后一个高度
         $real_last_block = (new RpcService())->rpc('eth_getBlockByNumber',[['latest',true]]);
-        $real_last_block = base_convert($real_last_block[0]['result']['number'], 16, 10) ?? 0;
+        $real_last_block = HexDec2($real_last_block[0]['result']['number']) ?? 0;
         $num = 500;
         if($real_last_block)
         {
@@ -94,7 +94,7 @@ class SyncService
                 {
                     if($block['result'])
                     {
-                        $block_time = base_convert($block['result']['timestamp'],16,10);
+                        $block_time = HexDec2($block['result']['timestamp']);
                         //太新的区块，不处理,至少要求30秒钟以上
                         if(time() - $block_time < 30)
                         {
@@ -114,7 +114,7 @@ class SyncService
                             }
                         }
 
-                        $block_height = bcadd(base_convert($block['result']['number'],16,10),1,0);
+                        $block_height = bcadd(HexDec2($block['result']['number']),1,0);
                     }
                     else
                     {
@@ -292,7 +292,7 @@ class SyncService
             {
                 $tx_status = 1;
             }else{
-                $tx_status = base_convert($receipt[0]['result']['status'], 16, 10);
+                $tx_status = HexDec2($receipt[0]['result']['status']);
             }
         }else{
             echo "没有回执:" . $v['hash'] . "\n";
@@ -307,9 +307,9 @@ class SyncService
         $tx->to = $v['to'] ?? '';
         $tx->hash = $v['hash'];
         $tx->block_hash = $v['blockHash'];
-        $tx->block_number = base_convert($v['blockNumber'], 16, 10);
-        $tx->gas_price = bcdiv(base_convert($v['gasPrice'],16,10) ,gmp_pow(10,18),18);
-        $tx->amount = bcdiv(base_convert($v['value'], 16, 10), gmp_pow(10, 18), 18);
+        $tx->block_number = HexDec2($v['blockNumber']);
+        $tx->gas_price = bcdiv(HexDec2($v['gasPrice']) ,gmp_pow(10,18),18);
+        $tx->amount = bcdiv(HexDec2($v['value']), gmp_pow(10, 18), 18);
         $tx->created_at = $timestamp;
         $tx->tx_status = $tx_status;
         $tx->save();
@@ -335,7 +335,7 @@ class SyncService
             $erc20 = new ERC20($geth);
             $token = $erc20->token($v['to']);
             $decimals = $token->decimals();
-            $token_tx_amount = bcdiv(base_convert($token_tx->amount,16,10),gmp_pow(10, $decimals),18);
+            $token_tx_amount = bcdiv(HexDec2($token_tx->amount),gmp_pow(10, $decimals),18);
             $this->saveTokenTx($this->token[$v['to']],float_format($token_tx_amount),$this->address[$v['from']],$this->address[$token_tx->payee],$tx->id,$timestamp,$tx_status);
         }
         return $tx;
