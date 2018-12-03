@@ -20,6 +20,10 @@
     <script src="/js/jquery.min.js"></script>
     <script src="/js/jquery-confirm.min.js"></script>
     <script src="/js/bootstrap.min.js"></script>
+    <script src="https://cdn.ravenjs.com/3.26.4/raven.min.js" crossorigin="anonymous"></script>
+    <script type="text/javascript">
+        Raven.config('https://c1b1a9e60a2c43f6bc8e237d046d8433@sentry.quarkblockchain.cn/3').install();
+    </script>
 
 </head>
 
