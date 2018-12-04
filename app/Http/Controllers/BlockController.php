@@ -14,7 +14,7 @@ class BlockController extends Controller
         $requestLastBlock = $request->input('last_block');
 
         $lastBlock = $rpcService->lastBlockHeightNumber();
-        $lastBlock = HexDec2($lastBlock);
+        $lastBlock = (int)HexDec2($lastBlock);
         if($requestLastBlock)
         {
             if($requestLastBlock <= $lastBlock)
