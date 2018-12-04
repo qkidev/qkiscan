@@ -15,7 +15,7 @@
                             <th aria-colindex="2" class="time-label" style="text-align: center;">出块时间</th>
                             <th aria-colindex="3" class="">交易数量</th>
                             <th aria-colindex="4" class="pc-hash">大小(KB)</th>
-                            <th aria-colindex="5" class="pc-hash">难度</th>
+                            <th aria-colindex="5" class="pc-hash">gas上限</th>
                             <th aria-colindex="6" class="">出块方</th>
                             <th aria-colindex="7" class="">区块Hash</th></tr>
                         </thead>
@@ -30,7 +30,7 @@
                                     </td>
                                     <td aria-colindex="3" class="">{{$item['tx_count']}}</td>
                                     <td aria-colindex="4" class="pc-hash">{{$item['size']}}</td>
-                                    <td aria-colindex="5" class="pc-hash">{{$item['difficulty']}}</td>
+                                    <td aria-colindex="5" class="pc-hash">{{$item['gasLimit']}}</td>
                                     <td aria-colindex="6" class="pc-hash">
                                         <a href="/address/{{$item['miner']}}" class="text3 vtext-monospace">{{$item['miner']}}</a>
                                     </td>
