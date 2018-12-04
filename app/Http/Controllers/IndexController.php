@@ -26,7 +26,7 @@ class IndexController extends Controller
         $rpcService = new RpcService();
         $lastBlock = $rpcService->lastBlockHeightNumber();
 
-        $lastBlock = HexDec2($lastBlock);
+        $lastBlock = (int)HexDec2($lastBlock);
 
         $blockArray = $rpcService->getBlockString($lastBlock);
         $block = $rpcService->getBlockByNumber($blockArray);
