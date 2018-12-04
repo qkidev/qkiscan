@@ -19,6 +19,7 @@ class EnableCrossRequestMiddleware
         $origin = $request->server('HTTP_ORIGIN') ? $request->server('HTTP_ORIGIN') : '';
         $response->header('Access-Control-Allow-Origin',$origin);
         $response->header('Cache-control','public');
+        $response->header('Allow','GET,POST,OPTIONS');
         return $response;
     }
 }
