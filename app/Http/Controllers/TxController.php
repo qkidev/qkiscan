@@ -15,7 +15,13 @@ class TxController extends Controller
      * 交易详细
      * @param $hash
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @throws \ERC20\Exception\ERC20Exception
+     * @throws \EthereumRPC\Exception\ConnectionException
+     * @throws \EthereumRPC\Exception\ContractABIException
+     * @throws \EthereumRPC\Exception\ContractsException
+     * @throws \EthereumRPC\Exception\GethException
      * @throws \EthereumRPC\Exception\ResponseObjectException
+     * @throws \HttpClient\Exception\HttpClientException
      */
     public function index($hash)
     {
@@ -32,9 +38,9 @@ class TxController extends Controller
         if($data){
             $gas = $RpcService->rpc('eth_getTransactionReceipt',[[$hash]]);
             $gas = isset($gas[0]['result'])?$gas[0]['result']:null;
-            $data['gas'] = HexDec2($gas['gasUsed'])??0;
-            $data['gasPrice'] = bcdiv(HexDec2($data['gasPrice']) ,gmp_pow(10,18),18);
-            $data['blockNumber'] = HexDec2($data['blockNumber']);
+            $data['gas'] = float_format(HexDec2($gas['gasUsed']))??0;
+            $data['gasPrice'] = float_format(bcdiv(HexDec2($data['gasPrice']) ,gmp_pow(10,18),18));
+            $data['blockNumber'] = base_convert($data['blockNumber'],16,10);
             $data['value'] = float_format(bcdiv(gmp_strval($data['value']) ,gmp_pow(10,18),18));
             $data['nonce'] = HexDec2($data['nonce']);
             //查询交易是否成功
