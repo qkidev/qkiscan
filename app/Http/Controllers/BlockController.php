@@ -28,6 +28,10 @@ class BlockController extends Controller
         $blockList = array();
         foreach ($block as $key => $item)
         {
+            if(!$item['result'])
+            {
+                break;
+            }
             $blockList[$key] = $item['result'];
             $blockList[$key]['height'] = HexDec2($blockList[$key]['number']);
             $blockList[$key]['created_at'] = date("Y-m-d H:i:s",HexDec2($blockList[$key]['timestamp'])+28800);
