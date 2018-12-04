@@ -81,6 +81,7 @@ class TransactionsController extends Controller
      */
     public function getTransactions(Request $request)
     {
+        header('Access-Control-Allow-Origin:*');
         $address = $request->input('address');
         $pageSize = $request->input('pageSize',20);
         if(!$address)
