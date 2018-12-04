@@ -82,6 +82,9 @@ class TransactionsController extends Controller
     public function getTransactions(Request $request)
     {
         header('Access-Control-Allow-Origin:*');
+        header("Access-Control-Allow-Methods:POST,GET");
+        header("Access-Control-Allow-Headers:x-requested-with,content-type");
+        header("Content-type:text/json;charset=utf-8");
         $address = $request->input('address');
         $pageSize = $request->input('pageSize',20);
         if(!$address)
