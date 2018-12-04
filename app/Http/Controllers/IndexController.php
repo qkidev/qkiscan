@@ -26,7 +26,7 @@ class IndexController extends Controller
         $rpcService = new RpcService();
         $lastBlock = $rpcService->lastBlockHeightNumber();
 
-        $lastBlock = HexDec2($lastBlock);
+        $lastBlock = (int)HexDec2($lastBlock);
 
         $blockArray = $rpcService->getBlockString($lastBlock);
         $block = $rpcService->getBlockByNumber($blockArray);
@@ -40,7 +40,7 @@ class IndexController extends Controller
                     break;
                 }
                 $blockList[$key] = $item['result'];
-                $blockList[$key]['height'] = HexDec2($blockList[$key]['number']??0);
+                $blockList[$key]['height'] = base_convert($blockList[$key]['number'],16,10);
                 $blockList[$key]['created_at'] = date("Y-m-d H:i:s",HexDec2($blockList[$key]['timestamp'])+28800);
                 $blockList[$key]['tx_count'] = count($blockList[$key]['transactions']);
                 $blockList[$key]['size'] = bcdiv(HexDec2($blockList[$key]['size']),1000,3);
