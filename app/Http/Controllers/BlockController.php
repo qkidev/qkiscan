@@ -41,12 +41,18 @@ class BlockController extends Controller
         }
 
         $data['first_block'] = 0;
-        if($requestLastBlock)
+        $data['last_block'] = 0;
+        $data['block'] = [];
+        if(count($blockList) > 0)
         {
-            $data['first_block'] = bcadd($blockList[0]['height'],20,0);
+            if($requestLastBlock)
+            {
+                $data['first_block'] = bcadd($blockList[0]['height'],20,0);
+            }
+            $data['last_block'] = $blockList[count($blockList)-1]['height'];
+            $data['block'] = $blockList;
+
         }
-        $data['last_block'] = $blockList[count($blockList)-1]['height'];
-        $data['block'] = $blockList;
         $data['last_block_height'] = Settings::getValueByKey("last_block_height");
         $data['currentPage'] = "block";
         return view("block.index",$data);
