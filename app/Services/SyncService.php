@@ -83,6 +83,11 @@ class SyncService
         //获取下一个区块
         $rpcService = new RpcService();
         $blocks = $rpcService->getBlockByNumber($blockArray);
+        if(!$blocks)
+        {
+            echo "获取数据失败";
+            return false;
+        }
         DB::beginTransaction();
         try{
 
