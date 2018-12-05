@@ -35,7 +35,7 @@
                         </td>
                         <td aria-colindex="3" class="">{{$item['tx_count']}}</td>
                         <td aria-colindex="4" class="pc-hash">{{$item['size']}}</td>
-                        <td aria-colindex="5" class="pc-hash">{{$item['difficulty']}}</td>
+                        <td aria-colindex="5" class="pc-hash">{{$item['gasLimit']}}</td>
                         <td aria-colindex="6" class="pc-hash">
                             <a href="/address/{{$item['miner']}}" class="text3 vtext-monospace">{{$item['miner']}}</a>
                         </td>
