@@ -83,6 +83,7 @@ class TransactionsController extends Controller
     {
         $address = $request->input('address');
         $pageSize = $request->input('pageSize',20);
+        $callback = $request->input('callback');
         if(!$address)
         {
             return response()->json(['code' => 500, 'message' => '缺少必要参数', 'data' => '']);
@@ -113,7 +114,7 @@ class TransactionsController extends Controller
             }
         }
 
-        return response()->json(['code' => 0, 'message' => 'OK', 'data' => $result]);
+        return response($callback."('". json_encode($result). "')");
     }
 
     public function getTokenTxInfo(Request $request)
