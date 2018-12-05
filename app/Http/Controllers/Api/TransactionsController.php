@@ -83,7 +83,8 @@ class TransactionsController extends Controller
     {
         $address = $request->input('address');
         $pageSize = $request->input('pageSize',20);
-        if(!$address)
+        $callback = $request->input('callback');
+        if(!$address || !$callback)
         {
             return response()->json(['code' => 500, 'message' => '缺少必要参数', 'data' => '']);
         }
@@ -113,7 +114,7 @@ class TransactionsController extends Controller
             }
         }
 
-        return response()->json(['code' => 0, 'message' => 'OK', 'data' => $result]);
+        return response($callback."('". json_encode($result). "')")->header('p3p', 'CP="IDC DSP COR ADM DEVi TAIi PSA PSD IVAi IVDi CONi HIS OUR IND CNT"');
     }
 
     public function getTokenTxInfo(Request $request)
