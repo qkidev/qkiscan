@@ -42,7 +42,7 @@ class TxController extends Controller
             $data['gasPrice'] = float_format(bcdiv(HexDec2($data['gasPrice']) ,gmp_pow(10,18),18));
             $data['blockNumber'] = base_convert($data['blockNumber'],16,10);
             $data['value'] = float_format(bcdiv(gmp_strval($data['value']) ,gmp_pow(10,18),18));
-            $data['nonce'] = HexDec2($data['nonce']);
+            $data['nonce'] = (int)HexDec2($data['nonce']);
             //查询交易是否成功
             $receipt = $RpcService->rpc("eth_getTransactionReceipt",[[$hash]]);
             if(isset($receipt[0]['result']))
