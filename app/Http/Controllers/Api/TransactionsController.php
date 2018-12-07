@@ -110,6 +110,7 @@ class TransactionsController extends Controller
                         $result[$i]['amount'] = '-'.$result[$k]['amount'];
                     }
                     $result[$i]['hash'] = $tx->hash;
+                    $result[$i]['tx_status'] = $tx->tx_status;
                     $i++;
                 }
             }
