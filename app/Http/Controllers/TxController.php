@@ -23,17 +23,31 @@ class TxController extends Controller
             [$hash]
         );
 
+
         $data = $RpcService->rpc("eth_getTransactionByHash",$params);
 
         $data = isset($data[0]['result'])?$data[0]['result']:null;
         if($data){
+            $block = $RpcService->rpc("eth_getBlockByNumber",[[$data['blockNumber'], true]]);
+            $block = isset($block[0]['result'])?$block[0]['result']:null;
+            if($block)
+            {
+                $created_at = base_convert($block['timestamp'], 16 ,10);
+                $data['created_at'] = date('Y-m-d H:i:s', $created_at);
+            }else{
+                $data['created_at'] = "";
+            }
+
             $gas = $RpcService->rpc('eth_getTransactionReceipt',[[$hash]]);
             $gas = isset($gas[0]['result'])?$gas[0]['result']:null;
             $data['gas'] = base_convert($gas['gasUsed'],16,10)??0;
             $data['gasPrice'] = float_format(bcdiv(base_convert($data['gasPrice'],16,10) ,gmp_pow(10,18),18));
             $data['blockNumber'] = base_convert($data['blockNumber'],16,10);
             $data['value'] = float_format(bcdiv(gmp_strval($data['value']) ,gmp_pow(10,18),18));
+            
         }
+
+
 
         $data['is_token_tx'] = false;
         //获取通证交易记录

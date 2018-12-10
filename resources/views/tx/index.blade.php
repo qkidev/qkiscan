@@ -26,7 +26,10 @@
                         <span data-v-0c97b89a="" class="text2 strong">矿工费</span>
                         <span data-v-0c97b89a="" id="hash-time" class="text2" data-original-title="" title="">{{float_format(bcmul($gas,$gasPrice,18))}} QKI</span>
                     </li>
-
+                    <li data-v-0c97b89a="" class="item">
+                        <span data-v-0c97b89a="" class="text2 strong">时间</span>
+                        <span data-v-0c97b89a="" id="hash-time" class="text2" data-original-title="" title="">{{$created_at}}</span>
+                    </li>
                 </ul>
                 <ul data-v-0c97b89a="" class="vsection base-right">
                     <li data-v-0c97b89a="" class="item">
