@@ -27,6 +27,10 @@
                         <span data-v-0c97b89a="" id="hash-time" class="text2" data-original-title="" title="">{{float_format(bcmul($gas,$gasPrice,18))}} QKI</span>
                     </li>
                     <li data-v-0c97b89a="" class="item">
+                        <span data-v-0c97b89a="" class="text2 strong">交易状态</span>
+                        <span data-v-0c97b89a="" id="hash-time" class="text2" data-original-title="" title="">{{$tx_status}}</span>
+                    </li>
+                    <li data-v-0c97b89a="" class="item">
                         <span data-v-0c97b89a="" class="text2 strong">时间</span>
                         <span data-v-0c97b89a="" id="hash-time" class="text2" data-original-title="" title="">{{$created_at}}</span>
                     </li>
@@ -36,8 +40,13 @@
                         <span data-v-0c97b89a="" class="text2 strong">来源</span>
                         <span data-v-0c97b89a="" class="text2"><a data-v-0c97b89a="" href="/address/{{$from}}" class="hash font-hash-content">{{$from}}</a></span></li>
                     <li data-v-0c97b89a="" class="item">
-                        <span data-v-0c97b89a="" class="text2 strong">接收</span>
-                        <span data-v-0c97b89a="" class="text2"><a data-v-0c97b89a="" href="/address/{{$to}}" class="hash font-hash-content">{{$to}}</a></span></li>
+                        @if(!$to && $contract_address)
+                            <span data-v-0c97b89a="" class="text2 strong">部署合约</span>
+                            <span data-v-0c97b89a="" class="text2"><a data-v-0c97b89a="" href="/address/{{$contract_address}}" class="hash font-hash-content">{{$contract_address}}</a></span></li>
+                        @else
+                            <span data-v-0c97b89a="" class="text2 strong">接收</span>
+                            <span data-v-0c97b89a="" class="text2"><a data-v-0c97b89a="" href="/address/{{$to}}" class="hash font-hash-content">{{$to}}</a></span></li>
+                        @endif
                     <li data-v-0c97b89a="" class="item">
                         <span data-v-0c97b89a="" class="text2 strong">金额</span>
                         <span data-v-0c97b89a="" class="text2" data-original-title="" title="" style="padding-left: 170px;">{{$value}}</span>
@@ -45,6 +54,10 @@
                     <li data-v-0c97b89a="" class="item">
                         <span data-v-0c97b89a="" class="text2 strong">input</span>
                         <textarea class="form-control" rows="1" readonly style="width: 65%; min-width: 278px; max-width: 324px">{{ $input }}</textarea>
+                    </li>
+                    <li data-v-0c97b89a="" class="item">
+                        <span data-v-0c97b89a="" class="text2 strong">nonce</span>
+                        <span data-v-0c97b89a="" class="text2" data-original-title="" title="" style="padding-left: 170px;">{{$nonce}}</span>
                     </li>
 
                 </ul>

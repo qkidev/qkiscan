@@ -20,6 +20,10 @@
     <script src="/js/jquery.min.js"></script>
     <script src="/js/jquery-confirm.min.js"></script>
     <script src="/js/bootstrap.min.js"></script>
+    <script src="https://cdn.ravenjs.com/3.26.4/raven.min.js" crossorigin="anonymous"></script>
+    <script type="text/javascript">
+        Raven.config('https://c1b1a9e60a2c43f6bc8e237d046d8433@sentry.quarkblockchain.cn/3').install();
+    </script>
 
 </head>
 
@@ -33,6 +37,12 @@
                     </li>
                     <li class="nuxt-link-exact-active nuxt-link-active nav-item @if(isset($currentPage) && $currentPage=='block') current @endif">
                         <a href="/block">区块</a>
+                    </li>
+                    <li class="nuxt-link-exact-active nuxt-link-active nav-item @if(isset($currentPage) && $currentPage=='tx-list') current @endif">
+                        <a href="/tx-list">交易</a>
+                    </li>
+                    <li class="nuxt-link-exact-active nuxt-link-active nav-item @if(isset($currentPage) && $currentPage=='unpacked-tx-list') current @endif">
+                        <a href="/unpacked-tx-list">未打包交易</a>
                     </li>
                 </ul>
                 <div class="search-container d-lg-block d-none">
@@ -67,6 +77,9 @@
                         </li>
                         <li class="nav-item">
                             <a rel="noopener" href="/block"  class="nav-link">区块</a>
+                        </li>
+                        <li class="nav-item">
+                            <a rel="noopener" href="/tx-list"  class="nav-link">交易</a>
                         </li>
                     </ul>
                 </div>

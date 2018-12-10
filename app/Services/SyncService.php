@@ -23,22 +23,22 @@ class SyncService
      */
     public function synchronizeTransactions()
     {
+        $this->unlock('create');
         if ($this->isLock('create')) {
+            echo "已锁";
             return;
         }
         $this->lock('create');
         ini_set('max_execution_time', 60);
-        $end_time = time() + 55;
+        $end_time = time() + 58;
         while (true)
         {
             if($end_time <= time())
             {
                 break;
             }
-            if(!$this->syncTx())
-            {
-                sleep(1);
-            }
+            $this->syncTx();
+            sleep(1);
         }
         $this->unlock('create');
 
@@ -57,7 +57,18 @@ class SyncService
         }
         $lastBlock = $last_block_height->value;
         $blockArray = array();
-        for($i=0;$i<500;$i++)
+        //获取最后一个高度
+        $real_last_block = (new RpcService())->rpc('eth_getBlockByNumber',[['latest',true]]);
+        $real_last_block = HexDec2($real_last_block[0]['result']['number']) ?? 0;
+        $num = 500;
+        if($real_last_block)
+        {
+            if($lastBlock + 10 >= $real_last_block)
+            {
+                $num = 10;
+            }
+        }
+        for($i=0;$i<$num;$i++)
         {
             //组装参数
             if($lastBlock < 10)
@@ -72,6 +83,11 @@ class SyncService
         //获取下一个区块
         $rpcService = new RpcService();
         $blocks = $rpcService->getBlockByNumber($blockArray);
+        if(!$blocks)
+        {
+            echo "获取数据失败";
+            return false;
+        }
         DB::beginTransaction();
         try{
 
@@ -83,20 +99,27 @@ class SyncService
                 {
                     if($block['result'])
                     {
+                        $block_time = HexDec2($block['result']['timestamp']);
+                        //太新的区块，不处理,至少要求30秒钟以上
+                        if(time() - $block_time < 30)
+                        {
+                            break;
+                        }
+
                         //保存出块方地址、保存通证
                         $this->saveAddress($block['result']['miner']);
                         $transactions = $block['result']['transactions'];
                         //如果此区块有交易
                         if(isset($transactions) && count($transactions) > 0)
                         {
-                            $timestamp = date("Y-m-d H:i:s",base_convert($block['result']['timestamp'],16,10));
+                            $timestamp = date("Y-m-d H:i:s",$block_time);
                             foreach($transactions as $tx)
                             {
                                 $this->saveTx($tx, $timestamp);
                             }
                         }
 
-                        $block_height = bcadd(base_convert($block['result']['number'],16,10),1,0);
+                        $block_height = bcadd(HexDec2($block['result']['number']),1,0);
                     }
                     else
                     {
@@ -242,9 +265,10 @@ class SyncService
      * @param $to_address_id
      * @param $tx_id
      * @param $timestamp
+     * @param $tx_status
      * @return bool
      */
-    public function saveTokenTx($token_id,$amount,$from_address_id,$to_address_id,$tx_id,$timestamp)
+    public function saveTokenTx($token_id,$amount,$from_address_id,$to_address_id,$tx_id,$timestamp,$tx_status)
     {
         $tokenTx = new TokenTx();
         $tokenTx->token_id = $token_id;
@@ -253,6 +277,7 @@ class SyncService
         $tokenTx->amount = $amount;
         $tokenTx->tx_id = $tx_id;
         $tokenTx->created_at = $timestamp;
+        $tokenTx->tx_status = $tx_status;
 
         return $tokenTx->save();
     }
@@ -265,15 +290,33 @@ class SyncService
      */
     public function saveTx($v, $timestamp): Transactions
     {
-        $tx = new Transactions();
+        //查询交易是否成功
+        $receipt = (new RpcService())->rpc("eth_getTransactionReceipt",[[$v['hash']]]);
+        if(isset($receipt[0]['result'])) {
+            if(isset($receipt[0]['result']['root']))
+            {
+                $tx_status = 1;
+            }else{
+                $tx_status = HexDec2($receipt[0]['result']['status']);
+            }
+        }else{
+            echo "没有回执:" . $v['hash'] . "\n";
+            $tx_status = 0;
+        }
+//        $exist = Transactions::where('hash',$v['hash'])->first();
+//        if($exist)
+//            $tx = $exist;
+//        else
+            $tx = new Transactions();
         $tx->from = $v['from'];
         $tx->to = $v['to'] ?? '';
         $tx->hash = $v['hash'];
         $tx->block_hash = $v['blockHash'];
-        $tx->block_number = base_convert($v['blockNumber'], 16, 10);
-        $tx->gas_price = 0;
-        $tx->amount = bcdiv(base_convert($v['value'], 16, 10), gmp_pow(10, 18), 18);
+        $tx->block_number = HexDec2($v['blockNumber']);
+        $tx->gas_price = bcdiv(HexDec2($v['gasPrice']) ,gmp_pow(10,18),18);
+        $tx->amount = bcdiv(HexDec2($v['value']), gmp_pow(10, 18), 18);
         $tx->created_at = $timestamp;
+        $tx->tx_status = $tx_status;
         $tx->save();
 
         //记录地址、保存通证
@@ -291,8 +334,14 @@ class SyncService
             $token_tx =  new TransactionInputTransfer($input);
             //保存通证接收方地址
             $this->saveAddress($token_tx->payee,$this->checkAddressType($token_tx->payee));
-            $token_tx_amount = bcdiv(base_convert($token_tx->amount,16,10),1000000000000000000,8);
-            $this->saveTokenTx($this->token[$v['to']],$token_tx_amount,$this->address[$v['from']],$this->address[$token_tx->payee],$tx->id,$timestamp);
+            //实例化通证
+            $url_arr = parse_url(env("RPC_HOST"));
+            $geth = new EthereumRPC($url_arr['host'], $url_arr['port']);
+            $erc20 = new ERC20($geth);
+            $token = $erc20->token($v['to']);
+            $decimals = $token->decimals();
+            $token_tx_amount = bcdiv(HexDec2($token_tx->amount),gmp_pow(10, $decimals),18);
+            $this->saveTokenTx($this->token[$v['to']],float_format($token_tx_amount),$this->address[$v['from']],$this->address[$token_tx->payee],$tx->id,$timestamp,$tx_status);
         }
         return $tx;
     }

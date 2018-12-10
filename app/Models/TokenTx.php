@@ -24,6 +24,9 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\TokenTx whereTxId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\TokenTx whereUpdatedAt($value)
  * @mixin \Eloquent
+ * @property int $tx_status 交易状态，1成功，2失败
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\TokenTx whereFromAddressId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\TokenTx whereTxStatus($value)
  */
 class TokenTx extends Model
 {

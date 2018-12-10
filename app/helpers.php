@@ -50,18 +50,31 @@ function getMultiple($unit)
  */
 function float_format($num){
 
-    if($num<0.0001 && $num>0){
+    $temp = explode ( '.', $num );
 
-        $num = number_format($num,8);
-
+    if (sizeof ( $temp ) > 1) {
         $num = rtrim($num,'0');
+    }
+    $temp1 = explode ( '.', $num );
 
-    }else{
-
-
-        $num = floatval($num);
-
+    if(isset($temp1[1]) && $temp1[1]==null){
+        $num = rtrim($num,'.');
     }
 
     return $num;
+}
+
+/**
+ * 16进制转10进制
+ * @param string $hex
+ * @return int|string
+ */
+function HexDec2(string $hex)
+{
+    $dec = 0;
+    $len = strlen($hex);
+    for ($i = 1; $i <= $len; $i++) {
+        $dec = bcadd($dec, bcmul(strval(hexdec($hex[$i - 1])), bcpow('16', strval($len - $i))));
+    }
+    return $dec;
 }

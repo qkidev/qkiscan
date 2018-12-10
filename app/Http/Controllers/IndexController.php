@@ -26,7 +26,7 @@ class IndexController extends Controller
         $rpcService = new RpcService();
         $lastBlock = $rpcService->lastBlockHeightNumber();
 
-        $lastBlock = base_convert($lastBlock,16,10);
+        $lastBlock = (int)HexDec2($lastBlock);
 
         $blockArray = $rpcService->getBlockString($lastBlock);
         $block = $rpcService->getBlockByNumber($blockArray);
@@ -35,16 +35,22 @@ class IndexController extends Controller
         {
             foreach ($block as $key => $item)
             {
+                if(!$item['result'])
+                {
+                    break;
+                }
                 $blockList[$key] = $item['result'];
                 $blockList[$key]['height'] = base_convert($blockList[$key]['number'],16,10);
-                $blockList[$key]['created_at'] = date("Y-m-d H:i:s",base_convert($blockList[$key]['timestamp'],16,10)+28800);
+                $blockList[$key]['gasLimit'] = base_convert($blockList[$key]['gasLimit'],16,10);
+                $blockList[$key]['created_at'] = date("Y-m-d H:i:s",HexDec2($blockList[$key]['timestamp'])+28800);
                 $blockList[$key]['tx_count'] = count($blockList[$key]['transactions']);
-                $blockList[$key]['size'] = bcdiv(base_convert($blockList[$key]['size'],16,10),1000,3);
-                $blockList[$key]['difficulty'] = base_convert($blockList[$key]['difficulty'],16,10);
+                $blockList[$key]['size'] = bcdiv(HexDec2($blockList[$key]['size']),1000,3);
+                $blockList[$key]['difficulty'] = HexDec2($blockList[$key]['difficulty']);
             }
         }
 
         $data['block'] = $blockList;
+        $data['currentPage'] = "index";
         return view("index.index",$data);
     }
 
@@ -105,6 +111,15 @@ class IndexController extends Controller
                 return view("error.404");
             }
         }
+    }
+
+    /**
+     * 接口页面
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function api()
+    {
+        return view("index.api");
     }
 
 }

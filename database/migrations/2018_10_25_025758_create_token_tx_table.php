@@ -18,7 +18,7 @@ class CreateTokenTxTable extends Migration
             $table->unsignedInteger('token_id')->comment('索引表id');
             $table->unsignedInteger('form_address_id')->comment('转入地址id');
             $table->unsignedInteger('to_address_id')->comment('转出地址id');
-            $table->unsignedDecimal('amount',18,8)->comment('数量');
+            $table->unsignedDecimal('amount',28,8)->comment('数量');
             $table->unsignedInteger('tx_id')->comment('交易ID');
             $table->timestamps();
         });
