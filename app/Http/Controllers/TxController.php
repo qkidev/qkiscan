@@ -64,7 +64,7 @@ class TxController extends Controller
                 $data['gas'] = float_format(HexDec2($gas['gasUsed']))??0;
                 $data['gasPrice'] = float_format(bcdiv(HexDec2($data['gasPrice']) ,gmp_pow(10,18),18));
                 $data['blockNumber'] = base_convert($data['blockNumber'],16,10);
-                $data['value'] = float_format(bcdiv(gmp_strval($data['value']) ,gmp_pow(10,18),18));
+                $data['value'] = float_format(bcdiv(HexDec2($data['value']) ,gmp_pow(10,18),18));
                 $data['contract_address'] = isset($gas['contractAddress'])?$gas['contractAddress']:'';
             }else{
                 $data['tx_status'] = '交易状态获取失败';
