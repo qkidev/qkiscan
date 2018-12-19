@@ -86,6 +86,7 @@ class BlockController extends Controller
             foreach($blockInfo['transactions'] as $k => $v)
             {
                 $data['transactions'][$k]['hash'] = $v['hash'];
+                $data['transactions'][$k]['created_at'] = $v['created_at'];
                 $data['transactions'][$k]['value'] = bcdiv(HexDec2($v['value']) ,gmp_pow(10,18),18);
             }
         }

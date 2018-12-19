@@ -33,6 +33,7 @@
                                     <a data-v-8701ced6="" href="/tx/{{$v['hash']}}" class="hash font-hash-title">
                                         <span data-v-8701ced6="" class="d-lg-inline-block">{{$v['hash']}}</span>
                                     </a>
+                                    <span style="margin-left:10px;">{{$v['created_at']}}</span>
                                     <span data-v-8701ced6="" @if(strtolower($v['from']) == strtolower($address)) style="color: red;" @else style="color: #00b275;" @endif class="output font-coin-title"> {{float_format($v['amount'])}} QKI</span>
                                     <!----></div>
 
