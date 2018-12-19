@@ -49,7 +49,7 @@ class TransactionsController extends Controller
             return response()->json(['code' => 500, 'message' => '合约地址有误，请检查', 'data' => '']);
         }
 
-        $list = TokenTx::select(DB::raw('token_tx.*,t.hash'))
+        $list = TokenTx::select(DB::raw('token_tx.*,t.hash,t.tx_status'))
             ->leftJoin('transactions as t', 'token_tx.tx_id', 't.id')
             ->where([['token_id', '=', $token->id],['from_address_id', '=', $user_address->id],['t.tx_status', '=', 1]])
             ->orWhere([['token_id', '=', $token->id],['to_address_id', '=', $user_address->id],['t.tx_status', '=', 1]])
@@ -68,6 +68,7 @@ class TransactionsController extends Controller
                     $result[$k]['amount'] = '-'.$result[$k]['amount'];
                 }
                 $result[$k]['hash'] = $tx->hash;
+                $result[$k]['tx_status'] = $tx->tx_status;
             }
         }
 
