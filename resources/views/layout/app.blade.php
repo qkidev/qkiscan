@@ -92,7 +92,7 @@
 
         <div class="vfooter">
 
-            <p class="panel-bottom">Copyright ©2018 quarkblockchain v{{config('app.version')}}</p>
+            <p class="panel-bottom">Copyright ©2018 quarkblockchain v{{config('app.version')}}   <a href="/apis">api</a></p>
         </div>
 
         <div id="btn_top" class="cmp-navtop d-none d-lg-flex" style="display:none;" data-v-59831c6c="">

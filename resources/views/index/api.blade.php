@@ -68,11 +68,13 @@
             amount: "-500.00000000",<span class="api-tips">//数量，正为转入，负为转出</span>
             created_at: "2018-11-02 06:07:37",<span class="api-tips">//转账时间</span>
             hash: "0x1e85805466fbdaa001caffa0a0e3c0e806db7264f01d16cff650a55cab4700c2"<span class="api-tips">//hash</span>
+            tx_status:"1"<span class="api-tips">交易状态，1成功，0失败</span>
         },
         {
             amount: "1000.00000000",
             created_at: "2018-10-24 02:57:57",
-            hash: "0x77d939383c2fcd180488ed16465e806626d03ad1d4d7ec25ea61584c94edaaae"
+            hash: "0x77d939383c2fcd180488ed16465e806626d03ad1d4d7ec25ea61584c94edaaae",
+            tx_status:"1"
         }
     ]
 }
@@ -93,21 +95,33 @@ data: [
             amount: "0.000000000000000000", <span class="api-tips">//数量，正为转入，负为转出</span>
             created_at: "2018-11-02 06:07:37", <span class="api-tips">//转账时间</span>
             hash: "0x1e85805466fbdaa001caffa0a0e3c0e806db7264f01d16cff650a55cab4700c2" <span class="api-tips">//hash</span>
+            tx_status: "1" <span class="api-tips">交易状态，1成功，0失败</span>
+            from: "0xf82a68006dff2e326f5815fb0d020215283e4144dcdfeac659b2e9e73e0bb11f" <span class="api-tips">转出地址</span>
+            to: "0xf82a68006dff2e326f5815fb0d020215283e4144dcdfeac659b2e9e73e0bb11f" <span class="api-tips">转入地址</span>
         },
         {
             amount: "1.123456780000000000",
             created_at: "2018-10-26 08:05:23",
-            hash: "0x708101347d561bd16213d4d66f03e3ea4207abbe250147ba237af8e4b8149ac1"
+            hash: "0x708101347d561bd16213d4d66f03e3ea4207abbe250147ba237af8e4b8149ac1",
+            tx_status: "1",
+            from: "0xf82a68006dff2e326f5815fb0d020215283e4144dcdfeac659b2e9e73e0bb11f",
+            to: "0xf82a68006dff2e326f5815fb0d020215283e4144dcdfeac659b2e9e73e0bb11f"
         },
         {
             amount: "1.000000000000000000",
             created_at: "2018-10-26 08:02:38",
-            hash: "0x2de69364e23689edb610303ab4731d10b842d42c8da3523e7f9c78bda69f0837"
+            hash: "0x2de69364e23689edb610303ab4731d10b842d42c8da3523e7f9c78bda69f0837",
+            tx_status: "1",
+            from: "0xf82a68006dff2e326f5815fb0d020215283e4144dcdfeac659b2e9e73e0bb11f",
+            to: "0xf82a68006dff2e326f5815fb0d020215283e4144dcdfeac659b2e9e73e0bb11f"
         },
         {
             amount: "0.000000000000001018",
             created_at: "2018-10-26 08:02:12",
-            hash: "0xbcb991fc5ea7657dd8fb3f1ed3a36185931ee9ab53b5e2cba666e2d526cd0a0b"
+            hash: "0xbcb991fc5ea7657dd8fb3f1ed3a36185931ee9ab53b5e2cba666e2d526cd0a0b",
+            tx_status: "1",
+            from: "0xf82a68006dff2e326f5815fb0d020215283e4144dcdfeac659b2e9e73e0bb11f",
+            to: "0xf82a68006dff2e326f5815fb0d020215283e4144dcdfeac659b2e9e73e0bb11f"
         },
         ......
     ]
@@ -169,6 +183,7 @@ data: [
         transactions: [<span class="api-tips">//交易</span>
             {
                 hash: "0x092c690c60ca346206fe97786e02c740a655b24a2dcb25686ccc7cc8a7f5e77a",<span class="api-tips">//交易hash</span>
+                created_at: "2018-11-02 14:13:01",<span class="api-tips">//时间</span>
                 amount: "0.000000000000000000"<span class="api-tips">//交易数量</span>
             },
             ......

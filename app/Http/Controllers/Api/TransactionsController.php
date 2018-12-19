@@ -117,6 +117,8 @@ class TransactionsController extends Controller
                         $result[$i]['amount'] = '-'.$result[$i]['amount'];
                     }
                     $result[$i]['hash'] = $tx->hash;
+                    $result[$i]['from'] = $tx->from;
+                    $result[$i]['to'] = $tx->to;
                     $result[$i]['tx_status'] = $tx->tx_status;
                     $i++;
                 }
