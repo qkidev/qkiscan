@@ -114,7 +114,7 @@ class TransactionsController extends Controller
                     $result[$i]['created_at'] = $tx->created_at->format('Y-m-d H:i:s');
                     if(strtolower($tx->from) == strtolower($address))
                     {
-                        $result[$i]['amount'] = '-'.$result[$k]['amount'];
+                        $result[$i]['amount'] = '-'.$result[$i]['amount'];
                     }
                     $result[$i]['hash'] = $tx->hash;
                     $result[$i]['tx_status'] = $tx->tx_status;
