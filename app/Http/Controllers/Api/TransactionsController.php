@@ -71,7 +71,13 @@ class TransactionsController extends Controller
             }
         }
 
-        return response($callback."('". json_encode($result). "')");
+        if($callback)
+        {
+            return response($callback."('". json_encode($result). "')");
+        }else{
+
+            return response()->json(['code' => 0, 'message' => 'OK', 'data' => $result]);
+        }
 
     }
 
@@ -116,7 +122,13 @@ class TransactionsController extends Controller
             }
         }
 
-        return response($callback."('". json_encode($result). "')");
+        if($callback)
+        {
+            return response($callback."('". json_encode($result). "')");
+        }else{
+
+            return response()->json(['code' => 0, 'message' => 'OK', 'data' => $result]);
+        }
     }
 
     public function getTokenTxInfo(Request $request)
