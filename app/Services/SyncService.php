@@ -100,8 +100,8 @@ class SyncService
                     if($block['result'])
                     {
                         $block_time = HexDec2($block['result']['timestamp']);
-                        //太新的区块，不处理,至少要求30秒钟以上
-                        if(time() - $block_time < 30)
+                        //太新的区块，不处理,至少要求60秒钟以上
+                        if(time() - $block_time < 60)
                         {
                             break;
                         }

@@ -16,7 +16,7 @@
                             <th aria-colindex="3" class="">交易数量</th>
                             <th aria-colindex="4" class="pc-hash">大小(KB)</th>
                             <th aria-colindex="5" class="pc-hash">gas上限</th>
-                            <th aria-colindex="6" class="">出块方</th>
+                            <th aria-colindex="6" class="pc-hash">出块方</th>
                             <th aria-colindex="7" class="">区块Hash</th></tr>
                         </thead>
                         <!---->
