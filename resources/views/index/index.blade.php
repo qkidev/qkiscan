@@ -37,11 +37,8 @@
                                     <td aria-colindex="7" class="pc-hash">
                                         <a href="/block/detail?hash={{$item['hash']}}" class="text3 vtext-monospace">{{$item['hash']}}</a>
                                     </td>
-                                    <td aria-colindex="6" class="web-hash">
-                                        <a href="/address?hash={{$item['miner']}}" class="text3 vtext-monospace">{{mb_substr($item['miner'],0,5,'utf-8')}}</a>
-                                    </td>
                                     <td aria-colindex="7" class="web-hash">
-                                        <a href="/block/detail?hash={{$item['hash']}}" class="text3 vtext-monospace">{{mb_substr($item['hash'],0,5,'utf-8')}}</a>
+                                        <a href="/block/detail?hash={{$item['hash']}}" class="text3 vtext-monospace">{{mb_substr($item['hash'],0,12,'utf-8')}}</a>
                                     </td>
                                 </tr>
                             @endforeach
