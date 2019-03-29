@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Models\Token;
 use App\Models\TokenTx;
 use App\Models\Transactions;
 use App\Services\RpcService;
@@ -9,6 +10,7 @@ use ERC20\ERC20;
 use EthereumRPC\EthereumRPC;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\DB;
 
 class AddressController extends Controller
 {
