@@ -249,6 +249,109 @@ data: {
 }
 </pre>
         </div>
+        <span class='le'><em>8.获取地址详情</em> <b>描述:获取地址详情接口</b> </span>
+        <span class='ri'>方式:<em> GET</em></span>
+        <span class='ri'>示例URL:<em> <a href='/api/get-address-info?address=0xbe15892b305d1a21ce018073eee95205c5a58441' target='_blank'>https://new-block-browser.quarkblockchain.cn/api/get-address-info?address=0xbe15892b305d1a21ce018073eee95205c5a58441</a> </em></span>
+        <div class='says'>传参说明：1.address（地址，<span class="tips-red">必选</span>）</div>
+        <div class='says'>返回结构示例：
+            <pre class="intersays">
+{
+code: 0,
+message: "OK",
+data: {
+    jsonrpc: "2.0",
+    id: 76,
+    result: "9.999130721",<span class="api-tips">//QKI余额</span>
+    address: "0xbe15892b305d1a21ce018073eee95205c5a58441",<span class="api-tips">//地址</span>
+    transactions: {
+        current_page: 1,
+        data: [
+            {
+                id: 16696,
+                from: "0xbe15892b305d1a21ce018073eee95205c5a58441",<span class="api-tips">//来源</span>
+                to: "0x4175aa5d372015b67ef58514414086f0f36caa7a",<span class="api-tips">//接收</span>
+                hash: "0xd29d85d0a4d4c4acb93cab01a231774021ee118252be74248b15bbc866b1b11e",<span class="api-tips">//交易hash</span>
+                block_hash: "0xc5e586c8c6205c519e55dfa704a9c990d8eaf2fe144963dbac11631c0418ce4c",<span class="api-tips">//区块hash</span>
+                block_number: 656439,<span class="api-tips">//高度</span>
+                gas_price: "0.000000001",<span class="api-tips">//矿工费</span>
+                amount: "0.000000000000000000",<span class="api-tips">//交易数量</span>
+                created_at: "2019-03-29 08:28:36",
+                updated_at: "2019-03-29 08:30:05",
+                tx_status: 1
+            },
+            ],
+            first_page_url: "https://new-block-browser.quarkblockchain.cn/api/get-address-info?page=1",
+            from: 1,
+            last_page: 1,
+            last_page_url: "https://new-block-browser.quarkblockchain.cn/api/get-address-info?page=1",
+            next_page_url: null,
+            path: "https://new-block-browser.quarkblockchain.cn/api/get-address-info",
+            per_page: 20,
+            prev_page_url: null,
+            to: 19,
+            total: 19
+            }
+        }
+    }
+}
+</pre>
+        </div>
+        <span class='le'><em>9.获取合约地址详情</em> <b>描述:获取合约地址详情接口</b> </span>
+        <span class='ri'>方式:<em> GET</em></span>
+        <span class='ri'>示例URL:<em> <a href='/api/get-contract-address-info?address=0x4175aa5d372015b67ef58514414086f0f36caa7a' target='_blank'>https://new-block-browser.quarkblockchain.cn/api/get-contract-address-info?address=0x4175aa5d372015b67ef58514414086f0f36caa7a</a> </em></span>
+        <div class='says'>传参说明：1.address（地址，<span class="tips-red">必选</span>）</div>
+        <div class='says'>返回结构示例：
+            <pre class="intersays">
+{
+    code: 0,
+    message: "OK",
+    data: {
+        token: {
+                id: 3,
+                token_name: "cct",<span class="api-tips">//通证名称</span>
+                token_symbol: "cct",<span class="api-tips">//通证符号</span>
+                contract_address: "0x4175aa5d372015b67ef58514414086f0f36caa7a",<span class="api-tips">//合约地址</span>
+                created_at: "2019-03-27 10:10:35",
+                updated_at: "2019-03-27 10:10:35"
+            },
+        decimals: 8,<span class="api-tips">//小数位数</span>
+        result: "1000000000",<span class="api-tips">//通证总量</span>
+        address: "0x4175aa5d372015b67ef58514414086f0f36caa7a",
+        tx: {
+            current_page: 1,
+            data: [
+            {
+                id: 77,
+                token_id: 3,
+                to_address_id: 768,
+                amount: "5.84999987",<span class="api-tips">//交易数量</span>
+                tx_id: 16696,
+                created_at: "2019-03-29 08:28:36",
+                updated_at: "2019-03-29 08:30:05",
+                from_address_id: 755,
+                tx_status: 1,
+                contract_address: "0x4175aa5d372015b67ef58514414086f0f36caa7a",
+                token_symbol: "cct",
+                from_address: "0xbe15892b305d1a21ce018073eee95205c5a58441",<span class="api-tips">//来源</span>
+                to_address: "0x062be095a45acc1f7ec8ba9b7156a98b66ad3ea2",<span class="api-tips">//接收</span>
+                hash: "0xd29d85d0a4d4c4acb93cab01a231774021ee118252be74248b15bbc866b1b11e"<span class="api-tips">//交易Hash</span>
+            },
+            ],
+            first_page_url: "https://new-block-browser.quarkblockchain.cn/api/get-address-info?page=1",
+            from: 1,
+            last_page: 1,
+            last_page_url: "https://new-block-browser.quarkblockchain.cn/api/get-address-info?page=1",
+            next_page_url: null,
+            path: "https://new-block-browser.quarkblockchain.cn/api/get-address-info",
+            per_page: 20,
+            prev_page_url: null,
+            to: 19,
+            total: 19
+        }
+    }
+}
+</pre>
+        </div>
     </div>
 </div>
 <div id="foot">
