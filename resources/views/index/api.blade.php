@@ -217,6 +217,38 @@ data: {
 }
 </pre>
         </div>
+        <span class='le'><em>7.获取交易详情接口</em> <b>描述:获取交易详情接口</b> </span>
+        <span class='ri'>方式:<em> GET</em></span>
+        <span class='ri'>示例URL:<em> <a href='/api/get-tx?hash=0x3d3cb7333f5e39e0707dc0489fe6a629dd18b04f8c3ade15e7bcfda2628386f9' target='_blank'>https://new-block-browser.quarkblockchain.cn/api/get-tx?hash=0x3d3cb7333f5e39e0707dc0489fe6a629dd18b04f8c3ade15e7bcfda2628386f9</a> </em></span>
+        <div class='says'>传参说明：1.hash（交易hash，<span class="tips-red">必选</span>）</div>
+        <div class='says'>返回结构示例：
+            <pre class="intersays">
+{
+code: 0,
+message: "OK",
+data: {
+        blockHash: "0x56b6c865ecf81d59da70a678f057341e6195aa7fd493a4e9d60e2ed0675e49ec",<span class="api-tips">//区块Hash</span>
+        blockNumber: "652477",<span class="api-tips">//高度</span>
+        from: "0xbe15892b305d1a21ce018073eee95205c5a58441",<span class="api-tips">//来源</span>
+        gas: "52417",<span class="api-tips">//使用gas</span>
+        gasPrice: "0.000000001",<span class="api-tips">//gas价格</span>
+        hash: "0x3d3cb7333f5e39e0707dc0489fe6a629dd18b04f8c3ade15e7bcfda2628386f9",<span class="api-tips">//交易Hash</span>
+        input: "0xa9059cbb000000000000000000000000a25911fdcd939d2d7c8456dd3d5886808afbd3e40000000000000000000000000000000000000000000000000000000022de6433",<span class="api-tips">//input</span>
+        nonce: 16,<span class="api-tips">//nonce</span>
+        to: "0x4175aa5d372015b67ef58514414086f0f36caa7a",<span class="api-tips">//接收</span>
+        transactionIndex: "0x0",
+        value: "0",<span class="api-tips">//金额</span>
+        v: "0x267e1ce",
+        r: "0xfdaca1fda979e8d78040f5f257480055bfccc9c942420ff5b91eb1e289b2c2eb",
+        s: "0x41806f0008a33cb7143b52fb7a76dab4051f75c09f87015db641f3003c75e666",
+        created_at: "2019-03-28 15:58:06",<span class="api-tips">//交易时间</span>
+        tx_status: "交易成功",<span class="api-tips">//状态</span>
+        contract_address: "",<span class="api-tips">//合约地址</span>
+        is_token_tx: true<span class="api-tips">//是否为合约交易</span>
+    }
+}
+</pre>
+        </div>
     </div>
 </div>
 <div id="foot">
