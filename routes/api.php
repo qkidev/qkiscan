@@ -27,4 +27,6 @@ Route::group(['namespace' => 'Api'], function () {
     Route::get('block', 'BlockController@blockDetail');//获取区块详情
     Route::get('token-tx-info', 'TransactionsController@getTokenTxInfo');//获取通证交易详情
     Route::get('get-balance', 'BalanceController@getBalance');//获取余额列表
+    Route::get('get-address-info', 'BalanceController@getAddressInfo');//获取地址详情
+    Route::get('get-contract-address-info', 'BalanceController@getTokenAddressInfo');//获取合约地址详情
 });
