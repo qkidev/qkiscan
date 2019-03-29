@@ -25,10 +25,10 @@ class BlockController extends Controller
 
         if ($block) {
             foreach ($block as $key => $item) {
-                $blockList[$key]['height'] = HexDec2($item['result']['number']);
+                $blockList[$key]['height'] = float_format(HexDec2($item['result']['number']));
                 $blockList[$key]['created_at'] = date("Y-m-d H:i:s", HexDec2($item['result']['timestamp']) + 28800);
                 $blockList[$key]['tx_count'] = count($item['result']['transactions']);
-                $blockList[$key]['hash '] = $item['result']['hash'];
+                $blockList[$key]['hash'] = $item['result']['hash'];
             }
         }
 
