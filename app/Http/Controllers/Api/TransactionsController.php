@@ -134,6 +134,11 @@ class TransactionsController extends Controller
         }
     }
 
+    /**
+     * 获取通证详情
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function getTokenTxInfo(Request $request)
     {
         $hash = $request->input('hash');
@@ -171,5 +176,70 @@ class TransactionsController extends Controller
         $result['created_at'] = $token_tx->created_at->format('Y-m-d H:i:s');
 
         return response()->json(['code' => 0, 'message' => 'OK', 'data' => $result]);
+    }
+
+    /**
+     * 获取交易详情
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function getTx(Request $request)
+    {
+        $hash = $request->input('hash');
+        if(!$hash)
+        {
+            return response()->json(['code' => 500, 'message' => '缺少必要参数', 'data' => '']);
+        }
+        $RpcService = new RpcService();
+
+        $params = array(
+            [$hash]
+        );
+
+        $data = $RpcService->rpc("eth_getTransactionByHash",$params);
+
+        $data = isset($data[0]['result'])?$data[0]['result']:null;
+        if($data){
+            $block = $RpcService->rpc("eth_getBlockByNumber",[[$data['blockNumber'], true]]);
+            $block = isset($block[0]['result'])?$block[0]['result']:null;
+            if($block)
+            {
+                $created_at = base_convert($block['timestamp'], 16 ,10);
+                $data['created_at'] = date('Y-m-d H:i:s', $created_at);
+            }else{
+                $data['created_at'] = "";
+            }
+
+            $gas = $RpcService->rpc('eth_getTransactionReceipt',[[$hash]]);
+            //var_dump($gas);exit;
+            $data['nonce'] = (int)HexDec2($data['nonce']);
+            //查询交易是否成功
+            if(isset($gas[0]['result']))
+            {
+                $gas = $gas[0]['result'];
+                $tx_status = HexDec2($gas['status']);
+                if($tx_status == 1)
+                {
+                    $data['tx_status'] = "交易成功";
+                }else{
+                    $data['tx_status'] = "交易失败";
+                }
+                $data['gas'] = float_format(HexDec2($gas['gasUsed']))??0;
+                $data['gasPrice'] = float_format(bcdiv(HexDec2($data['gasPrice']) ,gmp_pow(10,18),18));
+                $data['blockNumber'] = base_convert($data['blockNumber'],16,10);
+                $data['value'] = float_format(bcdiv(HexDec2($data['value']) ,gmp_pow(10,18),18));
+                $data['contract_address'] = isset($gas['contractAddress'])?$gas['contractAddress']:'';
+            }else{
+                $data['tx_status'] = '交易状态获取失败';
+            }
+
+        }
+        $data['is_token_tx'] = false;
+        //如果是通证交易
+        if (substr($data['input']??"", 0, 10) === '0xa9059cbb') {
+            $data['is_token_tx'] = true;
+        }
+
+        return response()->json(['code' => 0, 'message' => 'OK', 'data' => $data]);
     }
 }
