@@ -9,7 +9,7 @@
     <meta data-n-head="true" http-equiv="X-UA-Compatible" content="IE=edge">
     <meta data-n-head="true" data-hid="description" name="description" content="">
     <meta data-n-head="true" data-hid="keywords" name="keywords" content="">
-    <title data-n-head="true">区块浏览器 | QKI</title>
+    <title data-n-head="true">夸克区块浏览器 | QKI</title>
     <link data-n-head="true" rel="icon" type="image/x-icon" href="">
 
     <link data-n-head="true" rel="stylesheet" type="text/css" charset="utf-8" href="/css/bootstrap.min.css">
