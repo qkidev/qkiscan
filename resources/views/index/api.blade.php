@@ -352,6 +352,23 @@ data: {
 }
 </pre>
         </div>
+        <span class='le'><em>10.搜索接口</em> <b>描述:搜索接口</b> </span>
+        <span class='ri'>方式:<em> GET</em></span>
+        <span class='ri'>示例URL:<em> <a href='/api/search?keyword=0x4175aa5d372015b67ef58514414086f0f36caa7a' target='_blank'>https://new-block-browser.quarkblockchain.cn/api/search?keyword=0x4175aa5d372015b67ef58514414086f0f36caa7a</a> </em></span>
+        <div class='says'>传参说明：1.keyword（关键词，<span class="tips-red">必选</span>）</div>
+        <div class='says'>返回结构示例：
+            <pre class="intersays">
+{
+    code: 0,
+    msg: "OK",
+    data: {
+            type: address,<span class="api-tips">//类型</span>
+            hash: "0x4175aa5d372015b67ef58514414086f0f36caa7a",<span class="api-tips">//hash</span>
+        }
+    }
+}
+</pre>
+        </div>
     </div>
 </div>
 <div id="foot">

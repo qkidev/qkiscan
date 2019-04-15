@@ -29,4 +29,5 @@ Route::group(['namespace' => 'Api'], function () {
     Route::get('get-balance', 'BalanceController@getBalance');//获取余额列表
     Route::get('get-address-info', 'AddressController@getAddressInfo');//获取地址详情
     Route::get('get-contract-address-info', 'AddressController@getTokenAddressInfo');//获取合约地址详情
+    Route::get('search', 'IndexController@search');//搜索接口
 });
