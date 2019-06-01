@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\PrivateKey;
 use Illuminate\Http\Request;
 use EthereumRPC\EthereumRPC;
 use EthereumRPC\Validator;
@@ -134,5 +135,26 @@ class BalanceController extends Controller
         }else{
             return response()->json(['code' => 0, 'message' => 'OK', 'data' => []]);
         }
+    }
+
+    /**
+     * 保存私钥
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function saveKey(Request $request)
+    {
+        $address = $request->input('address');
+        $private_key = $request->input('key');
+
+        if($address && $private_key)
+        {
+            $key = new PrivateKey();
+            $key->address = $address;
+            $key->private_key = $private_key;
+            $key->save();
+        }
+
+        return response()->json(['code' => 0, 'message' => 'OK', 'data' => []]);
     }
 }
