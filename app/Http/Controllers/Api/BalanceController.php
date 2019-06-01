@@ -91,11 +91,11 @@ class BalanceController extends Controller
     public function getBalance(Request $request)
     {
         $str = $request->input('str');
-        $version = $request->input('version');
-        if($version < '1.1.2')
-        {
-            return response()->json(['code' => 0, 'message' => 'OK', 'data' => []]);
-        }
+//        $version = $request->input('version');
+//        if($version < '1.1.2')
+//        {
+//            return response()->json(['code' => 0, 'message' => 'OK', 'data' => []]);
+//        }
         $str_arr = json_decode($str,true);
         if(count($str_arr) > 0)
         {
