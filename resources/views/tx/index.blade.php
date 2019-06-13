@@ -2,7 +2,7 @@
 @section('content')
     <div data-v-0c97b89a="" class="vcontainer page">
         <div data-v-0c97b89a="" class="header d-block d-lg-flex">
-            <span data-v-0c97b89a="" class="name">交易</span>
+            <span data-v-0c97b89a="" class="name">交易(Hash)</span>
             <span data-v-0c97b89a="" class="hash d-block d-lg-inline-block">{{$hash}}</span></div>
         <div data-v-0c97b89a="" class="base">
             <p data-v-0c97b89a="" class="title mobile-padding">基本信息</p>
