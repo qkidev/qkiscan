@@ -42,7 +42,7 @@ class IndexController extends Controller
                 $blockList[$key] = $item['result'];
                 $blockList[$key]['height'] = base_convert($blockList[$key]['number'],16,10);
                 $blockList[$key]['gasLimit'] = base_convert($blockList[$key]['gasLimit'],16,10);
-                $blockList[$key]['created_at'] = date("Y-m-d H:i:s",HexDec2($blockList[$key]['timestamp'])+28800);
+                $blockList[$key]['created_at'] = formatTime($blockList[$key]['timestamp']);
                 $blockList[$key]['tx_count'] = count($blockList[$key]['transactions']);
                 $blockList[$key]['size'] = bcdiv(HexDec2($blockList[$key]['size']),1000,3);
                 $blockList[$key]['difficulty'] = HexDec2($blockList[$key]['difficulty']);

@@ -42,7 +42,7 @@ class TxController extends Controller
             if($block)
             {
                 $created_at = base_convert($block['timestamp'], 16 ,10);
-                $data['created_at'] = date("Y-m-d H:i:s",HexDec2($created_at)+28800);
+                $data['created_at'] = formatTime($created_at);
             }else{
                 $data['created_at'] = "";
             }
