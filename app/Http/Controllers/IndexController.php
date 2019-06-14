@@ -24,7 +24,7 @@ class IndexController extends Controller
     public function index()
     {
         $rpcService = new RpcService();
-        $lastBlock = $rpcService->lastBlockHeightNumber()??0;
+        $lastBlock = $rpcService->lastBlockHeightNumber() ?? 0;
 
         $lastBlock = (int)HexDec2($lastBlock);
 
