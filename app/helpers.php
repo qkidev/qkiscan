@@ -82,8 +82,15 @@ function HexDec2(string $hex)
 /**
  *  转化为东八区时间
  * @param string $time
+ * @param int $type 1 16进制，2 格式化时间
  * @return false|string
  */
-function formatTime(string $time) {
-    return date("Y-m-d H:i:s", HexDec2($time)+28800);
+function formatTime(string $time, $type=1) {
+    $t = "";
+    if($type==1){
+        $t = date("Y-m-d H:i:s", base_convert($time, 16 ,10)+28800);
+    }else if($type==2){
+        $t = date("Y-m-d H:i:s", strtotime($time)+28800);
+    }
+    return $t;
 }
