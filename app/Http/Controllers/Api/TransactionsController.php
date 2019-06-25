@@ -62,7 +62,7 @@ class TransactionsController extends Controller
             foreach ($list as $k => $tx)
             {
                 $result[$k]['amount'] = float_format($tx->amount);
-                $result[$k]['created_at'] = $tx->created_at->format('Y-m-d H:i:s');
+                $result[$k]['created_at'] = formatTime($tx->created_at);
                 if($tx->from_address_id == $user_address->id)
                 {
                     $result[$k]['amount'] = '-'.$result[$k]['amount'];
@@ -111,7 +111,7 @@ class TransactionsController extends Controller
                 if($tx->amount != 0)
                 {
                     $result[$i]['amount'] = float_format($tx->amount);
-                    $result[$i]['created_at'] = $tx->created_at->format('Y-m-d H:i:s');
+                    $result[$i]['created_at'] = formatTime($tx->created_at);
                     if(strtolower($tx->from) == strtolower($address))
                     {
                         $result[$i]['amount'] = '-'.$result[$i]['amount'];

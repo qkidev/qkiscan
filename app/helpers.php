@@ -78,3 +78,12 @@ function HexDec2(string $hex)
     }
     return $dec;
 }
+
+/**
+ *  转化为东八区时间
+ * @param string $time
+ * @return false|string
+ */
+function formatTime(string $time) {
+    return date("Y-m-d H:i:s", HexDec2($time)+28800);
+}
