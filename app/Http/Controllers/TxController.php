@@ -41,8 +41,7 @@ class TxController extends Controller
             $block = isset($block[0]['result'])?$block[0]['result']:null;
             if($block)
             {
-                $created_at = base_convert($block['timestamp'], 16 ,10);
-                $data['created_at'] = formatTime(date('Y-m-d H:i:s', $created_at));
+                $data['created_at'] = formatTime($block['timestamp']);
             }else{
                 $data['created_at'] = "";
             }
