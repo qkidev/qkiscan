@@ -49,6 +49,9 @@ class TokenController extends Controller
             ->where('token_tx.token_id',$token->id)
             ->orderBy('token_tx.id','desc')
             ->paginate(20);
+        foreach ($data['tx'] as &$v){
+            $v->created_at = formatTime($v->created_at);
+        }
 
         return view("token.index",$data);
     }
