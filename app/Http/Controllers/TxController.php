@@ -98,6 +98,9 @@ class TxController extends Controller
     {
         $data['transactions'] = Transactions::orderBy("id","desc")
             ->paginate(20);
+        foreach ($data['transactions'] as &$v){
+            $v->created_at = formatTime($v->created_at, 2);
+        }
         $data['currentPage'] = 'tx-list';
         return view("tx.list",$data);
     }
