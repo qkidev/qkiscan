@@ -50,7 +50,7 @@ class TokenController extends Controller
             ->orderBy('token_tx.id','desc')
             ->paginate(20);
         foreach ($data['tx'] as &$v){
-            $v->created_at = formatTime($v->created_at);
+            $v->created_at = formatTime(base_convert(strtotime($v->created_at), 10 ,16));
         }
 
         return view("token.index",$data);
