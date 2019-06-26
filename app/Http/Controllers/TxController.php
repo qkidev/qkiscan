@@ -128,8 +128,7 @@ class TxController extends Controller
      */
     public function qkiPage()
     {
-        $data['transactions'] = Balance::orderBy("qki","desc")
-            ->paginate(20);
+        $data['transactions'] = Balance::orderBy("qki","desc")->limit(100)->get();
         $data['currentPage'] = 'qki-page';
         return view('tx.qki-list',$data);
     }
@@ -140,8 +139,7 @@ class TxController extends Controller
      */
     public function cctPage()
     {
-        $data['transactions'] = Balance::orderBy("cct","desc")
-            ->paginate(20);
+        $data['transactions'] = Balance::orderBy("cct","desc")->limit(100)->get();
         $data['currentPage'] = 'cct-page';
         return view('tx.cct-list',$data);
     }

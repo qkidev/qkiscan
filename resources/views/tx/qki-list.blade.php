@@ -3,29 +3,22 @@
 
     <div class="vcontainer page">
             <div data-v-cd5b40a0="" id="block-trade-detail" class="tradedetail">
-                <div data-v-cd5b40a0="" class="top">
-                    <span data-v-cd5b40a0="" class="title">QKI排行榜</span>
-                    <span data-v-cd5b40a0="">
-                                    <span data-v-cd5b40a0="" class="txcount">共 {{$transactions->total()}}笔</span>
-                    </span>
-                </div>
                 <ul data-v-cd5b40a0="" class="middle">
-                    @foreach($transactions as $v)
-                    <li data-v-cd5b40a0="" class="item vshadow">
-                        <div data-v-8701ced6="" data-v-cd5b40a0="" class="tx-detail">
-                            <div data-v-8701ced6="" class="hash-section">
-                                <i data-v-8701ced6="" class="vicon icon-hash d-none d-lg-inline-block"></i>
-                                <span style="margin-left:10px;">{{$v['created_at']}}</span>
-                                <span data-v-8701ced6="" class="output font-coin-title"> {{float_format($v['qki'])}} QKI</span>
-                                <!----></div>
+                    @foreach($transactions as $k=>$v)
+                        <a href="/address/{{$v['address']}}" style="color: #52cbca;">
+                            <li data-v-cd5b40a0="" class="item vshadow">
+                                <div data-v-8701ced6="" data-v-cd5b40a0="" class="tx-detail">
+                                    <div data-v-8701ced6="" class="hash-section">
+                                        <span style="margin-left:10px;font-size: 20px;font-weight: bold">{{$k+1}}</span>
+                                        <span style="margin-left:10px;">{{$v['address']}}</span>
+                                        <span data-v-8701ced6="" class="output font-coin-title"> {{float_format($v['qki'])}} QKI</span>
+                                        <!----></div>
 
-                        </div>
-                    </li>
+                                </div>
+                            </li>
+                        </a>
                     @endforeach
                 </ul>
-                <div data-v-cd5b40a0="" class="bottom">
-                    {{$transactions->links()}}
-                </div>
             </div>
         </div>
     </div>

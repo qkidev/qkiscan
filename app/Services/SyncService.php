@@ -322,20 +322,11 @@ class SyncService
         $tx->save();
 
         //保存该地址的qki和cct余额
-        $balance = new Balance();
         if(empty(Balance::where('address', $v['from'])->first())){
-            $data = $this->getQkiCctBalance($v['from']);
-            $balance->address = $v['from'];
-            $balance->qki = $data[0];
-            $balance->cct = $data[1];
-            $balance->save();
+            $this->getQkiCctBalance($v['from']);
         }
         if(empty(Balance::where('address', $v['to'])->first())){
-            $data = $this->getQkiCctBalance($v['to']);
-            $balance->address = $v['to'];
-            $balance->qki = $data[0];
-            $balance->cct = $data[1];
-            $balance->save();
+            $this->getQkiCctBalance($v['to']);
         }
 
         //记录地址、保存通证
@@ -404,6 +395,6 @@ class SyncService
         $erc20 = new ERC20($geth);
         $token = $erc20->token($addr);
         $cct = $token->balanceOf($address);
-        return [$qki, $cct];
+        Balance::updateOrInsert(['address'=>$address], ['qki'=>$qki, 'cct'=>$cct]);
     }
 }
