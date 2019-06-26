@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 
 use App\Models\Transactions;
+use App\Services\SyncService;
 use Illuminate\Http\Request;
 use App\Services\RpcService;
 
@@ -35,6 +36,7 @@ class AddressController extends Controller
         foreach ($data['transactions'] as &$v){
             $v->created_at = formatTime($v->created_at, 2);
         }
+        (new SyncService())->getQkiCctBalance($address);
         return view("address.index",$data);
     }
 }

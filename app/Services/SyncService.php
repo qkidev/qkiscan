@@ -322,12 +322,8 @@ class SyncService
         $tx->save();
 
         //保存该地址的qki和cct余额
-        if(empty(Balance::where('address', $v['from'])->first())){
-            $this->getQkiCctBalance($v['from']);
-        }
-        if(empty(Balance::where('address', $v['to'])->first())){
-            $this->getQkiCctBalance($v['to']);
-        }
+        $this->getQkiCctBalance($v['from']);
+        $this->getQkiCctBalance($v['to']);
 
         //记录地址、保存通证
         $this->saveAddress($v['from']);
