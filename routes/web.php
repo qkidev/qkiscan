@@ -30,3 +30,8 @@ Route::get('/unpacked-tx-list', 'TxController@unpackedTxList');
 Route::get('/token/{address}', 'TokenController@index');
 //api页面
 Route::get('/apis', 'IndexController@api');
+//qki排行榜
+Route::get('/qki-page', 'TxController@qkiPage');
+//cct排行榜
+Route::get('/cct-page', 'TxController@cctPage');
+
