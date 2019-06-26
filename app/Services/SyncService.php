@@ -4,10 +4,12 @@ namespace App\Services;
 
 
 use App\Models\Address;
+use App\Models\Balance;
 use App\Models\Settings;
 use App\Models\Token;
 use App\Models\TokenTx;
 use App\Models\Transactions;
+use DemeterChain\B;
 use ERC20\ERC20;
 use EthereumRPC\EthereumRPC;
 use EthereumRPC\Response\TransactionInputTransfer;
@@ -307,7 +309,7 @@ class SyncService
 //        if($exist)
 //            $tx = $exist;
 //        else
-            $tx = new Transactions();
+        $tx = new Transactions();
         $tx->from = $v['from'];
         $tx->to = $v['to'] ?? '';
         $tx->hash = $v['hash'];
@@ -318,6 +320,23 @@ class SyncService
         $tx->created_at = $timestamp;
         $tx->tx_status = $tx_status;
         $tx->save();
+
+        //保存该地址的qki和cct余额
+        $balance = new Balance();
+        if(empty(Balance::where('address', $v['from'])->first())){
+            $data = $this->getQkiCctBalance($v['from']);
+            $balance->address = $v['from'];
+            $balance->qki = $data[0];
+            $balance->cct = $data[1];
+            $balance->save();
+        }
+        if(empty(Balance::where('address', $v['to'])->first())){
+            $data = $this->getQkiCctBalance($v['to']);
+            $balance->address = $v['to'];
+            $balance->qki = $data[0];
+            $balance->cct = $data[1];
+            $balance->save();
+        }
 
         //记录地址、保存通证
         $this->saveAddress($v['from']);
@@ -370,5 +389,21 @@ class SyncService
         if ($this->isLock($key)) {
             unlink(storage_path($key));
         }
+    }
+
+    public function getQkiCctBalance($address)
+    {
+        $rpc = new RpcService();
+        $rs = $rpc->rpc('eth_getBalance', [[$address,"latest"]]);
+        $rs = isset($rs[0])?$rs[0]:array();
+        $qki = bcdiv(gmp_strval($rs['result']) ,gmp_pow(10,18),8);
+
+        $addr = '0x4175aa5d372015b67ef58514414086f0f36caa7a';
+        $url_arr = parse_url(env("RPC_HOST"));
+        $geth = new EthereumRPC($url_arr['host'], $url_arr['port']);
+        $erc20 = new ERC20($geth);
+        $token = $erc20->token($addr);
+        $cct = $token->balanceOf($address);
+        return [$qki, $cct];
     }
 }

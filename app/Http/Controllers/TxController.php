@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Balance;
 use App\Models\Token;
 use App\Models\Transactions;
 use App\Services\RpcService;
@@ -119,5 +120,29 @@ class TxController extends Controller
         $data['currentPage'] = 'unpacked-tx-list';
 
         return view('tx.unpacked-list',$data);
+    }
+
+    /**
+     * qki排行榜
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function qkiPage()
+    {
+        $data['transactions'] = Balance::orderBy("qki","desc")
+            ->paginate(20);
+        $data['currentPage'] = 'qki-page';
+        return view('tx.qki-list',$data);
+    }
+
+    /**
+     * cct排行榜
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function cctPage()
+    {
+        $data['transactions'] = Balance::orderBy("cct","desc")
+            ->paginate(20);
+        $data['currentPage'] = 'cct-page';
+        return view('tx.cct-list',$data);
     }
 }
