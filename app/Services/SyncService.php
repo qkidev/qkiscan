@@ -31,8 +31,8 @@ class SyncService
             return;
         }
         $this->lock('create');
-        ini_set('max_execution_time', 60);
-        $end_time = time() + 58;
+        ini_set('max_execution_time', 0);
+        $end_time = time() + 58000;
         while (true)
         {
             if($end_time <= time())
@@ -61,7 +61,7 @@ class SyncService
         $blockArray = array();
         //获取最后一个高度
         $real_last_block = (new RpcService())->rpc('eth_getBlockByNumber',[['latest',true]]);
-        $real_last_block = HexDec2($real_last_block[0]['result']['number']) ?? 0;
+        $real_last_block = HexDec2($real_last_block[0]['result']['number']??'') ?? 0;
         $num = 500;
         if($real_last_block)
         {
@@ -141,7 +141,7 @@ class SyncService
             return true;
         } catch (\Exception $e) {
             DB::rollback();
-            echo $e->getMessage();
+            echo "file:" . $e->getFile() . " line:" . $e->getLine() . $e->getMessage() . "\n";
             return false;
         }
     }
@@ -294,7 +294,7 @@ class SyncService
     {
         //查询交易是否成功
         $receipt = (new RpcService())->rpc("eth_getTransactionReceipt",[[$v['hash']]]);
-        if(isset($receipt[0]['result'])) {
+       if(isset($receipt[0]['result'])) {
             if(isset($receipt[0]['result']['root']))
             {
                 $tx_status = 1;
@@ -322,8 +322,8 @@ class SyncService
         $tx->save();
 
         //保存该地址的qki和cct余额
-        $this->getQkiCctBalance($v['from']);
-        $this->getQkiCctBalance($v['to']);
+//        $this->getQkiCctBalance($v['from']);
+//        $this->getQkiCctBalance($v['to']);
 
         //记录地址、保存通证
         $this->saveAddress($v['from']);
@@ -338,6 +338,8 @@ class SyncService
         if (substr($input, 0, 10) === '0xa9059cbb') {
             //保存通证交易
             $token_tx =  new TransactionInputTransfer($input);
+            $tx->payee = $token_tx->payee;
+            $tx->save();
             //保存通证接收方地址
             $this->saveAddress($token_tx->payee,$this->checkAddressType($token_tx->payee));
             //实例化通证
@@ -382,6 +384,8 @@ class SyncService
     {
         $rpc = new RpcService();
         $rs = $rpc->rpc('eth_getBalance', [[$address,"latest"]]);
+        if(!isset($rs[0]['result']))
+            return;
         $rs = isset($rs[0])?$rs[0]:array();
         $qki = bcdiv(gmp_strval($rs['result']) ,gmp_pow(10,18),8);
 
