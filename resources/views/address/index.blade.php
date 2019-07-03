@@ -21,9 +21,12 @@
             </div>
 
             <div data-v-cd5b40a0="" id="block-trade-detail" class="tradedetail" style="padding-bottom: 30px;">
-                <div data-v-cd5b40a0="" class="top">
-                    <span data-v-cd5b40a0="" class="title">交易明细</span>
+
+                <div class="btn-group" role="group" >
+                    <button type="button" class="btn btn-info">交易明细</button>
+                    <a href="/address/{{$address}}/token" class="btn btn-secondary">通证明细</a>
                 </div>
+
                 <ul data-v-cd5b40a0="" class="middle">
                     @foreach($transactions as $v)
                         <li data-v-cd5b40a0="" class="item vshadow">

@@ -20,6 +20,7 @@ Route::get('/block', 'BlockController@index');
 Route::get('/block/detail', 'BlockController@detail');
 //地址详情
 Route::get('/address/{address}', 'AddressController@index');
+Route::get('/address/{address}/token', 'AddressController@token');
 //交易列表
 Route::get('/tx-list', 'TxController@list');
 //交易详情

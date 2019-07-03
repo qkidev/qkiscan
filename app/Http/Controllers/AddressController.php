@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 
+use App\Models\Address;
+use App\Models\TokenTx;
 use App\Models\Transactions;
 use App\Services\SyncService;
 use Illuminate\Http\Request;
@@ -39,4 +41,26 @@ class AddressController extends Controller
         (new SyncService())->getQkiCctBalance($address);
         return view("address.index",$data);
     }
+
+    /**
+     * 地址的通证交易
+     * @param $address
+     *
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function token($address){
+        $address = Address::whereAddress($address)->firstOrFail();
+
+        $txs = TokenTx::with(['token', 'transaction'])
+            ->where('to_address_id', $address->id)
+            ->orWhere('from_address_id', $address->id)
+            ->orderBy('id','desc')
+            ->paginate(20);
+
+        return view('address.token', [
+            'address' => $address,
+            'txs' => $txs,
+        ]);
+    }
+
 }
