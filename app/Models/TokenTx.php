@@ -31,4 +31,12 @@ use Illuminate\Database\Eloquent\Model;
 class TokenTx extends Model
 {
     protected $table = "token_tx";
+
+    public function token(){
+        return $this->hasOne(Token::class, 'id','token_id');
+    }
+
+    public function transaction(){
+        return $this->hasOne(Transactions::class, 'id', 'tx_id');
+    }
 }

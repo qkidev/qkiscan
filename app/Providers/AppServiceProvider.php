@@ -13,7 +13,12 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+        // 本地测试时打印SQL日志
+        if (app()->environment('local')){
+            \DB::listen(function ($query){
+                \Log::info('sql_log:'. $query->sql, $query->bindings);
+            });
+        }
     }
 
     /**

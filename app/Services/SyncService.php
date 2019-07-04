@@ -4,12 +4,11 @@ namespace App\Services;
 
 
 use App\Models\Address;
-use App\Models\Balance;
+use App\Models\Balances;
 use App\Models\Settings;
 use App\Models\Token;
 use App\Models\TokenTx;
 use App\Models\Transactions;
-use DemeterChain\B;
 use ERC20\ERC20;
 use EthereumRPC\EthereumRPC;
 use EthereumRPC\Response\TransactionInputTransfer;
@@ -31,8 +30,8 @@ class SyncService
             return;
         }
         $this->lock('create');
-        ini_set('max_execution_time', 60);
-        $end_time = time() + 58;
+        ini_set('max_execution_time', 0);
+        $end_time = time() + 58000;
         while (true)
         {
             if($end_time <= time())
@@ -61,7 +60,7 @@ class SyncService
         $blockArray = array();
         //获取最后一个高度
         $real_last_block = (new RpcService())->rpc('eth_getBlockByNumber',[['latest',true]]);
-        $real_last_block = HexDec2($real_last_block[0]['result']['number']) ?? 0;
+        $real_last_block = HexDec2($real_last_block[0]['result']['number']??'') ?? 0;
         $num = 500;
         if($real_last_block)
         {
@@ -141,7 +140,7 @@ class SyncService
             return true;
         } catch (\Exception $e) {
             DB::rollback();
-            echo $e->getMessage();
+            echo "file:" . $e->getFile() . " line:" . $e->getLine() . $e->getMessage() . "\n";
             return false;
         }
     }
@@ -216,7 +215,11 @@ class SyncService
             if($address_type == 2)
             {
                 $token = Token::where('contract_address',$address)->first();
-                $this->token[$address] = $token->id;
+                if ($token){
+                    $this->token[$address] = $token->id;
+                } else {
+                    $this->saveToken($address);
+                }
             }
             return true;
         }
@@ -294,7 +297,7 @@ class SyncService
     {
         //查询交易是否成功
         $receipt = (new RpcService())->rpc("eth_getTransactionReceipt",[[$v['hash']]]);
-        if(isset($receipt[0]['result'])) {
+       if(isset($receipt[0]['result'])) {
             if(isset($receipt[0]['result']['root']))
             {
                 $tx_status = 1;
@@ -322,8 +325,8 @@ class SyncService
         $tx->save();
 
         //保存该地址的qki和cct余额
-        $this->getQkiCctBalance($v['from']);
-        $this->getQkiCctBalance($v['to']);
+        $this->updateQkiBalance($v['from']);
+        $this->updateQkiBalance($v['to']);
 
         //记录地址、保存通证
         $this->saveAddress($v['from']);
@@ -338,8 +341,10 @@ class SyncService
         if (substr($input, 0, 10) === '0xa9059cbb') {
             //保存通证交易
             $token_tx =  new TransactionInputTransfer($input);
+            $tx->payee = $token_tx->payee;
+            $tx->save();
             //保存通证接收方地址
-            $this->saveAddress($token_tx->payee,$this->checkAddressType($token_tx->payee));
+            $this->saveAddress($token_tx->payee);
             //实例化通证
             $url_arr = parse_url(env("RPC_HOST"));
             $geth = new EthereumRPC($url_arr['host'], $url_arr['port']);
@@ -347,7 +352,10 @@ class SyncService
             $token = $erc20->token($v['to']);
             $decimals = $token->decimals();
             $token_tx_amount = bcdiv(HexDec2($token_tx->amount),gmp_pow(10, $decimals),18);
+//            dump($v['to'],$v['from'],$token_tx->payee);
             $this->saveTokenTx($this->token[$v['to']],float_format($token_tx_amount),$this->address[$v['from']],$this->address[$token_tx->payee],$tx->id,$timestamp,$tx_status);
+
+            $this->updateTokenBalance($token_tx->payee, $v['to']);
         }
         return $tx;
     }
@@ -378,19 +386,42 @@ class SyncService
         }
     }
 
-    public function getQkiCctBalance($address)
+    public function updateQkiBalance($address)
     {
         $rpc = new RpcService();
         $rs = $rpc->rpc('eth_getBalance', [[$address,"latest"]]);
+        if(!isset($rs[0]['result']))
+            return;
         $rs = isset($rs[0])?$rs[0]:array();
         $qki = bcdiv(gmp_strval($rs['result']) ,gmp_pow(10,18),8);
 
-        $addr = '0x4175aa5d372015b67ef58514414086f0f36caa7a';
+//        $addr = '0x4175aa5d372015b67ef58514414086f0f36caa7a';
+//        $url_arr = parse_url(env("RPC_HOST"));
+//        $geth = new EthereumRPC($url_arr['host'], $url_arr['port']);
+//        $erc20 = new ERC20($geth);
+//        $token = $erc20->token($addr);
+//        $cct = $token->balanceOf($address);
+//        Balance::updateOrInsert(['address'=>$address], ['qki'=>$qki, 'cct'=>$cct]);
+        $address = Address::firstOrCreate(['address' => $address]);
+        Balances::updateOrInsert(['address_id'=>$address->id, 'name' => 'qki'], ['amount' => $qki]);
+    }
+
+    public function updateTokenBalance($address, $token_address)
+    {
+//        $rpc = new RpcService();
+//        $rs = $rpc->rpc('eth_getBalance', [[$address,"latest"]]);
+//        if(!isset($rs[0]['result']))
+//            return;
+
+        $addr = $token_address;
         $url_arr = parse_url(env("RPC_HOST"));
         $geth = new EthereumRPC($url_arr['host'], $url_arr['port']);
         $erc20 = new ERC20($geth);
         $token = $erc20->token($addr);
-        $cct = $token->balanceOf($address);
-        Balance::updateOrInsert(['address'=>$address], ['qki'=>$qki, 'cct'=>$cct]);
+        $amount = $token->balanceOf($address);
+        $address = Address::firstOrCreate(['address' => $address]);
+        Balances::updateOrInsert(['address_id'=>$address->id, 'name' => $token->name()], ['amount' => $amount]);
     }
+
+
 }

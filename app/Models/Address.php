@@ -27,6 +27,23 @@ class Address extends Model
 {
     protected $table = "address";
 
+    protected $fillable = [
+        'address'
+    ];
+
     const TYPE_NORMAL_ADDRESS = 1;
     const TYPE_CONTRACT_ADDRESS = 2;
+
+
+    public function to(){
+        return $this->hasMany(TokenTx::class, 'to_address_id');
+    }
+
+    public function from(){
+        return $this->hasMany(TokenTx::class, 'from_address_id');
+    }
+
+    public function balances(){
+        return $this->hasMany(Balances::class, 'address_id');
+    }
 }

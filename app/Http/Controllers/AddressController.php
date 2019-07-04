@@ -3,9 +3,9 @@
 namespace App\Http\Controllers;
 
 
+use App\Models\Address;
+use App\Models\TokenTx;
 use App\Models\Transactions;
-use App\Services\SyncService;
-use Illuminate\Http\Request;
 use App\Services\RpcService;
 
 class AddressController extends Controller
@@ -27,16 +27,44 @@ class AddressController extends Controller
         $data = $RpcService->rpc("eth_getBalance",$params);
 
         $data = isset($data[0])?$data[0]:array();
-   
+
         $data['result'] = float_format(bcdiv(gmp_strval($data['result']) ,gmp_pow(10,18),18));
 
         $data['address'] = $address;
 
-        $data['transactions'] = Transactions::where('from',$address)->orWhere('to',$address)->orderBy('id','desc')->paginate(20);
+        $data['transactions'] = Transactions::whereNull('payee')
+            ->where(function($query) use ($address){
+                $query->where('from',$address)->orWhere('to',$address);
+            })
+            ->orderBy('id','desc')->paginate(20);
         foreach ($data['transactions'] as &$v){
             $v->created_at = formatTime($v->created_at, 2);
         }
-        (new SyncService())->getQkiCctBalance($address);
+
         return view("address.index",$data);
+    }
+
+    /**
+     * 地址的通证交易
+     * @param $address
+     *
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function token($address){
+
+        $address = Address::with('balances')
+            ->whereAddress($address)
+            ->firstOrFail();
+
+        $txs = TokenTx::with(['token', 'transaction'])
+            ->where('to_address_id', $address->id)
+            ->orWhere('from_address_id', $address->id)
+            ->orderBy('id','desc')
+            ->paginate(20);
+
+        return view('address.token', [
+            'address' => $address,
+            'txs' => $txs,
+        ]);
     }
 }
