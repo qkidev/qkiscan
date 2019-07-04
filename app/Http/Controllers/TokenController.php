@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Balances;
 use App\Models\Token;
 use App\Models\TokenTx;
 use ERC20\ERC20;
@@ -42,16 +43,23 @@ class TokenController extends Controller
         $data['result'] = float_format($token_obj->totalSupply());
         $data['address'] = $address;
         $data['tx'] = TokenTx::select(DB::raw('token_tx.*,token.contract_address,token.token_symbol,a.address as from_address,b.address as to_address,t.hash'))
-            ->leftJoin("token","token_tx.token_id","token.id")
-            ->leftJoin("address as a",'token_tx.from_address_id','a.id')
-            ->leftJoin("address as b",'token_tx.to_address_id','b.id')
-            ->leftJoin("transactions as t",'token_tx.tx_id','t.id')
+            ->join("token","token_tx.token_id","token.id")
+            ->join("address as a",'token_tx.from_address_id','a.id')
+            ->join("address as b",'token_tx.to_address_id','b.id')
+            ->join("transactions as t",'token_tx.tx_id','t.id')
             ->where('token_tx.token_id',$token->id)
             ->orderBy('token_tx.id','desc')
             ->paginate(20);
         foreach ($data['tx'] as &$v){
             $v->created_at = formatTime($v->created_at, 2);
         }
+
+        // token top 100
+        $data['top'] = Balances::with('address')
+            ->where('name', $token_obj->name())
+            ->orderBy("amount","desc")
+            ->limit(100)
+            ->get();
 
         return view("token.index",$data);
     }

@@ -92,6 +92,36 @@
                 </div>
             </div>
 
+
+            <div data-v-cd5b40a0="" id="block-trade-detail" class="tradedetail" style="padding-bottom: 30px;">
+                <div data-v-cd5b40a0="" class="top">
+                    <span data-v-cd5b40a0="" class="title">TOP100</span>
+                </div>
+                <div>
+                    <table aria-busy="false" aria-colcount="4" class="vtable vshadow table b-table">
+                        <thead class="">
+                        <tr>
+                            <th aria-colindex="1" class="">排名</th>
+                            <th aria-colindex="1" class="">地址</th>
+                            <th aria-colindex="1" class="">数量</th>
+                        </tr>
+                        </thead>
+                        <tbody class="">
+                        @foreach($top as $k => $item)
+                            <tr class="">
+                                <td aria-colindex="1" class="">{{$k+1}}</td>
+                                <td aria-colindex="1" class="">
+                                    <a href="/address/{{$item['address']['address']}}" class="text3">{{$item['address']['address']}}</a>
+                                </td>
+                                <td aria-colindex="1" class="">
+                                    <span class="block-time">{{$item['amount']}}</span>
+                                </td>
+                            </tr>
+                        @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
     </div>
 
