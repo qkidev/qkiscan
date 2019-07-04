@@ -32,7 +32,11 @@ class AddressController extends Controller
 
         $data['address'] = $address;
 
-        $data['transactions'] = Transactions::where('from',$address)->orWhere('to',$address)->orderBy('id','desc')->paginate(20);
+        $data['transactions'] = Transactions::whereNull('payee')
+            ->where(function($query) use ($address){
+                $query->where('from',$address)->orWhere('to',$address);
+            })
+            ->orderBy('id','desc')->paginate(20);
         foreach ($data['transactions'] as &$v){
             $v->created_at = formatTime($v->created_at, 2);
         }
