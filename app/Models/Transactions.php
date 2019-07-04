@@ -34,4 +34,17 @@ use Illuminate\Database\Eloquent\Model;
 class Transactions extends Model
 {
     protected $table = "transactions";
+    protected $fillable = [
+        'from',
+        'to',
+        'hash',
+        'block_hash',
+        'block_number',
+        'gas_price',
+        'amount',
+        'created_at',
+        'updated_at',
+        'tx_status',
+        'payee',
+    ];
 }

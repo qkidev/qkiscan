@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Balance;
+use App\Models\Balances;
 use App\Models\Token;
 use App\Models\Transactions;
 use App\Services\RpcService;
@@ -128,9 +128,13 @@ class TxController extends Controller
      */
     public function qkiPage()
     {
-        $data['transactions'] = Balance::orderBy("qki","desc")->limit(100)->get();
+        $data['transactions'] = Balances::with('address')
+            ->where('name', 'qki')
+            ->orderBy("amount","desc")
+            ->limit(100)
+            ->get();
         $data['currentPage'] = 'qki-page';
-        return view('tx.qki-list',$data);
+        return view('tx.rank',$data);
     }
 
     /**
@@ -139,8 +143,11 @@ class TxController extends Controller
      */
     public function cctPage()
     {
-        $data['transactions'] = Balance::orderBy("cct","desc")->limit(100)->get();
+        $data['transactions'] = Balances::where('name', 'cct')
+            ->orderBy("amount","desc")
+            ->limit(100)
+            ->get();
         $data['currentPage'] = 'cct-page';
-        return view('tx.cct-list',$data);
+        return view('tx.rank',$data);
     }
 }

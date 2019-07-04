@@ -6,8 +6,6 @@ namespace App\Http\Controllers;
 use App\Models\Address;
 use App\Models\TokenTx;
 use App\Models\Transactions;
-use App\Services\SyncService;
-use Illuminate\Http\Request;
 use App\Services\RpcService;
 
 class AddressController extends Controller
@@ -29,7 +27,7 @@ class AddressController extends Controller
         $data = $RpcService->rpc("eth_getBalance",$params);
 
         $data = isset($data[0])?$data[0]:array();
-   
+
         $data['result'] = float_format(bcdiv(gmp_strval($data['result']) ,gmp_pow(10,18),18));
 
         $data['address'] = $address;
@@ -38,7 +36,7 @@ class AddressController extends Controller
         foreach ($data['transactions'] as &$v){
             $v->created_at = formatTime($v->created_at, 2);
         }
-        (new SyncService())->getQkiCctBalance($address);
+
         return view("address.index",$data);
     }
 
@@ -49,7 +47,10 @@ class AddressController extends Controller
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function token($address){
-        $address = Address::whereAddress($address)->firstOrFail();
+
+        $address = Address::with('balances')
+            ->whereAddress($address)
+            ->firstOrFail();
 
         $txs = TokenTx::with(['token', 'transaction'])
             ->where('to_address_id', $address->id)
@@ -62,5 +63,4 @@ class AddressController extends Controller
             'txs' => $txs,
         ]);
     }
-
 }
