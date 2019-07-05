@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Http\Resources\BalancesResource;
+use App\Models\Address;
+use App\Models\Balances;
 use App\Models\Token;
 use App\Models\TokenTx;
 use App\Models\Transactions;
@@ -40,6 +43,12 @@ class AddressController extends Controller
         $data['result'] = float_format(bcdiv(gmp_strval($data['result']) ,gmp_pow(10,18),18));
 
         $data['address'] = $address;
+
+        // 地址详情新增所有余额字段
+        $data['balances'] = [];
+        if ($addressModel = Address::whereAddress($address)->first()){
+            $data['balances'] = BalancesResource::collection($addressModel->balances);
+        }
 
         $data['transactions'] = Transactions::where('from',$address)->orWhere('to',$address)->orderBy('id','desc')->paginate(20);
 
@@ -89,6 +98,31 @@ class AddressController extends Controller
             ->where('token_tx.token_id',$token->id)
             ->orderBy('token_tx.id','desc')
             ->paginate(20);
+
+        return response()->json(['code' => 0, 'message' => 'OK', 'data' => $data]);
+    }
+
+    /**
+     * 合约地址排行榜, 默认前100
+     * @param \Illuminate\Http\Request $request
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function getTokenTop(Request $request){
+        if (!$request->input('address'))
+            return response()->json(['code' => 500, 'message' => '缺少参数: address', 'data' => '']);
+
+        $token = Token::whereContractAddress($request->input('address'))->first();
+        if (!$token)
+            return response()->json(['code' => 500, 'message' => '合约地址不存在', 'data' => '']);
+
+        $top = Balances::with('address')
+            ->where('name', $token->token_symbol)
+            ->orderBy("amount","desc")
+            ->limit(100)
+            ->get();
+
+        $data['top'] = BalancesResource::collection($top);
 
         return response()->json(['code' => 0, 'message' => 'OK', 'data' => $data]);
     }
