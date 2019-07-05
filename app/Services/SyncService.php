@@ -394,25 +394,12 @@ class SyncService
             return;
         $rs = isset($rs[0])?$rs[0]:array();
         $qki = bcdiv(gmp_strval($rs['result']) ,gmp_pow(10,18),8);
-
-//        $addr = '0x4175aa5d372015b67ef58514414086f0f36caa7a';
-//        $url_arr = parse_url(env("RPC_HOST"));
-//        $geth = new EthereumRPC($url_arr['host'], $url_arr['port']);
-//        $erc20 = new ERC20($geth);
-//        $token = $erc20->token($addr);
-//        $cct = $token->balanceOf($address);
-//        Balance::updateOrInsert(['address'=>$address], ['qki'=>$qki, 'cct'=>$cct]);
         $address = Address::firstOrCreate(['address' => $address]);
         Balances::updateOrInsert(['address_id'=>$address->id, 'name' => 'qki'], ['amount' => $qki]);
     }
 
     public function updateTokenBalance($address, $token_address)
     {
-//        $rpc = new RpcService();
-//        $rs = $rpc->rpc('eth_getBalance', [[$address,"latest"]]);
-//        if(!isset($rs[0]['result']))
-//            return;
-
         $addr = $token_address;
         $url_arr = parse_url(env("RPC_HOST"));
         $geth = new EthereumRPC($url_arr['host'], $url_arr['port']);
