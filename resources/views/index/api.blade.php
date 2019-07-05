@@ -263,6 +263,21 @@ data: {
     id: 76,
     result: "9.999130721",<span class="api-tips">//QKI余额</span>
     address: "0xbe15892b305d1a21ce018073eee95205c5a58441",<span class="api-tips">//地址</span>
+    <span class="api-tips">//显示资产余额</span>
+    "balances": [
+        {
+            "name": "cct",
+            "amount": "39.70000000"
+        },
+        {
+            "name": "qki",
+            "amount": "1.00013305"
+        },
+        {
+            "name": "usdt",
+            "amount": "0.00000000"
+        }
+    ],
     transactions: {
         current_page: 1,
         data: [
@@ -369,6 +384,48 @@ data: {
 }
 </pre>
         </div>
+
+        <span class='le'><em>11.合约资产Top100</em> <b>描述:合约资产Top100</b> </span>
+        <span class='ri'>方式:<em> GET</em></span>
+        <span class='ri'>示例URL:<em> <a href='/api/get-contract-address-top?address=0x4175aa5d372015b67ef58514414086f0f36caa7a' target='_blank'>https://new-block-browser.quarkblockchain.cn/api/get-contract-address-top?address=0x4175aa5d372015b67ef58514414086f0f36caa7a</a> </em></span>
+        <div class='says'>传参说明：1.address（合约地址，<span class="tips-red">必选</span>）</div>
+        <div class='says'>返回结构示例：
+            <pre class="intersays">
+{
+    "code": 0,
+    "message": "OK",
+    "data": {
+        "top": [
+            {
+                "name": "cct",
+                "amount": "999938770.00000000",
+                "address": {
+                    "address": "0xdb53f8004ab20e70fccc885bff685dc353accfb3",
+                    "amount": "0.00000000"
+                }
+            },
+            {
+                "name": "cct",
+                "amount": "8819.38914550",
+                "address": {
+                    "address": "0x7a265cbf4e38a8c6a7380b6033bd075f460ea213",
+                    "amount": "0.00000000"
+                }
+            },
+            {
+                "name": "cct",
+                "amount": "2308.34574948",
+                "address": {
+                    "address": "0x1abf176877f86f0c3aaada1502ab604fbe0becd1",
+                    "amount": "0.00000000"
+                }
+            }
+        ]
+    }
+}
+</pre>
+        </div>
+
     </div>
 </div>
 <div id="foot">
