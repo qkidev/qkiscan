@@ -74,6 +74,19 @@
                 </div>
             </div>
 
+            <div id="nav_search" class="navbar-collapse collapse" style="">
+                <ul class="navbar-nav">
+                    <div class="mobile-search-container">
+                        <div class="vsearch-panel" data-v-2f615f5c="">
+                            <div class="vsearch" data-v-2f615f5c="">
+                                <div class="vsearch-inner" data-v-2f615f5c="">
+                                    <div class="search-bar" data-v-2f615f5c="">
+                                        <input placeholder="QKI地址、区块高度、Hash值" value="" class="input-search" id="web-search-input" data-v-2f615f5c=""><i class="btn-search search-btn" data-v-2f615f5c=""></i></div></div></div><div class="placeholder" data-v-2f615f5c="">
+                            </div>
+                        </div>
+                    </div>
+                </ul>
+            </div>
 
             <div id="nav_menu" class="navbar-collapse collapse" style="display: none;"><div class="menu-container">
                     <ul class="navbar-nav nav-links">
