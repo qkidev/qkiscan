@@ -97,8 +97,10 @@ class TransactionsController extends Controller
             return response()->json(['code' => 500, 'message' => '缺少必要参数', 'data' => '']);
         }
 
-        $transactions = Transactions::where('from',$address)
-            ->orWhere('to',$address)
+        $transactions = Transactions::whereNull('payee')
+            ->where(function($query) use ($address){
+                $query->where('from',$address)->orWhere('to',$address);
+            })
             ->orderBy('id','desc')
             ->paginate($pageSize);
 
