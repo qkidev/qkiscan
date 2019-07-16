@@ -22,7 +22,7 @@ Route::get('/block/detail', 'BlockController@detail');
 Route::get('/address/{address}', 'AddressController@index');
 Route::get('/address/{address}/token', 'AddressController@token');
 //交易列表
-Route::get('/tx-list', 'TxController@list');
+Route::get('/tx-list/{type}', 'TxController@list');
 //交易详情
 Route::get('/tx/{hash}', 'TxController@index');
 //未打包交易列表
