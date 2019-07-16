@@ -8,6 +8,8 @@
                     <span data-v-cd5b40a0="">
                                     <span data-v-cd5b40a0="" class="txcount">共 {{$transactions->total()}}笔</span>
                     </span>
+                    <span data-v-cd5b40a0="" class="title" style="cursor: pointer;float: right;color: {{$type==1?'grey':'black'}}" onclick="getData(2)">通证交易</span>
+                    <span data-v-cd5b40a0="" class="title" style="cursor: pointer;float: right;margin-right: 15px;color: {{$type==2?'grey':'black'}}" onclick="getData(1)">QKI交易</span>
                 </div>
                 <ul data-v-cd5b40a0="" class="middle">
                     @foreach($transactions as $v)
@@ -34,3 +36,8 @@
     </div>
 
 @stop
+<script>
+    function getData($type) {
+        location.href = '/tx-list/'+$type;
+    }
+</script>

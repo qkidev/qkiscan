@@ -93,16 +93,18 @@ class TxController extends Controller
 
     /**
      * 交易列表
+     * @param $type
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function list()
+    public function list($type)
     {
-        $data['transactions'] = Transactions::orderBy("id","desc")
+        $data['transactions'] = Transactions::orderBy("id","desc")->where('amount', $type==1?'>':'<=', 0)
             ->paginate(20);
         foreach ($data['transactions'] as &$v){
             $v->created_at = formatTime($v->created_at, 2);
         }
         $data['currentPage'] = 'tx-list';
+        $data['type'] = $type;
         return view("tx.list",$data);
     }
 
