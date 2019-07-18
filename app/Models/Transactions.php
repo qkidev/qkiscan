@@ -47,4 +47,8 @@ class Transactions extends Model
         'tx_status',
         'payee',
     ];
+
+    public function tokenTx(){
+        return $this->hasOne(TokenTx::class, 'tx_id', 'id');
+    }
 }
