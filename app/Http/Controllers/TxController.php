@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Balances;
 use App\Models\Token;
+use App\Models\TokenTx;
 use App\Models\Transactions;
 use App\Services\RpcService;
 use ERC20\ERC20;
@@ -98,9 +99,16 @@ class TxController extends Controller
      */
     public function list($type)
     {
-        $data['transactions'] = Transactions::orderBy("id","desc")->where('amount', $type==1?'>':'<=', 0)
-            ->paginate(20);
-        foreach ($data['transactions'] as &$v){
+        if ($type==1){
+            $data['transactions'] = Transactions::orderBy("id","desc")->where('amount', $type==1?'>':'<=', 0)->paginate(20);
+        }else{
+            $data['transactions'] = Transactions::with(['tokenTx'])->orderBy("id","desc")
+                ->where('amount', $type==1?'>':'<=', 0)->paginate(20);
+        }
+        foreach ($data['transactions'] as $v){
+            if ($type==2 && $v->tokenTx){
+                $v->token = Token::where('id', $v->tokenTx->token_id)->first();
+            }
             $v->created_at = formatTime($v->created_at, 2);
         }
         $data['currentPage'] = 'tx-list';
