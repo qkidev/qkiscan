@@ -100,10 +100,10 @@ class TxController extends Controller
     public function list($type)
     {
         if ($type==1){
-            $data['transactions'] = Transactions::orderBy("id","desc")->where('amount', $type==1?'>':'<=', 0)->paginate(20);
+            $data['transactions'] = Transactions::orderBy("id","desc")->where('amount', '>', 0)->paginate(20);
         }else{
             $data['transactions'] = Transactions::with(['tokenTx'])->orderBy("id","desc")
-                ->where('amount', $type==1?'>':'<=', 0)->paginate(20);
+                ->where('amount', '<=', 0)->paginate(20);
         }
         foreach ($data['transactions'] as $v){
             if ($type==2 && $v->tokenTx){

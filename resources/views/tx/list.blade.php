@@ -50,7 +50,7 @@
                                         {{str_limit($v['hash'],15)}}
                                     </a>
                                 </td>
-                                <td>{{formatTime($v['created_at'],2)}}</td>
+                                <td>{{$v['created_at']}}</td>
                                 <td>
                                     <a href="/address/{{$v['from']}}" title="{{$v['from']}}" class="hash font-hash-title">
                                         {{str_limit($v['from'],15)}}
