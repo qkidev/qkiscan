@@ -38,7 +38,7 @@
                             <th>发送方</th>
                             <th>进/出</th>
                             <th>接收方</th>
-                            <th>价值</th>
+                            <th>数量</th>
                             <th>通证</th>
                         </tr>
                         </thead>
