@@ -7,6 +7,8 @@ use App\Model\Block;
 use App\Model\MasterNode;
 use App\Model\Transaction;
 use App\Model\TxOut;
+use App\Models\Address;
+use App\Models\Transactions;
 use App\Service\APIService;
 use App\Service\SyncService;
 use App\Services\RpcService;
@@ -48,7 +50,15 @@ class IndexController extends Controller
                 $blockList[$key]['difficulty'] = HexDec2($blockList[$key]['difficulty']);
             }
         }
-
+        $data['max_height'] = 0;
+        if (count($blockList)>0){
+            $data['max_height'] = $blockList[0]['height']+1;
+        }
+        $data['transactions_num'] = Transactions::where('tx_status', 1)->count();
+        $start = time()-24*60*60-28800;
+        $end = time()-28800;
+        $data['hour_24_num'] = Transactions::where('tx_status', 1)->whereTime('created_at', '<', $end)->whereTime('created_at', '>', $start)->count();
+        $data['address_num'] = Address::where('amount', '>', 0)->count();
         $data['block'] = $blockList;
         $data['currentPage'] = "index";
         return view("index.index",$data);
