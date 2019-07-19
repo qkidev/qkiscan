@@ -5,7 +5,11 @@
         <div class="vcontainer">
             <div class="panel-block">
                 <div class="clearfix panel-header">
-                    <span class="float-left">最近出块</span>
+                    <span class="float-left" style="margin-right: 20px">最近出块</span>
+                    <span class="float-left" style="margin-right: 20px">累计交易笔数:{{$transactions_num}}</span>
+                    <span class="float-left" style="margin-right: 20px">有余额地址数:{{$address_num}}</span>
+                    <span class="float-left" style="margin-right: 20px">累计区块数:{{$max_height}}</span>
+                    <span class="float-left" style="margin-right: 20px">最近24小时交易笔数:{{$hour_24_num}}</span>
                     <a href="/block" class="float-right">查看更多</a></div>
                 <div>
                     <table aria-busy="false" aria-colcount="4" class="vtable vshadow table b-table">
