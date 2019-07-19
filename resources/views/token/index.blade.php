@@ -35,6 +35,30 @@
                             <span data-v-1fd0f8d0="" class="vfs-20 vcolor-52cbca">{{$result . " " . $token->token_symbol}}</span>
                             <span data-v-1fd0f8d0="" class="vfs-20 vcolor-192330 vpl-5">&nbsp;</span></div>
                     </div>
+                    <div data-v-1fd0f8d0="" class="vflex-between-center vborder-b balance">
+                        <span data-v-1fd0f8d0="" class="vfs-12 vfw-500 vcolor-192330">累计交易笔数</span>
+                        <div data-v-1fd0f8d0="">
+                            <span data-v-1fd0f8d0="" class="vfs-20 vcolor-52cbca">{{$transactions_num}}</span>
+                            <span data-v-1fd0f8d0="" class="vfs-20 vcolor-192330 vpl-5">&nbsp;</span></div>
+                    </div>
+                    <div data-v-1fd0f8d0="" class="vflex-between-center vborder-b balance">
+                        <span data-v-1fd0f8d0="" class="vfs-12 vfw-500 vcolor-192330">持有地址数量</span>
+                        <div data-v-1fd0f8d0="">
+                            <span data-v-1fd0f8d0="" class="vfs-20 vcolor-52cbca">{{$address_num}}</span>
+                            <span data-v-1fd0f8d0="" class="vfs-20 vcolor-192330 vpl-5">&nbsp;</span></div>
+                    </div>
+                    <div data-v-1fd0f8d0="" class="vflex-between-center vborder-b balance">
+                        <span data-v-1fd0f8d0="" class="vfs-12 vfw-500 vcolor-192330">过去24小时交易笔数</span>
+                        <div data-v-1fd0f8d0="">
+                            <span data-v-1fd0f8d0="" class="vfs-20 vcolor-52cbca">{{$hour_24_num}}</span>
+                            <span data-v-1fd0f8d0="" class="vfs-20 vcolor-192330 vpl-5">&nbsp;</span></div>
+                    </div>
+                    <div data-v-1fd0f8d0="" class="vflex-between-center vborder-b balance">
+                        <span data-v-1fd0f8d0="" class="vfs-12 vfw-500 vcolor-192330">过去24小时交易数量</span>
+                        <div data-v-1fd0f8d0="">
+                            <span data-v-1fd0f8d0="" class="vfs-20 vcolor-52cbca">{{$hour_24_amount}}</span>
+                            <span data-v-1fd0f8d0="" class="vfs-20 vcolor-192330 vpl-5">&nbsp;</span></div>
+                    </div>
                 </div>
             </div>
 
