@@ -68,6 +68,9 @@ class TxController extends Controller
                 $data['value'] = float_format(bcdiv(HexDec2($data['value']) ,gmp_pow(10,18),18));
                 $data['contract_address'] = isset($gas['contractAddress'])?$gas['contractAddress']:'';
             }else{
+                $data['gas'] = 0;
+                $data['gasPrice'] = 0;
+                $data['value'] = 0;
                 $data['tx_status'] = '交易状态获取失败';
             }
 
