@@ -6,10 +6,6 @@
             <div class="panel-block">
                 <div class="clearfix panel-header">
                     <span class="float-left" style="margin-right: 20px">最近出块</span>
-                    <span class="float-left" style="margin-right: 20px">累计交易笔数:{{$transactions_num}}</span>
-                    <span class="float-left" style="margin-right: 20px">有余额地址数:{{$address_num}}</span>
-                    <span class="float-left" style="margin-right: 20px">累计区块数:{{$max_height}}</span>
-                    <span class="float-left" style="margin-right: 20px">最近24小时交易笔数:{{$hour_24_num}}</span>
                     <a href="/block" class="float-right">查看更多</a></div>
                 <div>
                     <table aria-busy="false" aria-colcount="4" class="vtable vshadow table b-table">
@@ -48,6 +44,34 @@
                             @endforeach
                         </tbody>
                     </table>
+                </div>
+                <div class="panel-network row">
+                    <div class="panel col-12 col-lg-12">
+                        <div class="clearfix panel-header">
+                            <span class="float-left">数据统计</span></div>
+                        <div class="row panel-container">
+                            <div class="inner-panel col-12 col-lg-12 collapsed-padding">
+                                <ul class="vsection vshadow">
+                                    <li class="item">
+                                        <span class="text2 strong">累计交易笔数</span>
+                                        <span class="text2">{{$transactions_num}}</span>
+                                    </li>
+                                    <li class="item">
+                                        <span class="text2 strong">有余额地址数</span>
+                                        <span class="text2">{{$address_num}}</span>
+                                    </li>
+                                    <li class="item">
+                                        <span class="text2 strong">累计区块数</span>
+                                        <span class="text2">{{$max_height}}</span>
+                                    </li>
+                                    <li class="item">
+                                        <span class="text2 strong">最近24小时交易笔数</span>
+                                        <span class="text2">{{$hour_24_num}}</span>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
