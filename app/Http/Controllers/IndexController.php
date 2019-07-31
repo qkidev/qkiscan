@@ -8,6 +8,7 @@ use App\Model\MasterNode;
 use App\Model\Transaction;
 use App\Model\TxOut;
 use App\Models\Address;
+use App\Models\Balances;
 use App\Models\Transactions;
 use App\Service\APIService;
 use App\Service\SyncService;
@@ -58,7 +59,7 @@ class IndexController extends Controller
         $start = time()-24*60*60-28800;
         $end = time()-28800;
         $data['hour_24_num'] = Transactions::where('tx_status', 1)->whereTime('created_at', '<', $end)->whereTime('created_at', '>', $start)->count();
-        $data['address_num'] = Address::where('amount', '>', 0)->count();
+        $data['address_num'] = Balances::where('name', 'qki')->where('amount', '>', 0)->count();
         $data['block'] = $blockList;
         $data['currentPage'] = "index";
         return view("index.index",$data);
