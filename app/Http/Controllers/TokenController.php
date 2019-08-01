@@ -57,8 +57,10 @@ class TokenController extends Controller
         $start = time()-24*60*60-28800;
         $end = time()-28800;
 
-        $data['hour_24_num'] = TokenTx::where([['tx_status', 1], ['token_id', $token->id]])->whereTime('created_at', '<', $end)->whereTime('created_at', '>', $start)->count();
-        $data['hour_24_amount'] = TokenTx::where([['tx_status', 1], ['token_id', $token->id]])->whereTime('created_at', '<', $end)->whereTime('created_at', '>', $start)->sum('amount');
+        $data['hour_24_num'] = TokenTx::where([['tx_status', 1], ['token_id', $token->id]])
+            ->whereRaw("unix_timestamp(created_at)<$end")->whereRaw("unix_timestamp(created_at)>$start")->count();
+        $data['hour_24_amount'] = TokenTx::where([['tx_status', 1], ['token_id', $token->id]])
+            ->whereRaw("unix_timestamp(created_at)<$end")->whereRaw("unix_timestamp(created_at)>$start")->sum('amount');
         $data['address_num'] = Balances::where([['name', $token->token_name], ['amount', '>', 0]])->count();
         // token top 100
         $data['top'] = Balances::with('address')

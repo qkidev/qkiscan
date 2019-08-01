@@ -58,7 +58,7 @@ class IndexController extends Controller
         $data['transactions_num'] = Transactions::where('tx_status', 1)->count();
         $start = time()-24*60*60-28800;
         $end = time()-28800;
-        $data['hour_24_num'] = Transactions::where('tx_status', 1)->whereTime('created_at', '<', $end)->whereTime('created_at', '>', $start)->count();
+        $data['hour_24_num'] = Transactions::where('tx_status', 1)->whereRaw("unix_timestamp(created_at)<$end")->whereRaw("unix_timestamp(created_at)>$start")->count();
         $data['address_num'] = Balances::where('name', 'qki')->where('amount', '>', 0)->count();
         $data['block'] = $blockList;
         $data['currentPage'] = "index";
