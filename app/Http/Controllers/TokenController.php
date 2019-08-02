@@ -54,8 +54,8 @@ class TokenController extends Controller
             $v->created_at = formatTime($v->created_at, 2);
         }
         $data['transactions_num'] = TokenTx::where([['tx_status', 1], ['token_id', $token->id]])->count();
-        $start = time()-24*60*60-28800;
-        $end = time()-28800;
+        $start = time()-24*60*60;
+        $end = time();
 
         $data['hour_24_num'] = TokenTx::where([['tx_status', 1], ['token_id', $token->id]])
             ->whereRaw("unix_timestamp(created_at)<$end")->whereRaw("unix_timestamp(created_at)>$start")->count();
