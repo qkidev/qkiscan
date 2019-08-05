@@ -101,8 +101,9 @@ class SyncService
                     if($block['result'])
                     {
                         $block_time = HexDec2($block['result']['timestamp']);
-                        //太新的区块，不处理,至少要求60秒钟以上
-                        if(time() - $block_time < 60)
+                        $block_height = bcadd(HexDec2($block['result']['number']),1,0);
+                        //至少需要一个区块确认
+                        if($block_height < $real_last_block)
                         {
                             break;
                         }
@@ -119,8 +120,6 @@ class SyncService
                                 $this->saveTx($tx, $timestamp);
                             }
                         }
-
-                        $block_height = bcadd(HexDec2($block['result']['number']),1,0);
                     }
                     else
                     {
