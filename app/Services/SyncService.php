@@ -126,7 +126,7 @@ class SyncService
                     {
                         Settings::where('key','last_block_height')->update(['value' => $block_height]);
                         DB::commit();
-                        echo "同步成功，当前高度:$block_height\n";
+                        echo "没有结果，当前高度:$block_height\n";
                         return false;
                     }
                 }
