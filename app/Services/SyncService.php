@@ -117,6 +117,7 @@ class SyncService
                             $timestamp = date("Y-m-d H:i:s",$block_time);
                             foreach($transactions as $tx)
                             {
+                                if(!Transactions::where('hash',$tx['hash'])->exists())
                                 $this->saveTx($tx, $timestamp);
                             }
                         }
