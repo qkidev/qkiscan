@@ -66,7 +66,7 @@ class SyncService
         {
             if($lastBlock + 10 >= $real_last_block)
             {
-                $num = 10;
+                $num = 1;
             }
         }
         for($i=0;$i<$num;$i++)
@@ -107,7 +107,7 @@ class SyncService
                         $block_time = HexDec2($block['result']['timestamp']);
                         $block_height = bcadd(HexDec2($block['result']['number']),1,0);
                         //至少需要一个区块确认
-                        if($block_height >= $real_last_block - 1)
+                        if($block_height >= $real_last_block - 2)
                         {
                         	echo "区块确认数不够\n";
                             break;
