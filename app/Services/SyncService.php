@@ -112,6 +112,7 @@ class SyncService
                         	echo "区块确认数不够\n";
                             break;
                         }
+	                    $last_block_height->value = $block_height;
 
                         //保存出块方地址、保存通证
                         $this->saveAddress($block['result']['miner']);
@@ -129,7 +130,7 @@ class SyncService
                     }
                     else
                     {
-                        Settings::where('key','last_block_height')->update(['value' => $block_height]);
+	                    $last_block_height->save();
                         DB::commit();
                         echo "没有结果，当前高度:$block_height\n";
                         return false;
@@ -139,7 +140,7 @@ class SyncService
             }
 
             //记录下一个要同步的区块高度
-            Settings::where('key','last_block_height')->update(['value' => $block_height]);
+	        $last_block_height->save();
             DB::commit();
             echo "同步成功，当前高度:$block_height\n";
             return true;
