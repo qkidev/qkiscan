@@ -89,6 +89,10 @@ class SyncService
             echo "获取数据失败";
             return false;
         }
+        else
+        {
+        	echo "获取区块" . count($blocks) . "个\n";
+        }
         DB::beginTransaction();
         try{
 
@@ -103,8 +107,9 @@ class SyncService
                         $block_time = HexDec2($block['result']['timestamp']);
                         $block_height = bcadd(HexDec2($block['result']['number']),1,0);
                         //至少需要一个区块确认
-                        if($block_height < $real_last_block)
+                        if($block_height >= $real_last_block - 1)
                         {
+                        	echo "区块确认数不够\n";
                             break;
                         }
 
