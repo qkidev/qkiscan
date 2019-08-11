@@ -52,18 +52,22 @@ class AddressController extends Controller
      */
     public function token($address){
 
-        $address = Address::with('balances')
+        $addressModel = Address::with('balances')
             ->whereAddress($address)
-            ->firstOrFail();
+            ->first();
+        $txs = [];
 
-        $txs = TokenTx::with(['token', 'transaction'])
-            ->where('to_address_id', $address->id)
-            ->orWhere('from_address_id', $address->id)
-            ->orderBy('id','desc')
-            ->paginate(20);
+        if ($addressModel){
+            $txs = TokenTx::with(['token', 'transaction'])
+                ->where('to_address_id', $addressModel->id)
+                ->orWhere('from_address_id', $addressModel->id)
+                ->orderBy('id','desc')
+                ->paginate(20);
+        }
 
         return view('address.token', [
             'address' => $address,
+            'addressModel' => $addressModel,
             'txs' => $txs,
         ]);
     }
