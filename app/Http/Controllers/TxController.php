@@ -27,72 +27,78 @@ class TxController extends Controller
      */
     public function index($hash)
     {
+        try{
+            $RpcService = new RpcService();
 
-        $RpcService = new RpcService();
-
-        $params = array(
-            [$hash]
-        );
+            $params = array(
+                [$hash]
+            );
 
 
-        $data = $RpcService->rpc("eth_getTransactionByHash",$params);
+            $data = $RpcService->rpc("eth_getTransactionByHash",$params);
 
-        $data = isset($data[0]['result'])?$data[0]['result']:null;
-        if($data){
-            $block = $RpcService->rpc("eth_getBlockByNumber",[[$data['blockNumber'], true]]);
-            $block = isset($block[0]['result'])?$block[0]['result']:null;
-            if($block)
-            {
-                $data['created_at'] = formatTime($block['timestamp']);
-            }else{
-                $data['created_at'] = "";
-            }
-
-            $gas = $RpcService->rpc('eth_getTransactionReceipt',[[$hash]]);
-            //var_dump($gas);exit;
-            $data['nonce'] = (int)HexDec2($data['nonce']);
-            //查询交易是否成功
-            if(isset($gas[0]['result']))
-            {
-                $gas = $gas[0]['result'];
-                $tx_status = HexDec2($gas['status']);
-                if($tx_status == 1)
+            $data = isset($data[0]['result'])?$data[0]['result']:null;
+            if($data){
+                $block = $RpcService->rpc("eth_getBlockByNumber",[[$data['blockNumber'], true]]);
+                $block = isset($block[0]['result'])?$block[0]['result']:null;
+                if($block)
                 {
-                    $data['tx_status'] = "交易成功";
+                    $data['created_at'] = formatTime($block['timestamp']);
                 }else{
-                    $data['tx_status'] = "交易失败";
+                    $data['created_at'] = "";
                 }
-                $data['gas'] = float_format(HexDec2($gas['gasUsed']))??0;
-                $data['gasPrice'] = float_format(bcdiv(HexDec2($data['gasPrice']) ,gmp_pow(10,18),18));
-                $data['blockNumber'] = base_convert($data['blockNumber'],16,10);
-                $data['value'] = float_format(bcdiv(HexDec2($data['value']) ,gmp_pow(10,18),18));
-                $data['contract_address'] = isset($gas['contractAddress'])?$gas['contractAddress']:'';
-            }else{
-                $data['gas'] = 0;
-                $data['gasPrice'] = 0;
-                $data['value'] = 0;
-                $data['tx_status'] = '交易状态获取失败';
+
+                $gas = $RpcService->rpc('eth_getTransactionReceipt',[[$hash]]);
+                //var_dump($gas);exit;
+                $data['nonce'] = (int)HexDec2($data['nonce']);
+                //查询交易是否成功
+                if(isset($gas[0]['result']))
+                {
+                    $gas = $gas[0]['result'];
+                    $tx_status = HexDec2($gas['status']);
+                    if($tx_status == 1)
+                    {
+                        $data['tx_status'] = "交易成功";
+                    }else{
+                        $data['tx_status'] = "交易失败";
+                    }
+                    $data['gas'] = float_format(HexDec2($gas['gasUsed']))??0;
+                    $data['gasPrice'] = float_format(bcdiv(HexDec2($data['gasPrice']) ,gmp_pow(10,18),18));
+                    $data['blockNumber'] = base_convert($data['blockNumber'],16,10);
+                    $data['value'] = float_format(bcdiv(HexDec2($data['value']) ,gmp_pow(10,18),18));
+                    $data['contract_address'] = isset($gas['contractAddress'])?$gas['contractAddress']:'';
+                }else{
+                    $data['gas'] = 0;
+                    $data['gasPrice'] = 0;
+                    $data['value'] = 0;
+                    $data['tx_status'] = '交易状态获取失败';
+                }
+
+            }
+            $data['is_token_tx'] = false;
+            //获取通证交易记录
+            if (substr($data['input']??"", 0, 10) === '0xa9059cbb') {
+                //实例化通证
+                $url_arr = parse_url(env("RPC_HOST"));
+                $geth = new EthereumRPC($url_arr['host'], $url_arr['port']);
+                $erc20 = new ERC20($geth);
+                $token = $erc20->token($data['to']);
+                $decimals = $token->decimals();
+                $data['is_token_tx'] = true;
+                //保存通证交易
+                $token_tx =  new TransactionInputTransfer($data['input']);
+                $data['token_tx_amount'] = bcdiv(HexDec2($token_tx->amount),gmp_pow(10,$decimals),18);
+                $data['token_tx_to'] = $token_tx->payee;
+                $data['token'] = Token::where('contract_address',$data['to'])->first();
             }
 
+            return view("tx.index",$data);
+        }catch (\Exception $e){
+            if (app()->bound('sentry')) {
+                app('sentry')->captureException($e);
+            }
+            return '<h1>出错了</h1>';
         }
-        $data['is_token_tx'] = false;
-        //获取通证交易记录
-        if (substr($data['input']??"", 0, 10) === '0xa9059cbb') {
-            //实例化通证
-            $url_arr = parse_url(env("RPC_HOST"));
-            $geth = new EthereumRPC($url_arr['host'], $url_arr['port']);
-            $erc20 = new ERC20($geth);
-            $token = $erc20->token($data['to']);
-            $decimals = $token->decimals();
-            $data['is_token_tx'] = true;
-            //保存通证交易
-            $token_tx =  new TransactionInputTransfer($data['input']);
-            $data['token_tx_amount'] = bcdiv(HexDec2($token_tx->amount),gmp_pow(10,$decimals),18);
-            $data['token_tx_to'] = $token_tx->payee;
-            $data['token'] = Token::where('contract_address',$data['to'])->first();
-        }
-
-        return view("tx.index",$data);
     }
 
     /**

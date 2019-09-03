@@ -13,35 +13,41 @@ class AddressController extends Controller
     /**
      * 地址详情
      * @param $address
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return string
      */
     public function index($address)
     {
+        try{
+            $RpcService = new RpcService();
 
-        $RpcService = new RpcService();
+            $params = array(
+                [$address,"latest"]
+            );
 
-        $params = array(
-            [$address,"latest"]
-        );
+            $data = $RpcService->rpc("eth_getBalance",$params);
 
-        $data = $RpcService->rpc("eth_getBalance",$params);
+            $data = isset($data[0])?$data[0]:array();
 
-        $data = isset($data[0])?$data[0]:array();
+            $data['result'] = float_format(bcdiv(gmp_strval($data['result']) ,gmp_pow(10,18),18));
 
-        $data['result'] = float_format(bcdiv(gmp_strval($data['result']) ,gmp_pow(10,18),18));
+            $data['address'] = $address;
 
-        $data['address'] = $address;
+            $data['transactions'] = Transactions::whereNull('payee')
+                ->where(function($query) use ($address){
+                    $query->where('from',$address)->orWhere('to',$address);
+                })
+                ->orderBy('id','desc')->paginate(20);
+            foreach ($data['transactions'] as &$v){
+                $v->created_at = formatTime($v->created_at, 2);
+            }
 
-        $data['transactions'] = Transactions::whereNull('payee')
-            ->where(function($query) use ($address){
-                $query->where('from',$address)->orWhere('to',$address);
-            })
-            ->orderBy('id','desc')->paginate(20);
-        foreach ($data['transactions'] as &$v){
-            $v->created_at = formatTime($v->created_at, 2);
+            return view("address.index",$data);
+        }catch (\Exception $e){
+            if (app()->bound('sentry')) {
+                app('sentry')->captureException($e);
+            }
+            return '<h1>出错了</h1>';
         }
-
-        return view("address.index",$data);
     }
 
     /**
@@ -51,24 +57,30 @@ class AddressController extends Controller
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function token($address){
+        try{
+            $addressModel = Address::with('balances')
+                ->whereAddress($address)
+                ->first();
+            $txs = [];
 
-        $addressModel = Address::with('balances')
-            ->whereAddress($address)
-            ->first();
-        $txs = [];
+            if ($addressModel){
+                $txs = TokenTx::with(['token', 'transaction'])
+                    ->where('to_address_id', $addressModel->id)
+                    ->orWhere('from_address_id', $addressModel->id)
+                    ->orderBy('id','desc')
+                    ->paginate(20);
+            }
 
-        if ($addressModel){
-            $txs = TokenTx::with(['token', 'transaction'])
-                ->where('to_address_id', $addressModel->id)
-                ->orWhere('from_address_id', $addressModel->id)
-                ->orderBy('id','desc')
-                ->paginate(20);
+            return view('address.token', [
+                'address' => $address,
+                'addressModel' => $addressModel,
+                'txs' => $txs,
+            ]);
+        }catch (\Exception $e){
+            if (app()->bound('sentry')) {
+                app('sentry')->captureException($e);
+            }
+            return '<h1>出错了</h1>';
         }
-
-        return view('address.token', [
-            'address' => $address,
-            'addressModel' => $addressModel,
-            'txs' => $txs,
-        ]);
     }
 }
