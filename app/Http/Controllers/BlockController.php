@@ -59,7 +59,10 @@ class BlockController extends Controller
             $data['currentPage'] = "block";
             return view("block.index",$data);
         }catch (\Exception $e){
-            return $e->getMessage();
+            if (app()->bound('sentry')) {
+                app('sentry')->captureException($e);
+            }
+            return '<h1>出错了</h1>';
         }
     }
 
