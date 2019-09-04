@@ -116,7 +116,7 @@
                 </div>
             </div>
 
-
+            @if(empty($page) || $page<=1)
             <div data-v-cd5b40a0="" id="block-trade-detail" class="tradedetail" style="padding-bottom: 30px;">
                 <div data-v-cd5b40a0="" class="top">
                     <span data-v-cd5b40a0="" class="title">TOP100</span>
@@ -146,6 +146,7 @@
                     </table>
                 </div>
             </div>
+            @endif
         </div>
     </div>
 
