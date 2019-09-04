@@ -14,16 +14,11 @@ class TokenController extends Controller
 {
     /**
      * 合约地址
+     * @param Request $request
      * @param $address
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\RedirectResponse|\Illuminate\View\View
-     * @throws \ERC20\Exception\ERC20Exception
-     * @throws \EthereumRPC\Exception\ConnectionException
-     * @throws \EthereumRPC\Exception\ContractABIException
-     * @throws \EthereumRPC\Exception\ContractsException
-     * @throws \EthereumRPC\Exception\GethException
-     * @throws \HttpClient\Exception\HttpClientException
      */
-    public function index($address)
+    public function index(Request $request, $address)
     {
 
         try{
@@ -35,6 +30,7 @@ class TokenController extends Controller
 
             //查询通证总量
             //实例化通证
+            $data['page'] = $request->input('page', 0);
             $url_arr = parse_url(env("RPC_HOST"));
             $geth = new EthereumRPC($url_arr['host'], $url_arr['port']);
             $erc20 = new ERC20($geth);
@@ -64,11 +60,13 @@ class TokenController extends Controller
                 ->whereRaw("unix_timestamp(created_at)<$end")->whereRaw("unix_timestamp(created_at)>$start")->sum('amount');
             $data['address_num'] = Balances::where([['name', $token->token_name], ['amount', '>', 0]])->count();
             // token top 100
-            $data['top'] = Balances::with('address')
-                ->where('name', $token_obj->name())
-                ->orderBy("amount","desc")
-                ->limit(100)
-                ->get();
+            if (empty($data['page']) || $data['page']<=1){
+                $data['top'] = Balances::with('address')
+                    ->orderBy("amount","desc")
+                    ->where('name', $token_obj->name())
+                    ->limit(100)
+                    ->get();
+            }
 
             return view("token.index",$data);
         }catch (\Exception $e){
