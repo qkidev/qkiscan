@@ -73,7 +73,7 @@ class IndexController extends Controller
      */
     public function search(Request $request, RpcService $rpcService)
     {
-        $keyword = $request->input('keyword');
+        $keyword = strtolower($request->input('keyword'));
 
         //判断是否为数字，如果为数字，优先查询区块
         if(is_numeric($keyword))
