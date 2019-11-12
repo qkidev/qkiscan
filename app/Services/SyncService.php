@@ -285,6 +285,9 @@ class SyncService
         $tokenTx->token_id = $token_id;
         $tokenTx->from_address_id = $from_address_id;
         $tokenTx->to_address_id = $to_address_id;
+        if ($amount >= 100000000000000000000){
+            $amount = '99999999999999999999';
+        }
         $tokenTx->amount = $amount;
         $tokenTx->tx_id = $tx_id;
         $tokenTx->created_at = $timestamp;
