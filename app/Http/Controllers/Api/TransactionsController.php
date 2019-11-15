@@ -27,7 +27,6 @@ class TransactionsController extends Controller
         $contract_address = $request->input('contract_address');
         $pageSize = $request->input('pageSize',20);
         $callback = $request->input('callback');
-	    return response()->json(['code' => 0, 'message' => 'OK', 'data' => []]);
 
         if(!$address || !$contract_address)
         {
@@ -50,12 +49,17 @@ class TransactionsController extends Controller
             return response()->json(['code' => 500, 'message' => '合约地址有误，请检查', 'data' => '']);
         }
 
+        $address_id = $user_address->id;
+
         $list = TokenTx::select(DB::raw('token_tx.*,t.hash,t.tx_status'))
             ->leftJoin('transactions as t', 'token_tx.tx_id', 't.id')
-            ->where([['token_id', '=', $token->id],['from_address_id', '=', $user_address->id],['t.tx_status', '=', 1]])
-            ->orWhere([['token_id', '=', $token->id],['to_address_id', '=', $user_address->id],['t.tx_status', '=', 1]])
+            ->where([['token_id', '=', $token->id],['t.tx_status', '=', 1]])
+            ->where(function ($query) use ($address_id) {
+                $query->Where('from_address_id', '=', $address_id)
+                    ->orWhere('to_address_id', '=', $address_id);
+            })
             ->orderBy('id','desc')
-            ->paginate($pageSize);
+            ->take($pageSize);
 
         $result = [];
         if(count($list) > 0)
