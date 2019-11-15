@@ -27,6 +27,7 @@ class TransactionsController extends Controller
         $contract_address = $request->input('contract_address');
         $pageSize = $request->input('pageSize',20);
         $callback = $request->input('callback');
+	    return response()->json(['code' => 0, 'message' => 'OK', 'data' => []]);
 
         if(!$address || !$contract_address)
         {
