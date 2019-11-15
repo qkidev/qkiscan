@@ -59,7 +59,8 @@ class TransactionsController extends Controller
                     ->orWhere('to_address_id', '=', $address_id);
             })
             ->orderBy('id','desc')
-            ->take($pageSize);
+            ->take($pageSize)
+            ->get();
 
         $result = [];
         if(count($list) > 0)
