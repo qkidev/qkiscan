@@ -57,8 +57,10 @@ class TokenController extends Controller
             foreach ($data['tx'] as &$v){
                 $v->created_at = formatTime($v->created_at, 2);
             }
-            $data['transactions_num'] = TokenTx::where([['tx_status', 1], ['token_id', $token->id]])->count();
             $token_id = $token->id;
+            $data['transactions_num'] = Cache::remember("transactions_num_{$token->id}", 60*10, function () use ($token_id){
+                return TokenTx::where([['tx_status', 1], ['token_id', $token_id]])->count();
+            });
             $data['hour_24_num'] = Cache::remember("token_{$token->id}_hour_24_num", 60*10, function () use ($token_id){
                 $start = time()-24*60*60;
                 return TokenTx::where([['tx_status', 1], ['token_id',$token_id]])->whereRaw("unix_timestamp(created_at)>$start")->count();
