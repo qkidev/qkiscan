@@ -5,10 +5,10 @@ namespace App\Http\Controllers;
 use App\Models\Balances;
 use App\Models\Token;
 use App\Models\TokenTx;
-use Doctrine\Common\Cache\Cache;
 use ERC20\ERC20;
 use EthereumRPC\EthereumRPC;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 
 class TokenController extends Controller

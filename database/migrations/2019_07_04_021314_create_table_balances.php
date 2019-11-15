@@ -16,7 +16,7 @@ class CreateTableBalances extends Migration
         Schema::create('balances', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('address_id')->comment('地址id');
-            $table->char('name')->comment('资源名称');
+            $table->char('name',32)->comment('资源名称');
 //            $table->integer('token_id')->comment('通证id');
             $table->decimal('amount', 26, 18)
                 ->default(0)
