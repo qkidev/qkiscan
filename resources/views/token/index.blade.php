@@ -111,8 +111,21 @@
                     </table>
                 </div>
                 <div style="display: flex;justify-content: space-between;padding: 0 5px;">
-                    <div style="font-size: 14px;">当前第{{$tx->currentPage()}}页</div>
-                    {{$tx->links('vendor.pagination.bootstrap-4')}}
+                    <div style="font-size: 14px;">当前第{{$page}}页</div>
+                    <ul class="pagination" role="navigation">
+                        @if($page >= 2)
+                        <li class="page-item">
+                            <a class="page-link" href="/token/{{$contract_address}}?page={{$page-1}}" rel="prev" aria-label="« Previous">上一页</a>
+                        </li>
+                        @endif
+
+                        @if(count($tx) == 20)
+                        <li class="page-item">
+                            <a class="page-link" href="/token/{{$contract_address}}?page={{$page+1}}" rel="next" aria-label="Next »">下一页</a>
+                        </li>
+                        @endif
+                    </ul>
+
                 </div>
             </div>
 

@@ -31,7 +31,11 @@ class TokenController extends Controller
 
             //查询通证总量
             //实例化通证
-            $data['page'] = $request->input('page', 0);
+            $data['page'] = (int)$request->input('page', 0);
+            if($data['page'] < 1)
+                $data['page'] = 1;
+            $offset = 20 * ($data['page'] - 1);
+            $data['contract_address'] = $address;
             $url_arr = parse_url(env("RPC_HOST"));
             $geth = new EthereumRPC($url_arr['host'], $url_arr['port']);
             $erc20 = new ERC20($geth);
@@ -47,7 +51,9 @@ class TokenController extends Controller
                 ->join("transactions as t",'token_tx.tx_id','t.id')
                 ->where('token_tx.token_id',$token->id)
                 ->orderBy('token_tx.id','desc')
-                ->paginate(20);
+                ->offset($offset)
+                ->limit(20)
+                ->get();
             foreach ($data['tx'] as &$v){
                 $v->created_at = formatTime($v->created_at, 2);
             }
