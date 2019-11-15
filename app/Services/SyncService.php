@@ -362,7 +362,12 @@ class SyncService
             $decimals = $token->decimals();
             $token_tx_amount = bcdiv(HexDec2($token_tx->amount),gmp_pow(10, $decimals),18);
 //            dump($v['to'],$v['from'],$token_tx->payee);
-            $this->saveTokenTx($this->token[$v['to']],float_format($token_tx_amount),$this->address[$v['from']],$this->address[$token_tx->payee],$tx->id,$timestamp,$tx_status);
+            $this->saveTokenTx($this->token[$v['to']],float_format($token_tx_amount),
+                $this->address[$v['from']],
+                $this->address[$token_tx->payee],
+                $tx->id,
+                $timestamp,
+                $tx_status);
 
             $this->updateTokenBalance($v['from'], $v['to']);
             $this->updateTokenBalance($token_tx->payee, $v['to']);
