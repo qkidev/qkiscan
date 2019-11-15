@@ -213,7 +213,12 @@ class SyncService
             //如果为合约地址，保存通证
             if($address_type == 2)
             {
-                $this->saveToken($address);
+                $token = Token::where('contract_address',$address)->first();
+                if ($token){
+                    $this->token[$address] = $token->id;
+                } else {
+                    $this->saveToken($address);
+                }
             }
             return $addressModel->id;
         }else{
