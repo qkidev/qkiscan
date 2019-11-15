@@ -352,7 +352,7 @@ class SyncService
         $input = $v['input'] ?? '';
 
         // 通证转账
-        if (substr($input, 0, 10) === '0xa9059cbb') {
+        if (substr($input, 0, 10) === '0xa9059cbb' && !empty($this->token[$v['to']])) {
             //保存通证交易
             $token_tx =  new TransactionInputTransfer($input);
             $tx->payee = $token_tx->payee;
