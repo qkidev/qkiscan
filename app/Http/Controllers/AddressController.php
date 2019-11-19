@@ -40,6 +40,8 @@ class AddressController extends Controller
 
 
 	        $account_data = $RpcService->rpc("eth_getTransactionCount",$params);
+	        $account_data = isset($account_data[0])?$account_data[0]:array();
+
 	        $data['nonce'] = float_format(HexDec2($account_data['result']))??0;
 
             foreach ($data['transactions'] as &$v){
