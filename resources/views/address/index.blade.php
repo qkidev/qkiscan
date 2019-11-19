@@ -14,6 +14,12 @@
                             <span data-v-1fd0f8d0="" class="vfs-20 vcolor-52cbca">{{number_format($result,8)}} QKI</span>
                         </div>
                     </div>
+                    <div data-v-1fd0f8d0="" class="vflex-between-center vborder-b balance">
+                        <span data-v-1fd0f8d0="" class="vfs-12 vfw-500 vcolor-192330">nonce</span>
+                        <div data-v-1fd0f8d0="">
+                            <span data-v-1fd0f8d0="" class="vfs-20 vcolor-52cbca">{{number_format($result,8)}} QKI</span>
+                        </div>
+                    </div>
                 </div>
             </div>
 

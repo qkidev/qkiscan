@@ -37,6 +37,11 @@ class AddressController extends Controller
                     $query->where('from',$address)->orWhere('to',$address);
                 })
                 ->orderBy('id','desc')->paginate(20);
+
+
+	        $account_data = $RpcService->rpc("eth_getTransactionCount",$params);
+	        $data['nonce'] = float_format($account_data($data['result']))??0;
+
             foreach ($data['transactions'] as &$v){
                 $v->created_at = formatTime($v->created_at, 2);
             }
