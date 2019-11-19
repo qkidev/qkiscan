@@ -40,7 +40,7 @@ class AddressController extends Controller
 
 
 	        $account_data = $RpcService->rpc("eth_getTransactionCount",$params);
-	        $data['nonce'] = float_format($account_data($data['result']))??0;
+	        $data['nonce'] = float_format(HexDec2($account_data['result']))??0;
 
             foreach ($data['transactions'] as &$v){
                 $v->created_at = formatTime($v->created_at, 2);
