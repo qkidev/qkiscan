@@ -58,18 +58,18 @@ class TokenController extends Controller
                 $v->created_at = formatTime($v->created_at, 2);
             }
             $token_id = $token->id;
-            $data['transactions_num'] = Cache::remember("transactions_num_{$token->id}", 60*10, function () use ($token_id){
+            $data['transactions_num'] = Cache::remember("transactions_num_{$token->id}", 5, function () use ($token_id){
                 return TokenTx::where([['tx_status', 1], ['token_id', $token_id]])->count();
             });
-            $data['hour_24_num'] = Cache::remember("token_{$token->id}_hour_24_num", 60*10, function () use ($token_id){
+            $data['hour_24_num'] = Cache::remember("token_{$token->id}_hour_24_num", 5, function () use ($token_id){
                 $start = time()-24*60*60;
                 return TokenTx::where([['tx_status', 1], ['token_id',$token_id]])->whereRaw("unix_timestamp(created_at)>$start")->count();
             });
-            $data['hour_24_amount'] = Cache::remember("token_{$token->id}_hour_24_amount", 60*10, function () use ($token_id){
+            $data['hour_24_amount'] = Cache::remember("token_{$token->id}_hour_24_amount", 5, function () use ($token_id){
                 $start = time()-24*60*60;
                 return TokenTx::where([['tx_status', 1], ['token_id', $token_id]])->whereRaw("unix_timestamp(created_at)>$start")->sum('amount');
             });
-            $data['address_num'] = Cache::remember("token_{$token->id}_address_num", 60*10, function () use ($token){
+            $data['address_num'] = Cache::remember("token_{$token->id}_address_num", 5, function () use ($token){
                 return Balances::where([['name', $token->token_name], ['amount', '>', 0]])->count();
             });
             // token top 100

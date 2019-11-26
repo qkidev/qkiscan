@@ -14,13 +14,13 @@
 
     <link data-n-head="true" rel="stylesheet" type="text/css" charset="utf-8" href="/css/bootstrap.min.css">
     <link rel="stylesheet" href="/css/style.css">
-    <link rel="stylesheet" href="/css/app.css?v={{time()}}">
+    <link rel="stylesheet" href="/css/app.css?v=1">
     <link rel="stylesheet" href="/css/jquery-confirm.css" />
     <link rel="stylesheet" href="/fonts/iconfont.css" />
     <script src="/js/jquery.min.js"></script>
     <script src="/js/jquery-confirm.min.js"></script>
     <script src="/js/bootstrap.min.js"></script>
-    <script src="https://static.quarkblockchain.cn/lib/js/bundle.min.js "></script>
+    <script src="https://static.quarkblockchain.cn/lib/js/bundle.min.js"></script>
     <script>
         Sentry.init({ dsn: 'https://36df09d3d58a4d889ce6367c650a3766@sentry.quarkblockchain.cn/4'});
     </script>
