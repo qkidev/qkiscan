@@ -31,6 +31,6 @@ class CreateTokenTxTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('rpc_transactions');
+        Schema::dropIfExists('token_tx');
     }
 }

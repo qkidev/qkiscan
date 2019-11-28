@@ -26,7 +26,7 @@ class AddPayeeToTransactions extends Migration
     public function down()
     {
         Schema::table('transactions', function (Blueprint $table) {
-            $table->dropColumn('tx_status');
+            $table->dropColumn('payee');
         });
     }
 }

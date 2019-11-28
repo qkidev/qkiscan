@@ -29,6 +29,6 @@ class CreateTokenTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('rpc_index');
+        Schema::dropIfExists('token');
     }
 }
