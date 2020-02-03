@@ -112,7 +112,7 @@
         <div class="vfooter">
 
             <p class="panel-bottom">Copyright ©2018 quarkblockchain v{{config('app.version')}}   <a href="/apis">api</a></p>
-            <a href="http://www.beian.miit.gov.cn" target="_blank"><p class="panel-bottom">渝ICP备18010814号-2</p></a>
+            <a href="http://www.beian.miit.gov.cn" target="_blank"><p class="panel-bottom">{{env('ICP_NUM')}}</p></a>
         </div>
 
         <div id="btn_top" class="cmp-navtop d-none d-lg-flex" style="display:none;" data-v-59831c6c="">
