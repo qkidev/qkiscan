@@ -34,6 +34,10 @@
                                 <span data-v-cd5b40a0="" class="vcolor-192330">{{$size}}</span>
                             </li>
                             <li data-v-cd5b40a0="" class="item">
+                                <span data-v-cd5b40a0="" class="vcolor-192330 strong">gas使用量</span>
+                                <span data-v-cd5b40a0="" class="vcolor-192330">{{$gasUsed}}</span>
+                            </li>
+                            <li data-v-cd5b40a0="" class="item">
                                 <span data-v-cd5b40a0="" class="vcolor-192330 strong">出块方</span>
                                 <span data-v-cd5b40a0="" class="vcolor-192330"><a href="/address/{{$miner}}" class="text3 vtext-monospace">{{$miner}}</a></span>
                             </li>
