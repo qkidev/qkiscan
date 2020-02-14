@@ -74,10 +74,10 @@
                         </li>
                         <li data-v-0c97b89a="" class="item">
                             <span data-v-0c97b89a="" class="text2 strong">来源</span>
-                            <span data-v-0c97b89a="" class="text2"><a data-v-0c97b89a="" href="/address/{{$from}}" class="hash font-hash-content">{{$from}}</a></span></li>
+                            <span data-v-0c97b89a="" class="text2"><a data-v-0c97b89a="" href="/address/{{$from}}/token" class="hash font-hash-content">{{$from}}</a></span></li>
                         <li data-v-0c97b89a="" class="item">
                             <span data-v-0c97b89a="" class="text2 strong">接收</span>
-                            <span data-v-0c97b89a="" class="text2"><a data-v-0c97b89a="" href="/address/{{$token_tx_to}}" class="hash font-hash-content">{{$token_tx_to}}</a></span></li>
+                            <span data-v-0c97b89a="" class="text2"><a data-v-0c97b89a="" href="/address/{{$token_tx_to}}/token" class="hash font-hash-content">{{$token_tx_to}}</a></span></li>
 
                     </ul>
                     <ul data-v-0c97b89a="" class="vsection base-right">

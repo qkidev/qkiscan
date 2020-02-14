@@ -39,7 +39,7 @@
         </td>
         <td class="text-right">{{float_format($type==1?$v['amount']:$v['tokenTx']['amount'])}}</td>
         <td>
-            <a href="/token/{{$v['token']['contract_address']}}/token"
+            <a href="/token/{{$v['token']['contract_address']}}"
                title="{{$v['token']['token_symbol']}}" class="hash font-hash-title">
                 {{strtoupper($v['token']['token_name'])}}
             </a>
