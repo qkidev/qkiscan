@@ -89,4 +89,11 @@ class TokenController extends Controller
             return '<h1>出错了</h1>';
         }
     }
+
+
+    public function tokens()
+    {
+        $data['tokens'] = Token::get();
+        return view("token.tokens",$data);
+    }
 }

@@ -31,6 +31,7 @@ Route::get('/tx/{hash}', 'TxController@index');
 Route::get('/unpacked-tx-list', 'TxController@unpackedTxList');
 //合约地址
 Route::get('/token/{address}', 'TokenController@index');
+Route::get('/tokens', 'TokenController@tokens');
 //api页面
 Route::get('/apis', 'IndexController@api');
 //qki排行榜
