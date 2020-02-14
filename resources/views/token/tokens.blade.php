@@ -16,6 +16,7 @@
                         <tr>
                             <th aria-colindex="1" class="">地址</th>
                             <th aria-colindex="1" class="">数量</th>
+                            <th aria-colindex="1" class="">持有地址数</th>
                         </tr>
                         </thead>
                         <tbody class="">
@@ -26,6 +27,9 @@
                                 </td>
                                 <td aria-colindex="1" class="">
                                     <span class="block-time">{{$token['token_symbol']}}</span>
+                                </td>
+                                <td aria-colindex="1" class="">
+                                    <span class="block-time">{{$token['holders']}}</span>
                                 </td>
                             </tr>
                         @endforeach
