@@ -72,6 +72,8 @@ class TokenController extends Controller
             $data['address_num'] = Cache::remember("token_{$token->id}_address_num", 5, function () use ($token){
                 return Balances::where([['name', $token->token_name], ['amount', '>', 0]])->count();
             });
+            $token->holders = $data['address_num'];
+            $token->save();
             // token top 100
             if (empty($data['page']) || $data['page']<=1){
                 $data['top'] = Balances::with('address')
@@ -93,7 +95,7 @@ class TokenController extends Controller
 
     public function tokens()
     {
-        $data['tokens'] = Token::get();
+        $data['tokens'] = Token::orderBy("holders","desc")->get();
         return view("token.tokens",$data);
     }
 }
