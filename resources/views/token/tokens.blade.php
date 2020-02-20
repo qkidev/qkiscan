@@ -2,7 +2,9 @@
 @section('content')
     <div data-v-1fd0f8d0="" class="vcontainer page" style="min-height: 812px!important;">
         <div data-v-1fd0f8d0="" class="header">
-            <span data-v-1fd0f8d0="" class="name">通证列表</span></div>
+            <span data-v-1fd0f8d0="" class="name">通证列表</span>
+            <span data-v-1fd0f8d0="" class="address">按持有人数进行排名</span>
+        </div>
         <div data-v-1fd0f8d0="" class="main">
 
 
