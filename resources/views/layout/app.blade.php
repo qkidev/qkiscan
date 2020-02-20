@@ -111,7 +111,7 @@
 
         <div class="vfooter">
 
-            <p class="panel-bottom">Copyright ©2018 quarkblockchain v{{config('app.version')}}   <a href="/apis">api</a></p>
+            <p class="panel-bottom">Copyright ©2018-2020 quarkblockchain    <a href="/apis">api</a> <a href="/bp">bp</a> <a href="/tokens">tokens</a></p>
             <a href="http://www.beian.miit.gov.cn" target="_blank"><p class="panel-bottom">{{env('ICP_NUM')}}</p></a>
         </div>
 
