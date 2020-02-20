@@ -14,6 +14,7 @@
                     <table aria-busy="false" aria-colcount="4" class="vtable vshadow table b-table">
                         <thead class="">
                         <tr>
+                            <th aria-colindex="1" class="">排名</th>
                             <th aria-colindex="1" class="">地址</th>
                             <th aria-colindex="1" class="">数量</th>
                             <th aria-colindex="1" class="">持有地址数</th>
@@ -22,6 +23,9 @@
                         <tbody class="">
                         @foreach($tokens as $k => $token)
                             <tr class="">
+                                <td aria-colindex="1" class="">
+                                    {{($k+1)}}
+                                </td>
                                 <td aria-colindex="1" class="">
                                     <a href="/token/{{$token['contract_address']}}/" class="text3">{{$token['token_symbol']}}</a>
                                 </td>

@@ -9,7 +9,7 @@
                             <li data-v-cd5b40a0="" class="item vshadow">
                                 <div data-v-8701ced6="" data-v-cd5b40a0="" class="tx-detail">
                                     <div data-v-8701ced6="" class="hash-section">
-                                        <span style="margin-left:10px;">{{$bp}}</span>
+                                        <span style="margin-left:10px;">{{$bp}}  {{$v}}%</span>
                                     </div>
 
                                 </div>
