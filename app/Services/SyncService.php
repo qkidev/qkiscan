@@ -10,6 +10,7 @@ use App\Models\Token;
 use App\Models\TokenTx;
 use App\Models\Transactions;
 use ERC20\ERC20;
+use ERC20\ERC20_Token;
 use EthereumRPC\EthereumRPC;
 use EthereumRPC\Response\TransactionInputTransfer;
 use Illuminate\Support\Facades\DB;
@@ -376,8 +377,8 @@ class SyncService
                 $timestamp,
                 $tx_status);
 
-            $this->updateTokenBalance($v['from'], $v['to']);
-            $this->updateTokenBalance($token_tx->payee, $v['to']);
+            $this->updateTokenBalance($v['from'], $v['to'],$token);
+            $this->updateTokenBalance($token_tx->payee, $v['to'],$token);
         }
         return $tx;
     }
@@ -420,16 +421,11 @@ class SyncService
         Balances::updateOrInsert(['address_id'=>$address->id, 'name' => 'qki'], ['amount' => $qki]);
     }
 
-    public function updateTokenBalance($address, $token_address)
+    public function updateTokenBalance($address, $token_address,ERC20_Token $token)
     {
-        $addr = $token_address;
-        $url_arr = parse_url(env("RPC_HOST"));
-        $geth = new EthereumRPC($url_arr['host'], $url_arr['port']);
-        $erc20 = new ERC20($geth);
-        $token = $erc20->token($addr);
         $amount = $token->balanceOf($address);
         $address = Address::firstOrCreate(['address' => $address]);
-        $token_db = Token::where('contract_address',$token_address);
+        $token_db = Token::where('contract_address',$token_address)->first();
         Balances::updateOrInsert(['address_id'=>$address->id,"token_id"=>$token_db->id, 'name' => $token->symbol()], ['amount' => $amount]);
     }
 
