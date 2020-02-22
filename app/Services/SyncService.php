@@ -429,7 +429,8 @@ class SyncService
         $token = $erc20->token($addr);
         $amount = $token->balanceOf($address);
         $address = Address::firstOrCreate(['address' => $address]);
-        Balances::updateOrInsert(['address_id'=>$address->id, 'name' => $token->symbol()], ['amount' => $amount]);
+        $token_db = Token::where('contract_address',$token_address);
+        Balances::updateOrInsert(['address_id'=>$address->id,"token_id"=>$token_db->id, 'name' => $token->symbol()], ['amount' => $amount]);
     }
 
 

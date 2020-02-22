@@ -11,6 +11,7 @@ class Balances extends Model
     protected $fillable = [
         'address_id',
         'name',
+        'token_id',
         'amount',
     ];
 
