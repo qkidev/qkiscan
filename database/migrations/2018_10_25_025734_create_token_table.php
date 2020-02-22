@@ -15,8 +15,8 @@ class CreateTokenTable extends Migration
     {
         Schema::create('token', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('token_name',20)->comment('token名');
-            $table->string('token_symbol')->comment('token标识');
+            $table->string('token_name',128)->comment('token名');
+            $table->string('token_symbol',128)->comment('token标识');
             $table->string('contract_address', 42)->unique()->comment('合约地址');
             $table->timestamps();
         });
