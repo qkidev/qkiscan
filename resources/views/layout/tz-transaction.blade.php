@@ -41,7 +41,7 @@
         <td>
             <a href="/token/{{$v['token']['contract_address']}}"
                title="{{$v['token']['token_symbol']}}" class="hash font-hash-title">
-                {{strtoupper($v['token']['token_name'])}}
+                {{strtoupper($v['token']['token_symbol'])}}
             </a>
         </td>
     </tr>
