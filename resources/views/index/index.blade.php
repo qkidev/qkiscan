@@ -16,7 +16,7 @@
                             <th aria-colindex="3" class="pc-hash">Tx数量</th>
                             <th aria-colindex="4" class="">大小(KB)</th>
                             <th aria-colindex="5" class="pc-hash">gas上限</th>
-                            <th aria-colindex="6" class="pc-hash">出块方</th>
+                            <th aria-colindex="6" class="pc-hash">gas使用</th>
                             <th aria-colindex="7" class="">区块Hash</th></tr>
                         </thead>
                         <!---->
@@ -31,9 +31,7 @@
                                     <td aria-colindex="3" class="pc-hash">{{$item['tx_count']}}</td>
                                     <td aria-colindex="4" class="">{{$item['size']}}</td>
                                     <td aria-colindex="5" class="pc-hash">{{$item['gasLimit']}}</td>
-                                    <td aria-colindex="6" class="pc-hash">
-                                        <a href="/address/{{$item['miner']}}" class="text3 vtext-monospace">{{$item['miner']}}</a>
-                                    </td>
+                                    <td aria-colindex="6" class="pc-hash">{{$item['gasUsed']}}</td>
                                     <td aria-colindex="7" class="pc-hash">
                                         <a href="/block/detail?hash={{$item['hash']}}" class="text3 vtext-monospace">{{$item['hash']}}</a>
                                     </td>
