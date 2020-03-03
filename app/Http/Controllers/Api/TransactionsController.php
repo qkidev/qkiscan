@@ -230,9 +230,9 @@ class TransactionsController extends Controller
                 $tx_status = HexDec2($gas['status']);
                 if($tx_status == 1)
                 {
-                    $data['tx_status'] = "交易成功";
+                    $data['tx_status'] = 1;
                 }else{
-                    $data['tx_status'] = "交易失败";
+                    $data['tx_status'] = 0;
                 }
                 $data['gas'] = float_format(HexDec2($gas['gasUsed']))??0;
                 $data['gasPrice'] = float_format(bcdiv(HexDec2($data['gasPrice']) ,gmp_pow(10,18),18));
@@ -240,7 +240,7 @@ class TransactionsController extends Controller
                 $data['value'] = float_format(bcdiv(HexDec2($data['value']) ,gmp_pow(10,18),18));
                 $data['contract_address'] = isset($gas['contractAddress'])?$gas['contractAddress']:'';
             }else{
-                $data['tx_status'] = '交易状态获取失败';
+                $data['tx_status'] = 2;
             }
 
         }
