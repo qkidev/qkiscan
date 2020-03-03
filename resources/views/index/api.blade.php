@@ -242,7 +242,8 @@ data: {
         r: "0xfdaca1fda979e8d78040f5f257480055bfccc9c942420ff5b91eb1e289b2c2eb",
         s: "0x41806f0008a33cb7143b52fb7a76dab4051f75c09f87015db641f3003c75e666",
         created_at: "2019-03-28 15:58:06",<span class="api-tips">//交易时间</span>
-        tx_status: "1",<span class="api-tips">//状态,0交易失败，1交易成功，2交易状态获取失败</span>
+        tx_status: "交易成功",<span class="api-tips">//状态</span>
+        tx_status_code: "1",<span class="api-tips">//状态,0交易失败，1交易成功，2交易状态获取失败</span>
         contract_address: "",<span class="api-tips">//合约地址</span>
         is_token_tx: true<span class="api-tips">//是否为合约交易</span>
     }
