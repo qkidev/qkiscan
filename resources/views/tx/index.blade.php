@@ -50,9 +50,9 @@
                         <span data-v-0c97b89a="" class="text2 strong">金额</span>
                         <span data-v-0c97b89a="" class="text2" data-original-title="" title="" style="padding-left: 170px;">{{$value}}</span>
                     </li>
-                    <li data-v-0c97b89a="" class="item">
+                    <li data-v-0c97b89a="" class="item" style="height: 120px">
                         <span data-v-0c97b89a="" class="text2 strong">input</span>
-                        <textarea class="form-control" rows="1" readonly style="width: 65%; min-width: 278px; max-width: 324px">{{ $input }}</textarea>
+                        <textarea class="form-control" rows="3" readonly style="width: 65%; min-width: 278px; max-width: 324px">{{ $input }}</textarea>
                     </li>
                     <li data-v-0c97b89a="" class="item">
                         <span data-v-0c97b89a="" class="text2 strong">nonce</span>
