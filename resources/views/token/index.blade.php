@@ -70,6 +70,7 @@
                     <table aria-busy="false" aria-colcount="4" class="vtable vshadow table b-table">
                         <thead class="">
                         <tr>
+                            <th aria-colindex="1" class="">#</th>
                             <th aria-colindex="1" class="">hash</th>
                             <th aria-colindex="2" class="time-label pc-hash" style="text-align: center;">交易时间</th>
                             <th aria-colindex="3" class="">来源</th>
@@ -83,6 +84,9 @@
                         <tbody class="">
                         @foreach($tx as $item)
                             <tr class="">
+                                <td width="5%">
+                                    @include('layout.icon', ['status'=>$item['tx_status']])
+                                </td>
                                 <td aria-colindex="1" class="pc-hash">
                                     <a href="/tx/{{$item['hash']}}" class="text3">{{$item['hash']}}</a>
                                 </td>
