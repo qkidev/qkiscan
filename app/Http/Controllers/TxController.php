@@ -67,6 +67,9 @@ class TxController extends Controller
                     $data['blockNumber'] = base_convert($data['blockNumber'],16,10);
                     $data['value'] = float_format(bcdiv(HexDec2($data['value']) ,gmp_pow(10,18),18));
                     $data['contract_address'] = isset($gas['contractAddress'])?$gas['contractAddress']:'';
+                    //计算区块确认数
+                    $newestBlock = $RpcService->rpc('eth_blockNumber', [[]]);
+                    $data['blockConfirm'] = base_convert($newestBlock[0]['result'], 16, 10) - $data['blockNumber'];
                 }else{
                     $data['gas'] = float_format(HexDec2($data['gas']))??0;
                     $data['gasPrice'] = float_format(bcdiv(HexDec2($data['gasPrice']) ,gmp_pow(10,18),18));

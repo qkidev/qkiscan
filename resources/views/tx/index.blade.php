@@ -1,17 +1,26 @@
 @extends('layout.app')
 @section('content')
+    <style>
+
+        @media (min-width: 1200px) {
+            .pd {
+                padding-left: 22px; padding-right: 22px
+            }
+        }
+    </style>
     <div data-v-0c97b89a="" class="vcontainer page">
         <div data-v-0c97b89a="" class="header d-block d-lg-flex">
             <span data-v-0c97b89a="" class="name">Tx(Hash)</span>
             <span data-v-0c97b89a="" class="hash d-block d-lg-inline-block">{{$hash}}</span></div>
         <div data-v-0c97b89a="" class="base">
             <p data-v-0c97b89a="" class="title mobile-padding">基本信息</p>
-            <div data-v-0c97b89a="" class="d-block d-lg-flex vshadow" style="padding-left: 20px; padding-right: 20px">
+            <div data-v-0c97b89a="" class="d-block d-lg-flex vshadow pd">
                 <ul data-v-0c97b89a="" class="vsection">
                     <li data-v-0c97b89a="" class="item">
                         <span data-v-0c97b89a="" class="text2 strong">高度</span>
                         <div data-v-0c97b89a="">
                             <a data-v-0c97b89a="" href="/block/detail?hash={{$blockHash}}" class="vcolor-52cbca">{{$blockNumber}}</a>
+                            <span class="u-label u-label--xs u-label--badge-in u-label--secondary ml-1">{{$blockConfirm}} 区块确认数</span>
                         </div>
                     </li>
                     <li data-v-0c97b89a="" class="item">
