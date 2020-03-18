@@ -8828,3 +8828,44 @@ ul[data-v-0c97b89a] {
         display: none;
     }
 }
+
+.u-label {
+    display: inline-block;
+    font-size: .8125rem;
+    font-weight: 500;
+    line-height: 1.3;
+    padding: .625rem 1.125rem;
+    border-radius: 6.1875rem;
+    transition: .2s ease-in-out
+}
+.u-label--xs {
+    font-weight: 300;
+    font-size: .60938rem;
+    line-height: 1.7;
+    padding: .2rem .5rem
+}
+.u-label--xs {
+    font-weight: 500
+}
+.u-label--badge-in {
+    position: relative;
+    padding-left: 1.15rem;
+    letter-spacing: .8px;
+    border-top-right-radius: .25rem;
+    border-bottom-right-radius: .25rem;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0
+}
+.u-label--badge-in:after {
+    position: absolute;
+    left: 0;
+    top: 0;
+    content: "";
+    border-top: .7rem solid transparent;
+    border-bottom: .7rem solid transparent;
+    border-left: .7rem solid #fff
+}
+.u-label--secondary {
+    color: #77838f;
+    background-color: rgba(119, 131, 143, .1)
+}
