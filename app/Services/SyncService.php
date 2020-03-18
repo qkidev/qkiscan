@@ -39,8 +39,9 @@ class SyncService
             {
                 break;
             }
-            $this->syncTx();
-            sleep(1);
+            $block_amount = $this->syncTx();
+            if($block_amount < 500)
+            sleep(3);
         }
         $this->unlock('create');
 
@@ -144,7 +145,7 @@ class SyncService
 	        $last_block_height->save();
             DB::commit();
             echo "同步成功，当前高度:$block_height\n";
-            return true;
+            return count($blocks);
         } catch (\Exception $e) {
             DB::rollback();
             echo "file:" . $e->getFile() . " line:" . $e->getLine() . $e->getMessage() . "\n";
