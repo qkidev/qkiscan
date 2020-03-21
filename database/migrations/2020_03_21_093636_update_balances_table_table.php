@@ -14,7 +14,7 @@ class UpdateBalancesTableTable extends Migration
     public function up()
     {
         Schema::table('balances', function (Blueprint $table) {
-            $table->dropIndex(['address_id', 'name']);
+            $table->dropUnique(['address_id', 'name']);
             $table->unique(['address_id', 'token_id']);
         });
     }
@@ -28,7 +28,7 @@ class UpdateBalancesTableTable extends Migration
     {
         Schema::table('balances', function (Blueprint $table) {
             $table->unique(['address_id', 'name']);
-            $table->dropIndex(['address_id', 'token_id']);
+            $table->dropUnique(['address_id', 'token_id']);
         });
     }
 }
