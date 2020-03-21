@@ -32,7 +32,7 @@ class SyncService
         }
         $this->lock('create');
         ini_set('max_execution_time', 0);
-        $end_time = time() + 58;
+        $end_time = time() + 580;
         while (true)
         {
             if($end_time <= time())
