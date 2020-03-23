@@ -121,7 +121,9 @@ class TxController extends Controller
             if ($type==2 && $v->tokenTx){
                 $v->token = Token::where('id', $v->tokenTx->token_id)->first();
             }
-            $v->created_at = formatTime($v->created_at, 2);
+            if ($type == 1){
+                $v->created_at = formatTime($v->created_at, 2);
+            }
         }
         $data['currentPage'] = 'tx-list';
         $data['type'] = $type;
