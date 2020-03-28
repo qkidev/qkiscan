@@ -18,6 +18,9 @@ DONATE_ADDRESS=
 
 # CNZZ统计ID
 CNZZ_ID=
+
+# ICP 备案号
+ICP_NUM=
 ```
 ## 运行
 同步区块数据
