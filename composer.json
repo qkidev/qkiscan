@@ -12,6 +12,7 @@
         "furqansiddiqui/erc20-php": "^0.1.2",
         "laravel/framework": "5.7.*",
         "laravel/tinker": "^1.0",
+        "predis/predis": "^1.1",
         "sentry/sentry-laravel": "^1.2"
     },
     "require-dev": {
