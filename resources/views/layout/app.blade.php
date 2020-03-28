@@ -90,15 +90,18 @@
 
             <div id="nav_menu" class="navbar-collapse collapse" style="display: none;"><div class="menu-container">
                     <ul class="navbar-nav nav-links">
-                        <li class="nav-item current">
+                        <li class="nav-item @if(isset($currentPage) && $currentPage=='index') current @endif">
                             <a href="/" class="nav-link">首页
                             </a>
                         </li>
-                        <li class="nav-item">
+                        <li class="nav-item @if(isset($currentPage) && $currentPage=='block') current @endif">
                             <a rel="noopener" href="/block"  class="nav-link">区块</a>
                         </li>
-                        <li class="nav-item">
-                            <a rel="noopener" href="/tx-list"  class="nav-link">交易</a>
+                        <li class="nav-item @if(isset($currentPage) && $currentPage=='tx-list') current @endif">
+                            <a rel="noopener" href="/tx-list/1"  class="nav-link">Tx</a>
+                        </li>
+                        <li class="nav-item @if(isset($currentPage) && $currentPage=='unpacked-tx-list') current @endif">
+                            <a rel="noopener" href="/unpacked-tx-list"  class="nav-link">未打包Tx</a>
                         </li>
                     </ul>
                 </div>
