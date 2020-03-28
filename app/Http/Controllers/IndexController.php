@@ -13,12 +13,14 @@ use App\Models\Transactions;
 use App\Service\APIService;
 use App\Service\SyncService;
 use App\Services\RpcService;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 
 class IndexController extends Controller
 {
+    const HOME_CACHE_KEY = 'home:data';
 
     /**
      * 首页
@@ -26,6 +28,10 @@ class IndexController extends Controller
      */
     public function index()
     {
+        if (Cache::has(self::HOME_CACHE_KEY)) {
+            return view("index.index", Cache::get(self::HOME_CACHE_KEY));
+        }
+
         $rpcService = new RpcService();
         $lastBlock = $rpcService->lastBlockHeightNumber() ?? 0;
 
@@ -56,14 +62,16 @@ class IndexController extends Controller
         if (count($blockList)>0){
             $data['max_height'] = $blockList[0]['height']+1;
         }
-        $data['transactions_num'] = Transactions::where('tx_status', 1)->count();
-        $start = time()-24*60*60;
-        $end = time();
-        $data['hour_24_num'] = Transactions::where('tx_status', 1)->whereRaw("unix_timestamp(updated_at)<$end")->
-        whereRaw("unix_timestamp(updated_at)>$start")->count();
+        $data['transactions_num'] = Transactions::count();
+        $end = Carbon::now();
+        $start = $end->copy()->subDay();
+        $data['hour_24_num'] = Transactions::whereBetween('updated_at', [$start, $end])
+            ->count();
         $data['address_num'] = Balances::where('name', 'qki')->where('amount', '>', 0)->count();
         $data['block'] = $blockList;
         $data['currentPage'] = "index";
+        // 数据缓存 15s
+        Cache::put(self::HOME_CACHE_KEY, $data, $end->addSeconds(60));
         return view("index.index",$data);
     }
 

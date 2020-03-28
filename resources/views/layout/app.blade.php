@@ -9,25 +9,27 @@
     <meta data-n-head="true" http-equiv="X-UA-Compatible" content="IE=edge">
     <meta data-n-head="true" data-hid="description" name="description" content="">
     <meta data-n-head="true" data-hid="keywords" name="keywords" content="">
-    <title data-n-head="true">qkiscan | QKI</title>
+    <title data-n-head="true">{{config('app.name')}} | QKI</title>
     <link data-n-head="true" rel="icon" type="image/x-icon" href="">
     <link rel="search" type="application/opensearchdescription+xml" href="/open-search-xml" title="QKI区块浏览器" />
-    <link data-n-head="true" rel="stylesheet" type="text/css" charset="utf-8" href="/css/bootstrap.min.css">
-    <link rel="stylesheet" href="/css/style.css">
-    <link rel="stylesheet" href="/css/app.css?v=2">
-    <link rel="stylesheet" href="/css/jquery-confirm.css" />
-    <link rel="stylesheet" href="/fonts/iconfont.css" />
-    <script src="/js/jquery.min.js"></script>
-    <script src="/js/jquery-confirm.min.js"></script>
-    <script src="/js/bootstrap.min.js"></script>
+    <link data-n-head="true" rel="stylesheet" type="text/css" charset="utf-8" href="{{env('ASSETS_HOST')}}/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{{env('ASSETS_HOST')}}/css/style.css">
+    <link rel="stylesheet" href="{{env('ASSETS_HOST')}}/css/app.css?v=2">
+    <link rel="stylesheet" href="{{env('ASSETS_HOST')}}/css/jquery-confirm.css" />
+    <link rel="stylesheet" href="{{env('ASSETS_HOST')}}/fonts/iconfont.css" />
+    <script src="{{env('ASSETS_HOST')}}/js/jquery.min.js"></script>
+    <script src="{{env('ASSETS_HOST')}}/js/jquery-confirm.min.js"></script>
+    <script src="{{env('ASSETS_HOST')}}/js/bootstrap.min.js"></script>
+    @if(env('SENTRY_DSN'))
     <script src="https://static.quarkblockchain.cn/lib/js/bundle.min.js"></script>
     <script>
-        Sentry.init({ dsn: 'https://36df09d3d58a4d889ce6367c650a3766@sentry.quarkblockchain.cn/4'});
+        Sentry.init({ dsn: '{{env('SENTRY_DSN')}}'});
     </script>
-
+    @endif
 </head>
 
 <body>
+    <div>
         <div class="vheader">
             <div class="vcontainer vheader-inner">
                 <a href="/" class="icon iconfont icon-icon-test1 news_logo"></a>
@@ -90,15 +92,18 @@
 
             <div id="nav_menu" class="navbar-collapse collapse" style="display: none;"><div class="menu-container">
                     <ul class="navbar-nav nav-links">
-                        <li class="nav-item current">
+                        <li class="nav-item @if(isset($currentPage) && $currentPage=='index') current @endif">
                             <a href="/" class="nav-link">首页
                             </a>
                         </li>
-                        <li class="nav-item">
+                        <li class="nav-item @if(isset($currentPage) && $currentPage=='block') current @endif">
                             <a rel="noopener" href="/block"  class="nav-link">区块</a>
                         </li>
-                        <li class="nav-item">
-                            <a rel="noopener" href="/tx-list"  class="nav-link">交易</a>
+                        <li class="nav-item @if(isset($currentPage) && $currentPage=='tx-list') current @endif">
+                            <a rel="noopener" href="/tx-list/1"  class="nav-link">Tx</a>
+                        </li>
+                        <li class="nav-item @if(isset($currentPage) && $currentPage=='unpacked-tx-list') current @endif">
+                            <a rel="noopener" href="/unpacked-tx-list"  class="nav-link">未打包Tx</a>
                         </li>
                     </ul>
                 </div>
@@ -110,9 +115,19 @@
 
 
         <div class="vfooter">
+            <p class="panel-bottom">
+                Copyright ©2018-2020 quarkblockchain <a href="/apis">api</a> <a href="/bp">bp</a> <a href="/tokens">tokens</a>
 
-            <p class="panel-bottom">Copyright ©2018-2020 quarkblockchain    <a href="/apis">api</a> <a href="/bp">bp</a> <a href="/tokens">tokens</a></p>
-            <a href="http://www.beian.miit.gov.cn" target="_blank"><p class="panel-bottom">{{env('ICP_NUM')}}</p></a>
+            </p>
+            <p class="panel-bottom">
+                @if(env('ICP_NUM'))
+                    <a href="http://www.beian.miit.gov.cn" target="_blank">{{env('ICP_NUM')}}</a>
+                @endif
+                @if(env('DONATE_ADDRESS'))
+                    捐赠地址: <a href="/address/{{env('DONATE_ADDRESS')}}">{{env('DONATE_ADDRESS')}}</a>
+                @endif
+            </p>
+
         </div>
 
         <div id="btn_top" class="cmp-navtop d-none d-lg-flex" style="display:none;" data-v-59831c6c="">
@@ -186,6 +201,9 @@
             window.location.href = '/search?keyword='+keyword;
         }
     </script>
+    @if(env('CNZZ_ID'))
+        <script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? "https://" : "http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_{{env('CNZZ_ID')}}}'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s9.cnzz.com/z_stat.php%3Fid%3D{{env('CNZZ_ID')}}}%26show%3Dpic1' type='text/javascript'%3E%3C/script%3E"));</script>
+    @endif
 </body>
 
 </html>

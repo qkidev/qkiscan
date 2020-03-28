@@ -7,12 +7,16 @@ use App\Models\Token;
 use App\Models\TokenTx;
 use App\Models\Transactions;
 use App\Services\RpcService;
+use Carbon\Carbon;
 use ERC20\ERC20;
 use EthereumRPC\EthereumRPC;
 use EthereumRPC\Response\TransactionInputTransfer;
+use Illuminate\Support\Facades\Cache;
 
 class TxController extends Controller
 {
+    const TX_CACHE_KEY = 'tx:list:';
+
     /**
      * 交易详细
      * @param $hash
@@ -111,6 +115,12 @@ class TxController extends Controller
      */
     public function list($type)
     {
+        if (!in_array($type, [1, 2])) abort(404);
+
+        if (Cache::has(self::TX_CACHE_KEY.$type)) {
+            return view("tx.list", Cache::get(self::TX_CACHE_KEY.$type));
+        }
+
         if ($type==1){
             $data['transactions'] = Transactions::orderBy("id","desc")->where('amount', '>', 0)->paginate(20);
         }else{
@@ -121,10 +131,13 @@ class TxController extends Controller
             if ($type==2 && $v->tokenTx){
                 $v->token = Token::where('id', $v->tokenTx->token_id)->first();
             }
-            $v->created_at = formatTime($v->created_at, 2);
+            if ($type == 1){
+                $v->created_at = formatTime($v->created_at, 2);
+            }
         }
         $data['currentPage'] = 'tx-list';
         $data['type'] = $type;
+        Cache::put(self::TX_CACHE_KEY . $type, $data, Carbon::now()->addSeconds(15));
         return view("tx.list",$data);
     }
 

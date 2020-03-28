@@ -2,28 +2,44 @@
 浏览夸克区块链上的各种数据
 
 ## 配置
-DB_CONNECTION=mysql  #数据库类型
+#数据库类型
+DB_CONNECTION=mysql  
 
-DB_HOST=127.0.0.1 #数据库地址
+#数据库地址
+DB_HOST=127.0.0.1 
 
-DB_PORT=3306 #数据库端口
+#数据库端口
+DB_PORT=3306 
 
-DB_DATABASE=qkiscan #数据库库名
+#数据库库名
+DB_DATABASE=qkiscan 
 
-DB_USERNAME=root #数据库用户名
+#数据库用户名
+DB_USERNAME=root 
 
-DB_PASSWORD=root #数据库密码
+#数据库密码
+DB_PASSWORD=root
 
-RPC_HOST 节点rpc地址
+#节点rpc地址
+RPC_HOST 
 
-ICP_NUM  备案信息
+# 静态文件 CDN 地址
+ASSETS_HOST=
+
+# sentry 异常捕获
+SENTRY_DSN=
+
+# 捐赠地址
+DONATE_ADDRESS=
+
+# CNZZ统计ID
+CNZZ_ID=
+
+# ICP 备案号
+ICP_NUM=
 
 ## 运行
-配置.env
-
-执行迁移
-
-同步区块数据（建议配置定时任务，每分钟一次）
+同步区块数据
 ```
 php artisan doSync
 ```
