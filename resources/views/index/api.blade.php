@@ -3,9 +3,9 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <title>API在线文档</title>
-    <link href="/css/api.css" rel="stylesheet" type="text/css" />
-    <script language="javascript" src="/js/jquery.min.js"></script>
-    <script language="javascript" src="/js/jquery.dimensions.js"></script>
+    <link href="{{env('ASSETS_HOST')}}/css/api.css" rel="stylesheet" type="text/css" />
+    <script language="javascript" src="{{env('ASSETS_HOST')}}/js/jquery.min.js"></script>
+    <script language="javascript" src="{{env('ASSETS_HOST')}}/js/jquery.dimensions.js"></script>
 </head>
 <style>
     .le em{
