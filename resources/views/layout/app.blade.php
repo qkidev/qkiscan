@@ -9,22 +9,23 @@
     <meta data-n-head="true" http-equiv="X-UA-Compatible" content="IE=edge">
     <meta data-n-head="true" data-hid="description" name="description" content="">
     <meta data-n-head="true" data-hid="keywords" name="keywords" content="">
-    <title data-n-head="true">qkiscan | QKI</title>
+    <title data-n-head="true">{{config('app.name')}} | QKI</title>
     <link data-n-head="true" rel="icon" type="image/x-icon" href="">
     <link rel="search" type="application/opensearchdescription+xml" href="/open-search-xml" title="QKI区块浏览器" />
-    <link data-n-head="true" rel="stylesheet" type="text/css" charset="utf-8" href="/css/bootstrap.min.css">
-    <link rel="stylesheet" href="/css/style.css">
-    <link rel="stylesheet" href="/css/app.css?v=2">
-    <link rel="stylesheet" href="/css/jquery-confirm.css" />
-    <link rel="stylesheet" href="/fonts/iconfont.css" />
-    <script src="/js/jquery.min.js"></script>
-    <script src="/js/jquery-confirm.min.js"></script>
-    <script src="/js/bootstrap.min.js"></script>
+    <link data-n-head="true" rel="stylesheet" type="text/css" charset="utf-8" href="{{env('ASSETS_HOST')}}/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{{env('ASSETS_HOST')}}/css/style.css">
+    <link rel="stylesheet" href="{{env('ASSETS_HOST')}}/css/app.css?v=2">
+    <link rel="stylesheet" href="{{env('ASSETS_HOST')}}/css/jquery-confirm.css" />
+    <link rel="stylesheet" href="{{env('ASSETS_HOST')}}/fonts/iconfont.css" />
+    <script src="{{env('ASSETS_HOST')}}/js/jquery.min.js"></script>
+    <script src="{{env('ASSETS_HOST')}}/js/jquery-confirm.min.js"></script>
+    <script src="{{env('ASSETS_HOST')}}/js/bootstrap.min.js"></script>
+    @if(env('SENTRY_DSN'))
     <script src="https://static.quarkblockchain.cn/lib/js/bundle.min.js"></script>
     <script>
         Sentry.init({ dsn: 'https://36df09d3d58a4d889ce6367c650a3766@sentry.quarkblockchain.cn/4'});
     </script>
-
+    @endif
 </head>
 
 <body>
@@ -113,8 +114,12 @@
 
 
         <div class="vfooter">
-
-            <p class="panel-bottom">Copyright ©2018-2020 quarkblockchain    <a href="/apis">api</a> <a href="/bp">bp</a> <a href="/tokens">tokens</a></p>
+            <p class="panel-bottom">
+                Copyright ©2018-2020 quarkblockchain <a href="/apis">api</a> <a href="/bp">bp</a> <a href="/tokens">tokens</a>
+                @if(env('DONATE_ADDRESS'))
+                <br>捐赠地址: <a href="/address/{{env('DONATE_ADDRESS')}}">{{env('DONATE_ADDRESS')}}</a>
+                @endif
+            </p>
             <a href="http://www.beian.miit.gov.cn" target="_blank"><p class="panel-bottom">{{env('ICP_NUM')}}</p></a>
         </div>
 
