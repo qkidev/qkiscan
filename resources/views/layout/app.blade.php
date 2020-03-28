@@ -117,11 +117,17 @@
         <div class="vfooter">
             <p class="panel-bottom">
                 Copyright ©2018-2020 quarkblockchain <a href="/apis">api</a> <a href="/bp">bp</a> <a href="/tokens">tokens</a>
+
+            </p>
+            <p class="panel-bottom">
+                @if(env('ICP_NUM'))
+                    <a href="http://www.beian.miit.gov.cn" target="_blank">{{env('ICP_NUM')}}</a>
+                @endif
                 @if(env('DONATE_ADDRESS'))
-                <br>捐赠地址: <a href="/address/{{env('DONATE_ADDRESS')}}">{{env('DONATE_ADDRESS')}}</a>
+                    捐赠地址: <a href="/address/{{env('DONATE_ADDRESS')}}">{{env('DONATE_ADDRESS')}}</a>
                 @endif
             </p>
-            <a href="http://www.beian.miit.gov.cn" target="_blank"><p class="panel-bottom">{{env('ICP_NUM')}}</p></a>
+
         </div>
 
         <div id="btn_top" class="cmp-navtop d-none d-lg-flex" style="display:none;" data-v-59831c6c="">
