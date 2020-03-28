@@ -23,12 +23,13 @@
     @if(env('SENTRY_DSN'))
     <script src="https://static.quarkblockchain.cn/lib/js/bundle.min.js"></script>
     <script>
-        Sentry.init({ dsn: 'https://36df09d3d58a4d889ce6367c650a3766@sentry.quarkblockchain.cn/4'});
+        Sentry.init({ dsn: '{{env('SENTRY_DSN')}}'});
     </script>
     @endif
 </head>
 
 <body>
+    <div>
         <div class="vheader">
             <div class="vcontainer vheader-inner">
                 <a href="/" class="icon iconfont icon-icon-test1 news_logo"></a>
@@ -194,6 +195,9 @@
             window.location.href = '/search?keyword='+keyword;
         }
     </script>
+    @if(env('CNZZ_ID'))
+        <script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? "https://" : "http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_{{env('CNZZ_ID')}}}'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s9.cnzz.com/z_stat.php%3Fid%3D{{env('CNZZ_ID')}}}%26show%3Dpic1' type='text/javascript'%3E%3C/script%3E"));</script>
+    @endif
 </body>
 
 </html>
