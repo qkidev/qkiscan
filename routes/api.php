@@ -13,10 +13,6 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
-});
-
 Route::group(['namespace' => 'Api'], function () {
     Route::get('get-token-balance', 'BalanceController@getTokenBalance');//获取通证余额
     Route::get('get-qki-balance', 'BalanceController@getQkiBalance');//获取QKI余额
