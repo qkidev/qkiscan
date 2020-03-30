@@ -39,4 +39,6 @@ Route::get('/qki-page', 'TxController@qkiPage');
 //cct排行榜
 Route::get('/cct-page', 'TxController@cctPage');
 Route::get('/bp', 'IndexController@bp');
+//abi
+Route::get('/abi/{address}', 'IndexController@abi');
 

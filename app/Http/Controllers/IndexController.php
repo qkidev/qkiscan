@@ -7,6 +7,7 @@ use App\Model\Block;
 use App\Model\MasterNode;
 use App\Model\Transaction;
 use App\Model\TxOut;
+use App\Models\Abi;
 use App\Models\Address;
 use App\Models\Balances;
 use App\Models\Transactions;
@@ -175,6 +176,11 @@ class IndexController extends Controller
         }
 
         return view('index.bp',$data);
+    }
+
+    public function abi($address)
+    {
+        return Abi::where('address', $address)->value('abi');
     }
 
 }
