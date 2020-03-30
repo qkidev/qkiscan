@@ -40,5 +40,5 @@ Route::get('/qki-page', 'TxController@qkiPage');
 Route::get('/cct-page', 'TxController@cctPage');
 Route::get('/bp', 'IndexController@bp');
 //abi
-Route::get('/abi/{address}/{format?}', );
+Route::get('/abi/{address}', 'IndexController@abi');
 
