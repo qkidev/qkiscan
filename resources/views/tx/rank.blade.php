@@ -3,6 +3,12 @@
 
     <div class="vcontainer page">
             <div data-v-cd5b40a0="" id="block-trade-detail" class="tradedetail">
+                
+                <div class="clearfix panel-header">
+                    <span class="float-left" style="margin-right: 20px">TOP100</span>
+                    <a href="javascript:;" style="color: #aaa;">统计时间：{{$count_time}}</a>
+                </div>
+                
                 <ul data-v-cd5b40a0="" class="middle">
                     @foreach($transactions as $k=>$v)
                         <a href="/address/{{$v['address']['address']}}" style="color: #52cbca;">
