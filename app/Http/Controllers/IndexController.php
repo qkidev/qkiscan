@@ -178,9 +178,4 @@ class IndexController extends Controller
         return view('index.bp',$data);
     }
 
-    public function abi($address)
-    {
-        return Abi::where('address', $address)->value('abi');
-    }
-
 }

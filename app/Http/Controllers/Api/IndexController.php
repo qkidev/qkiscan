@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Models\Abi;
 use App\Services\RpcService;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -73,5 +74,12 @@ class IndexController extends Controller
                 return response()->json(['code' => 500, 'msg' => '请输入正确的地址、区块高度或Hash值', 'data' => '']);
             }
         }
+    }
+
+
+    public function abi(Request $request)
+    {
+        $address = $request->input('address');
+        return response()->json(['code' => 0, 'msg' => 'OK', 'data' => Abi::where('address', $address)->value('abi')]);
     }
 }
