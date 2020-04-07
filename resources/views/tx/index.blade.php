@@ -46,14 +46,22 @@
 
                     <li data-v-0c97b89a="" class="item">
                         <span data-v-0c97b89a="" class="text2 strong">来源</span>
-                        <span data-v-0c97b89a="" class="text2"><a data-v-0c97b89a="" href="/address/{{$from}}" class="hash font-hash-content">{{$from}}</a></span></li>
+                        <span data-v-0c97b89a="" class="text2"><a data-v-0c97b89a="" href="/address/{{$from}}" class="hash font-hash-content">{{$from}}</a></span>
+                        @if($from_note)
+                            <span data-v-1fd0f8d0="" class="note">({{$from_note->name}})</span>
+                        @endif
+                    </li>
                     <li data-v-0c97b89a="" class="item">
                         @if(!$to && $contract_address)
                             <span data-v-0c97b89a="" class="text2 strong">部署合约</span>
                             <span data-v-0c97b89a="" class="text2"><a data-v-0c97b89a="" href="/address/{{$contract_address}}" class="hash font-hash-content">{{$contract_address}}</a></span></li>
                     @else
                         <span data-v-0c97b89a="" class="text2 strong">接收</span>
-                        <span data-v-0c97b89a="" class="text2"><a data-v-0c97b89a="" href="/address/{{$to}}" class="hash font-hash-content">{{$to}}</a></span></li>
+                        <span data-v-0c97b89a="" class="text2"><a data-v-0c97b89a="" href="/address/{{$to}}" class="hash font-hash-content">{{$to}}</a></span>
+                        @if($to_note)
+                            <span data-v-1fd0f8d0="" class="note">({{$to_note->name}})</span>
+                            @endif
+                        </li>
                     @endif
                     <li data-v-0c97b89a="" class="item">
                         <span data-v-0c97b89a="" class="text2 strong">金额</span>
@@ -81,10 +89,18 @@
                         </li>
                         <li data-v-0c97b89a="" class="item">
                             <span data-v-0c97b89a="" class="text2 strong">来源</span>
-                            <span data-v-0c97b89a="" class="text2"><a data-v-0c97b89a="" href="/address/{{$from}}/token" class="hash font-hash-content">{{$from}}</a></span></li>
+                            <span data-v-0c97b89a="" class="text2"><a data-v-0c97b89a="" href="/address/{{$from}}/token" class="hash font-hash-content">{{$from}}</a></span>
+                            @if($from_note)
+                                <span data-v-1fd0f8d0="" class="note">({{$from_note->name}})</span>
+                            @endif
+                        </li>
                         <li data-v-0c97b89a="" class="item">
                             <span data-v-0c97b89a="" class="text2 strong">接收</span>
-                            <span data-v-0c97b89a="" class="text2"><a data-v-0c97b89a="" href="/address/{{$token_tx_to}}/token" class="hash font-hash-content">{{$token_tx_to}}</a></span></li>
+                            <span data-v-0c97b89a="" class="text2"><a data-v-0c97b89a="" href="/address/{{$token_tx_to}}/token" class="hash font-hash-content">{{$token_tx_to}}</a></span>
+                            @if($token_tx_to_note)
+                                <span data-v-1fd0f8d0="" class="note">({{$token_tx_to_note->name}})</span>
+                            @endif
+                        </li>
 
                     </ul>
                     <ul data-v-0c97b89a="" class="vsection base-right">

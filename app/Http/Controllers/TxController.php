@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\AddressNotes;
 use App\Models\Balances;
 use App\Models\Token;
 use App\Models\TokenTx;
@@ -82,6 +83,8 @@ class TxController extends Controller
                 }
 
             }
+            $data['from_note'] = AddressNotes::where("address",$data['from'])->first();
+            $data['to_note'] = AddressNotes::where("address",$data['to'])->first();
             $data['is_token_tx'] = false;
             //获取通证交易记录
             if (substr($data['input']??"", 0, 10) === '0xa9059cbb') {
@@ -96,6 +99,7 @@ class TxController extends Controller
                 $token_tx =  new TransactionInputTransfer($data['input']);
                 $data['token_tx_amount'] = bcdiv(HexDec2($token_tx->amount),gmp_pow(10,$decimals),18);
                 $data['token_tx_to'] = $token_tx->payee;
+                $data['token_tx_to_note'] = AddressNotes::where("address",$data['token_tx_to'])->first();
                 $data['token'] = Token::where('contract_address',$data['to'])->first();
             }
 
