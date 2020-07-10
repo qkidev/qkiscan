@@ -168,7 +168,7 @@ class TxController extends Controller
     public function qkiPage()
     {
         $data['transactions'] = Balances::with('address')
-            ->where('name', 'qki')
+            ->where('token_id', '0')
             ->orderBy("amount","desc")
             ->limit(100)
             ->get();
