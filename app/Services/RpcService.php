@@ -132,15 +132,4 @@ class RpcService
         return $output;
     }
 
-//
-//    public function getBlockByHashMap($hash)
-//    {
-//        $method = 'eth_getBlockByHash';
-//        $param = array(
-//            [$hash, true]
-//        );
-//        $blockInfo = $this->rpc($method, $param);
-//        return $blockInfo[0];
-//    }
-
 }
