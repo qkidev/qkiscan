@@ -40,3 +40,6 @@ Route::get('/qki-page', 'TxController@qkiPage');
 Route::get('/cct-page', 'TxController@cctPage');
 Route::get('/bp', 'IndexController@bp');
 
+//节点统计列表
+Route::get('/node-statistics', 'NodeStatisticsController@index');
+
