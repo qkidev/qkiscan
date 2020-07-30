@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\DB;
 
 class NodeStatisticsController extends Controller
 {
+
     /**
      * 合约地址
      * @param Request $request
