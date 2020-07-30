@@ -15,7 +15,6 @@ class NodeService
 
         if (isset($rpc_data['result'])) {
             foreach ($rpc_data['result'] as $key => $val) {
-
                 //操作系统
                 $os = array_slice(explode('/', $val['name']), -2, 1)[0];
                 //处理节点ID
