@@ -5,18 +5,18 @@ namespace App\Services;
 
 class RpcService
 {
-    public function rpc1($method,$param)
+    public function rpc1($method, $param)
     {
-        $id = rand(1,100);
+        $id = rand(1, 100);
         $rpc_param = [
-            'jsonrpc'=>"2.0",
-            "method"=>$method,
-            "params"=>$param,
-            "id"=>$id
+            'jsonrpc' => "2.0",
+            "method" => $method,
+            "params" => $param,
+            "id" => $id
         ];
         $curl_param = json_encode($rpc_param);
         $data_str = $this->curlPost($curl_param);
-        $data = json_decode($data_str,true);
+        $data = json_decode($data_str, true);
 
         return $data;
     }
@@ -27,23 +27,22 @@ class RpcService
      * @param $params
      * @return mixed
      */
-    public function rpc($method,$params)
+    public function rpc($method, $params)
     {
         $param = array();
-        foreach ($params as $key => $item)
-        {
-            $id = rand(1,100);
+        foreach ($params as $key => $item) {
+            $id = rand(1, 100);
             $param[$key] = [
-                'jsonrpc'=>"2.0",
-                "method"=>$method,
-                "params"=>$item,
-                "id"=>$id
+                'jsonrpc' => "2.0",
+                "method" => $method,
+                "params" => $item,
+                "id" => $id
             ];
         }
 
         $param = json_encode($param);
         $data_str = $this->curlPost($param);
-        $data = json_decode($data_str,true);
+        $data = json_decode($data_str, true);
 
         return $data;
     }
@@ -55,7 +54,7 @@ class RpcService
      */
     public function getBlockByNumber($param)
     {
-        $block = $this->rpc('eth_getBlockByNumber',$param);
+        $block = $this->rpc('eth_getBlockByNumber', $param);
         return $block;
     }
 
@@ -66,9 +65,9 @@ class RpcService
     public function lastBlockHeightNumber()
     {
         $params = array(
-            ['latest',true]
+            ['latest', true]
         );
-        $blockHeight = $this->rpc('eth_getBlockByNumber',$params);
+        $blockHeight = $this->rpc('eth_getBlockByNumber', $params);
 
         return $blockHeight[0]['result']['number'];
     }
@@ -81,15 +80,13 @@ class RpcService
     public function getBlockString($lastBlock)
     {
         $blockArray = array();
-        if($lastBlock < 20)
-        {
+        if ($lastBlock < 20) {
             $num = $lastBlock;
-        }else{
+        } else {
             $num = 20;
         }
-        for($i=0;$i<=$num;$i++)
-        {
-            $blockArray[$i] = ['0x'.base_convert($lastBlock--,10,16),true];
+        for ($i = 0; $i <= $num; $i++) {
+            $blockArray[$i] = ['0x' . base_convert($lastBlock--, 10, 16), true];
         }
         return $blockArray;
     }
@@ -103,11 +100,13 @@ class RpcService
     {
         $method = 'eth_getBlockByHash';
         $param = array(
-            [$hash,true]
+            [$hash, true]
         );
-        $blockInfo = $this->rpc($method,$param);
+        $blockInfo = $this->rpc($method, $param);
+
         return $blockInfo[0];
     }
+
 
     /**
      * post请求
@@ -132,4 +131,16 @@ class RpcService
 
         return $output;
     }
+
+//
+//    public function getBlockByHashMap($hash)
+//    {
+//        $method = 'eth_getBlockByHash';
+//        $param = array(
+//            [$hash, true]
+//        );
+//        $blockInfo = $this->rpc($method, $param);
+//        return $blockInfo[0];
+//    }
+
 }
