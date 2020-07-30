@@ -47,9 +47,14 @@ class NodeService
                         ]
                     );
                 } catch (\Exception $e) {
+                    echo $e->getMessage() . "\n";
                 }
             }
             return ['code' => 0, 'message' => 'ok'];
+        }
+        else
+        {
+            echo "没有节点数据\n";
         }
         return $rpc_data['error'];
     }
