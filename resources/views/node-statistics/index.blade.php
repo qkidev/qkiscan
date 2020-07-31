@@ -14,7 +14,7 @@
                             <th aria-colindex="2" class="">IP地址</th>
                             <th aria-colindex="3" class="">端口</th>
                             <th aria-colindex="4" class="">操作系统</th>
-{{--                            <th aria-colindex="5" class="">支持协议</th>--}}
+                            <th aria-colindex="5" class="">支持协议</th>
 {{--                            <th aria-colindex="6" class="">网络ID</th>--}}
                             <th aria-colindex="7" class="">当前同步的高度</th>
 {{--                            <th aria-colindex="8" class="">创世区块高度</th>--}}
@@ -36,11 +36,11 @@
                                 <td aria-colindex="4" class="">
                                     <span class="block-time">{{$node['os']}}</span>
                                 </td>
-{{--                                <td aria-colindex="5" class="">--}}
-{{--                                    @foreach($node['protocol'] as $k_p => $protocol)--}}
-{{--                                        <span class="block-time"> {{$protocol}} </span>，--}}
-{{--                                    @endforeach--}}
-{{--                                </td>--}}
+                                <td aria-colindex="5" class="">
+                                    @foreach($node['protocol'] as $k_p => $protocol)
+                                        <span class="block-time"> {{replaceStr($protocol)}}  </span>
+                                    @endforeach
+                                </td>
 {{--                                <td aria-colindex="6" class="">--}}
 {{--                                    <span class="block-time">{{$node['network_id']}}</span>--}}
 {{--                                </td>--}}
