@@ -36,6 +36,14 @@
                                 </div>
                             </li>
                             <li data-v-cd5b40a0="" class="item">
+                                <span data-v-cd5b40a0="" class="vcolor-192330 strong">支持协议</span>
+                                <div data-v-cd5b40a0="">
+                                    @foreach($protocol as $k => $v)
+                                    <span data-v-cd5b40a0="" class="vcolor-192330"> {{replaceStr($v)}}</span>
+                                    @endforeach
+                                </div>
+                            </li>
+                            <li data-v-cd5b40a0="" class="item">
                                 <span data-v-cd5b40a0="" class="vcolor-192330 strong">当前同步的高度</span>
                                 <div data-v-cd5b40a0="">
                                     <span data-v-cd5b40a0="" class="vcolor-192330">{{$currentBlock}}</span>
@@ -50,13 +58,13 @@
                             <li data-v-cd5b40a0="" class="item">
                                 <span data-v-cd5b40a0="" class="vcolor-192330 strong">首次发现时间</span>
                                 <div data-v-cd5b40a0="">
-                                    <span data-v-cd5b40a0="" class="vcolor-192330">{{$created_at}}</span>
+                                    <span data-v-cd5b40a0="" class="vcolor-192330">{{formatTime($created_at, 2)}}</span>
                                 </div>
                             </li>
                             <li data-v-cd5b40a0="" class="item">
                                 <span data-v-cd5b40a0="" class="vcolor-192330 strong">最近发现时间</span>
                                 <div data-v-cd5b40a0="">
-                                    <span data-v-cd5b40a0="" class="vcolor-192330">{{$updated_at}}</span>
+                                    <span data-v-cd5b40a0="" class="vcolor-192330">{{formatTime($updated_at, 2)}}</span>
                                 </div>
                             </li>
                         </ul>
