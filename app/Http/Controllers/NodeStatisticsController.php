@@ -2,23 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Balances;
 use App\Models\NodeStatistics;
-use App\Models\Token;
-use App\Models\TokenTx;
-use App\Services\NodeService;
-use App\Services\RpcService;
-use ERC20\ERC20;
-use EthereumRPC\EthereumRPC;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\DB;
 
 class NodeStatisticsController extends Controller
 {
 
     /**
-     * 合约地址
+     * 节点列表
      * @param Request $request
      * @param $address
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\RedirectResponse|\Illuminate\View\View
@@ -29,5 +20,17 @@ class NodeStatisticsController extends Controller
         return view("node-statistics.index", $data);
     }
 
+
+    /**
+     * 节点详情
+     *
+     * @param $node_id
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function show($node_id)
+    {
+        $data = NodeStatistics::where('node_id', $node_id)->first();
+        return view("node-statistics.detail", $data);
+    }
 
 }

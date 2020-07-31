@@ -42,4 +42,6 @@ Route::get('/bp', 'IndexController@bp');
 
 //节点统计列表
 Route::get('/node-statistics', 'NodeStatisticsController@index');
+//节点统计详情
+Route::get('/node-statistics/{node_id}', 'NodeStatisticsController@show');
 
