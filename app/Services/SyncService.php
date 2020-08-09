@@ -48,6 +48,39 @@ class SyncService
         echo "区块同步成功";
     }
 
+
+    public function txpool_sync()
+    {
+        ini_set('max_execution_time', 0);
+        $end_time = time() + 580;
+        while (true)
+        {
+            if($end_time <= time())
+            {
+                break;
+            }
+            $block_amount = $this->txpool();
+            sleep(1);
+        }
+    }
+
+    public function txpool()
+    {
+        $txpool = (new RpcService())->rpc1('txpool_content',[]);
+        if(isset($txpool['result']['pending']) && count($txpool['result']['pending']))
+        {
+            foreach ($txpool['result']['pending'] as $pending)
+            {
+                foreach ($pending as $tx)
+                {
+                    if(!Transactions::where('hash',$tx['hash'])->exists())
+                    $this->saveUnpackedTx($tx);
+                }
+            }
+        }
+    }
+
+
     public function syncTx()
     {
         //获取setting表中记录的下一个要同步的区块高度
@@ -125,7 +158,7 @@ class SyncService
                             $timestamp = date("Y-m-d H:i:s",$block_time);
                             foreach($transactions as $tx)
                             {
-                                $tx_db = Transactions::where('hash',$tx['hash'])->fisrt();
+                                $tx_db = Transactions::where('hash',$tx['hash'])->first();
                                 if(!empty($tx_db))
                                 {
                                     $this->saveTx($tx, $timestamp);
@@ -134,6 +167,24 @@ class SyncService
                                 {
                                     $tx_db->block_hash = $tx['blockHash'];
                                     $tx_db->block_number = $block_height;
+
+                                    $receipt = (new RpcService())->rpc("eth_getTransactionReceipt",[[$tx['hash']]]);
+                                    if(isset($receipt[0]['result'])) {
+                                        if(isset($receipt[0]['result']['root']))
+                                        {
+                                            $tx_status = 1;
+                                        }else{
+                                            $tx_status = HexDec2($receipt[0]['result']['status']);
+                                        }
+                                    }else{
+                                        echo "没有回执:" . $tx['hash'] . "\n";
+                                        $tx_status = 0;
+                                    }
+
+
+                                    $tx_db->tx_status = $tx_status;
+
+                                    $tx_db->save();
                                 }
                             }
                         }
@@ -309,6 +360,65 @@ class SyncService
         $tokenTx->tx_status = $tx_status;
 
         return $tokenTx->save();
+    }
+
+    public function saveUnpackedTx($v)
+    {
+        $timestamp = date("Y-m-d H:i:s");
+        $tx = new Transactions();
+        $tx->from = $v['from'];
+        $tx->to = $v['to'] ?? '';
+        $tx->hash = $v['hash'];
+        $tx->block_hash = "";
+        $tx->block_number = 0;
+        $tx->gas_price = bcdiv(HexDec2($v['gasPrice']) ,gmp_pow(10,18),18);
+        $tx->amount = bcdiv(HexDec2($v['value']), gmp_pow(10, 18), 18);
+        $tx->created_at = date("Y-m-d H:i:s");
+        $tx->tx_status = 0;
+        $tx->save();
+
+        //保存该地址的qki和cct余额
+        $this->updateQkiBalance($v['from']);
+        $this->updateQkiBalance($v['to']);
+
+        //记录地址、保存通证
+        $this->saveAddress($v['from']);
+        if($v['to'])
+        {
+            $this->saveAddress($v['to']);
+        }
+        //input可能为空
+        $input = $v['input'] ?? '';
+
+        // 通证转账
+        if (substr($input, 0, 10) === '0xa9059cbb' && !empty($this->token[$v['to']])) {
+            //保存通证交易
+            $token_tx =  new TransactionInputTransfer($input);
+            $tx->payee = $token_tx->payee;
+            $tx->save();
+            //保存通证接收方地址
+            $this->saveAddress($token_tx->payee);
+            //实例化通证
+            $url_arr = parse_url(env("RPC_HOST"));
+            $geth = new EthereumRPC($url_arr['host'], $url_arr['port']);
+            $erc20 = new ERC20($geth);
+            $token = $erc20->token($v['to']);
+            $decimals = $token->decimals();
+            $token_tx_amount = bcdiv(HexDec2($token_tx->amount),gmp_pow(10, $decimals),18);
+//            dump($v['to'],$v['from'],$token_tx->payee);
+            $this->saveTokenTx(
+                $this->token[$v['to']],
+                float_format($token_tx_amount),
+                $this->address[$v['from']],
+                $this->address[$token_tx->payee],
+                $tx->id,
+                $timestamp,
+                0);
+
+            $this->updateTokenBalance($v['from'], $v['to'],$token);
+            $this->updateTokenBalance($token_tx->payee, $v['to'],$token);
+        }
+        return $tx;
     }
 
     /**
