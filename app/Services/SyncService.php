@@ -125,8 +125,16 @@ class SyncService
                             $timestamp = date("Y-m-d H:i:s",$block_time);
                             foreach($transactions as $tx)
                             {
-                                if(!Transactions::where('hash',$tx['hash'])->exists())
-                                $this->saveTx($tx, $timestamp);
+                                $tx_db = Transactions::where('hash',$tx['hash'])->fisrt();
+                                if(!empty($tx_db))
+                                {
+                                    $this->saveTx($tx, $timestamp);
+                                }
+                                elseif($tx_db->block_number == 0)//更新区块信息
+                                {
+                                    $tx_db->block_hash = $tx['blockHash'];
+                                    $tx_db->block_number = $block_height;
+                                }
                             }
                         }
                     }
