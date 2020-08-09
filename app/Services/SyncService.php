@@ -159,7 +159,7 @@ class SyncService
                             foreach($transactions as $tx)
                             {
                                 $tx_db = Transactions::where('hash',$tx['hash'])->first();
-                                if(!empty($tx_db))
+                                if($tx_db == null)
                                 {
                                     $this->saveTx($tx, $timestamp);
                                 }
