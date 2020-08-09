@@ -80,6 +80,7 @@ class TxController extends Controller
                     $data['gasPrice'] = float_format(bcdiv(HexDec2($data['gasPrice']) ,gmp_pow(10,18),18));
                     $data['value'] = float_format(bcdiv(HexDec2($data['value']) ,gmp_pow(10,18),18));
                     $data['tx_status'] = '区块打包中';
+                    $data['blockConfirm'] = 0;
                 }
 
             }
