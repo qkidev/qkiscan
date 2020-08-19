@@ -21,7 +21,6 @@ class AddIndexToSomeTable extends Migration
             //添加索引
             $table->index('updated_at');
         });
-
     }
 
     /**
