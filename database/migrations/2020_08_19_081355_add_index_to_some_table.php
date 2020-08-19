@@ -20,7 +20,6 @@ class AddIndexToSomeTable extends Migration
 
     }
 
-
     /**
      * Reverse the migrations.
      *
