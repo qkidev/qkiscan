@@ -10,6 +10,7 @@ use App\Model\TxOut;
 use App\Models\Abi;
 use App\Models\Address;
 use App\Models\Balances;
+use App\Models\TokenTx;
 use App\Models\Transactions;
 use App\Service\APIService;
 use App\Service\SyncService;
@@ -41,39 +42,54 @@ class IndexController extends Controller
         $blockArray = $rpcService->getBlockString($lastBlock);
         $block = $rpcService->getBlockByNumber($blockArray);
         $blockList = array();
-        if(!empty($block))
-        {
-            foreach ($block as $key => $item)
-            {
-                if(!$item['result'])
-                {
+        if (!empty($block)) {
+            foreach ($block as $key => $item) {
+                if (!$item['result']) {
                     break;
                 }
                 $blockList[$key] = $item['result'];
-                $blockList[$key]['height'] = base_convert($blockList[$key]['number'],16,10);
-                $blockList[$key]['gasLimit'] = base_convert($blockList[$key]['gasLimit'],16,10);
-                $blockList[$key]['gasUsed'] = base_convert($blockList[$key]['gasUsed'],16,10);
+                $blockList[$key]['height'] = base_convert($blockList[$key]['number'], 16, 10);
+                $blockList[$key]['gasLimit'] = base_convert($blockList[$key]['gasLimit'], 16, 10);
+                $blockList[$key]['gasUsed'] = base_convert($blockList[$key]['gasUsed'], 16, 10);
                 $blockList[$key]['created_at'] = formatTime($blockList[$key]['timestamp']);
                 $blockList[$key]['tx_count'] = count($blockList[$key]['transactions']);
-                $blockList[$key]['size'] = bcdiv(HexDec2($blockList[$key]['size']),1000,3);
+                $blockList[$key]['size'] = bcdiv(HexDec2($blockList[$key]['size']), 1000, 3);
                 $blockList[$key]['difficulty'] = HexDec2($blockList[$key]['difficulty']);
             }
         }
         $data['max_height'] = 0;
-        if (count($blockList)>0){
-            $data['max_height'] = $blockList[0]['height']+1;
+        if (count($blockList) > 0) {
+            $data['max_height'] = $blockList[0]['height'] + 1;
         }
-        $data['transactions_num'] = Transactions::count();
+//        $data['transactions_num'] = Transactions::count();
+        //缓存
+        $data['transactions_num'] = Cache::remember("home_transactions_num", 60, function () {
+            return Transactions::count();
+        });
         $end = Carbon::now();
         $start = $end->copy()->subDay();
-        $data['hour_24_num'] = Transactions::whereBetween('updated_at', [$start, $end])
-            ->count();
-        $data['address_num'] = Balances::where('name', 'qki')->where('amount', '>', 0)->count();
+
+//        $data['hour_24_num'] = Transactions::whereBetween('updated_at', [$start, $end])->count();
+//        $data['address_num'] = Balances::where('name', 'qki')->where('amount', '>', 0)->count();
+
+
+        //先查询出前一天的最大的id值 并缓存1天
+        $maxId = Cache::remember("home_token_max_id", 60 * 60 * 24, function () {
+            return Transactions::where('created_at', '<', Carbon::today())->orderBy('id')->max('id');
+        });
+        $data['hour_24_num'] = Cache::remember("home_token_hour_24_num", 10, function () use ($maxId) {
+            return Transactions::where('id', '>', $maxId)->count();
+        });
+        $data['address_num'] = Cache::remember("home_address_num", 10, function () {
+            return Balances::where('name', 'qki')->where('amount', '>', 0)->count();
+        });
+
+
         $data['block'] = $blockList;
         $data['currentPage'] = "index";
         // 数据缓存 15s
         Cache::put(self::HOME_CACHE_KEY, $data, $end->addSeconds(60));
-        return view("index.index",$data);
+        return view("index.index", $data);
     }
 
     /**
@@ -86,49 +102,44 @@ class IndexController extends Controller
         $keyword = strtolower($request->input('keyword'));
 
         //判断是否为数字，如果为数字，优先查询区块
-        if(is_numeric($keyword))
-        {
-            $keyword = [['0x'.base_convert($keyword,10,16),true]];
+        if (is_numeric($keyword)) {
+            $keyword = [['0x' . base_convert($keyword, 10, 16), true]];
             $result = $rpcService->getBlockByNumber($keyword);
             $blockInfo = $result[0]['result'];
-            if(isset($blockInfo) && $blockInfo['hash'])
-            {
-                $url = "/block/detail?hash=".$blockInfo['hash'];
+            if (isset($blockInfo) && $blockInfo['hash']) {
+                $url = "/block/detail?hash=" . $blockInfo['hash'];
                 return redirect($url);
-            }else{
+            } else {
                 //todo 跳转404页面
                 return view("error.404");
             }
-        }else{
+        } else {
             $hash_leng = strlen($keyword);
-            if($hash_leng == 42)
-            {
+            if ($hash_leng == 42) {
                 //地址查询
-                $url = "/address/".$keyword;
+                $url = "/address/" . $keyword;
                 return redirect($url);
-            }else if($hash_leng == 66){
+            } else if ($hash_leng == 66) {
                 //hash查询
                 $result = $rpcService->getBlockByHash($keyword);
                 $blockInfo = $result['result'];
-                if(isset($blockInfo) && $blockInfo['hash'])
-                {
-                    $url = "/block/detail?hash=".$blockInfo['hash'];
+                if (isset($blockInfo) && $blockInfo['hash']) {
+                    $url = "/block/detail?hash=" . $blockInfo['hash'];
                     return redirect($url);
-                }else{
+                } else {
                     $params = array(
                         [$keyword]
                     );
-                    $data = $rpcService->rpc("eth_getTransactionByHash",$params);
-                    if(isset($data) && $data[0]['result'])
-                    {
-                        $url = "/tx/".$keyword;
+                    $data = $rpcService->rpc("eth_getTransactionByHash", $params);
+                    if (isset($data) && $data[0]['result']) {
+                        $url = "/tx/" . $keyword;
                         return redirect($url);
-                    }else{
+                    } else {
                         //todo 跳转404页面
                         return view("error.404");
                     }
                 }
-            }else{
+            } else {
                 //todo 跳转404页面
                 return view("error.404");
             }
@@ -157,25 +168,22 @@ class IndexController extends Controller
             <Description>QKI区块浏览器搜索</Description>
             <Url type="text/html" template="https://' . $request->getHost() . '/search?keyword={searchTerms}"/>
         </OpenSearchDescription>';
-        return response('', 200, ['Content-type'=>'text/xml']);
+        return response('', 200, ['Content-type' => 'text/xml']);
     }
 
 
     public function bp()
     {
         $rpcService = new RpcService();
-        $rpc_data = $rpcService->rpc1('clique_status',[]);
+        $rpc_data = $rpcService->rpc1('clique_status', []);
 
-        if(isset($rpc_data) && $rpc_data['result'])
-        {
+        if (isset($rpc_data) && $rpc_data['result']) {
             $data['bps'] = $rpc_data['result']['sealerActivity'];
-        }
-        else
-        {
+        } else {
             $data['bps'] = [];
         }
 
-        return view('index.bp',$data);
+        return view('index.bp', $data);
     }
 
 }

@@ -17,6 +17,7 @@ class AddIndexToSomeTable extends Migration
             //添加联合索引
             $table->index(['token_id', 'tx_status']);
         });
+
     }
 
 
