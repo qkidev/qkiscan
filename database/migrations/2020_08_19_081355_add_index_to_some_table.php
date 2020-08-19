@@ -17,10 +17,6 @@ class AddIndexToSomeTable extends Migration
             //添加联合索引
             $table->index(['token_id', 'tx_status']);
         });
-        Schema::table('transactions', function (Blueprint $table) {
-            //添加索引
-            $table->index('updated_at');
-        });
     }
 
 
@@ -34,10 +30,6 @@ class AddIndexToSomeTable extends Migration
         Schema::table('token_tx', function (Blueprint $table) {
             //
             $table->dropIndex(['token_id', 'tx_status']);
-        });
-        Schema::table('transactions', function (Blueprint $table) {
-            //
-            $table->dropIndex('updated_at');
         });
     }
 }
