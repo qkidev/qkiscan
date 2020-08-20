@@ -67,6 +67,7 @@ class IndexController extends Controller
         $maxId = Cache::remember("home_token_max_id", $minutes, function () {
             return Transactions::where('created_at', '<', Carbon::today())->orderBy('id')->max('id');
         });
+
         //缓存1分钟
         $data['hour_24_num'] = Cache::remember("home_token_hour_24_num", 1, function () use ($maxId) {
             return Transactions::where('id', '>', $maxId)->count();
