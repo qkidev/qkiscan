@@ -7,10 +7,7 @@ use App\Model\Block;
 use App\Model\MasterNode;
 use App\Model\Transaction;
 use App\Model\TxOut;
-use App\Models\Abi;
-use App\Models\Address;
 use App\Models\Balances;
-use App\Models\TokenTx;
 use App\Models\Transactions;
 use App\Service\APIService;
 use App\Service\SyncService;
@@ -18,7 +15,6 @@ use App\Services\RpcService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\DB;
 
 class IndexController extends Controller
 {
@@ -61,26 +57,22 @@ class IndexController extends Controller
         if (count($blockList) > 0) {
             $data['max_height'] = $blockList[0]['height'] + 1;
         }
-//        $data['transactions_num'] = Transactions::count();
-        //缓存
-        $data['transactions_num'] = Cache::remember("home_transactions_num", 60, function () {
+        $end = Carbon::now();
+        //缓存1分钟
+        $data['transactions_num'] = Cache::remember("home_transactions_num", 1, function () {
             return Transactions::count();
         });
-        $end = Carbon::now();
-        $start = $end->copy()->subDay();
-
-//        $data['hour_24_num'] = Transactions::whereBetween('updated_at', [$start, $end])->count();
-//        $data['address_num'] = Balances::where('name', 'qki')->where('amount', '>', 0)->count();
-
-
-        //先查询出前一天的最大的id值 并缓存1天
-        $maxId = Cache::remember("home_token_max_id", 60 * 60 * 24, function () {
+        //先查询出前一天的最大的id值 并缓存到今日结束
+        $minutes = $end->diffInMinutes(Carbon::tomorrow());
+        $maxId = Cache::remember("home_token_max_id", $minutes, function () {
             return Transactions::where('created_at', '<', Carbon::today())->orderBy('id')->max('id');
         });
-        $data['hour_24_num'] = Cache::remember("home_token_hour_24_num", 10, function () use ($maxId) {
+        //缓存1分钟
+        $data['hour_24_num'] = Cache::remember("home_token_hour_24_num", 1, function () use ($maxId) {
             return Transactions::where('id', '>', $maxId)->count();
         });
-        $data['address_num'] = Cache::remember("home_address_num", 10, function () {
+        //缓存1分钟
+        $data['address_num'] = Cache::remember("home_address_num", 1, function () {
             return Balances::where('name', 'qki')->where('amount', '>', 0)->count();
         });
 
