@@ -52,7 +52,7 @@ class TransactionsController extends Controller
 
         $address_id = $user_address->id;
 
-        $list = TokenTx::select(DB::raw('token_tx.*,t.from,t.payee,a.address as to,t.hash,t.tx_status'))
+        $list = TokenTx::select(DB::raw('token_tx.*,t.from,t.payee,t.hash,t.tx_status'))
             ->leftJoin('transactions as t', 'token_tx.tx_id', 't.id')
             ->where([['token_id', '=', $token->id],['t.tx_status', '=', 1]])
             ->where(function ($query) use ($address_id) {
