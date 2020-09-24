@@ -75,6 +75,8 @@ class TransactionsController extends Controller
                 {
                     $result[$k]['amount'] = '-'.$result[$k]['amount'];
                 }
+                $result[$k]['from'] = $tx->from;
+                $result[$k]['to'] = $tx->to;
                 $result[$k]['hash'] = $tx->hash;
                 $result[$k]['tx_status'] = $tx->tx_status;
             }
