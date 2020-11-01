@@ -25,9 +25,9 @@ class NodeService
                 $port = end($network);
 
                 $currentBlock = 0;
-                if (isset($val['protocols']['eth']['head'])) {
+                if (isset($val['protocols']['qki']['head'])) {
                     //用hash获取高度
-                    $blockInfo = $rpcService->getBlockByHash($val['protocols']['eth']['head'])['result'];
+                    $blockInfo = $rpcService->getBlockByHash($val['protocols']['qki']['head'])['result'];
                     $currentBlock = HexDec2($blockInfo['number']);
                 }
                 //数据库操作
@@ -43,7 +43,7 @@ class NodeService
                             'currentBlock' => $currentBlock,
                             'genesis_block_hash' => '',
                             'Synced' => '',
-                            'protocol_version' => $val['protocols']['eth']['version']
+                            'protocol_version' => $val['protocols']['qki']['version']
                         ]
                     );
                 } catch (\Exception $e) {
