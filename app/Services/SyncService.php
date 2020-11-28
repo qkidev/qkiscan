@@ -545,7 +545,10 @@ class SyncService
         $amount = $token->balanceOf($address);
         $address = Address::firstOrCreate(['address' => $address]);
         $token_db = Token::where('contract_address',$token_address)->first();
-        Balances::updateOrInsert(['address_id'=>$address->id,"token_id"=>$token_db->id, 'name' => $token->symbol()], ['amount' => $amount]);
+        if($token_db)
+        {
+            Balances::updateOrInsert(['address_id'=>$address->id,"token_id"=>$token_db->id, 'name' => $token->symbol()], ['amount' => $amount]);
+        }
     }
 
 
