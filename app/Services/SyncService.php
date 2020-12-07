@@ -97,7 +97,7 @@ class SyncService
         $blockArray = array();
         //获取最后一个高度
         $real_last_block = (new RpcService())->rpc('eth_getBlockByNumber',[['latest',true]]);
-        $real_last_block = 4136000;//HexDec2($real_last_block[0]['result']['number']??'') ?? 0;
+        $real_last_block = HexDec2($real_last_block[0]['result']['number']??'') ?? 0;
         $num = 500;
         if($real_last_block)
         {
