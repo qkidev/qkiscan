@@ -95,7 +95,7 @@ class SyncService
         $blockArray = array();
         //获取最后一个高度
         $real_last_block = (new RpcService())->rpc('eth_getBlockByNumber',[['latest',true]]);
-        $real_last_block = HexDec2($real_last_block[0]['result']['number']??'') ?? 0;
+        $real_last_block = 4136000;//HexDec2($real_last_block[0]['result']['number']??'') ?? 0;
         $num = 500;
         if($real_last_block)
         {
@@ -498,6 +498,15 @@ class SyncService
 
             $this->updateTokenBalance($v['from'], $v['to'],$token);
             $this->updateTokenBalance($token_tx->payee, $v['to'],$token);
+        }
+        else if ($input == '0x1249c58b' && $v['to'] == '0x3fb708e854041673433e708fedb9a1b43905b6f7')
+        {
+            $url_arr = parse_url(env("RPC_HOST"));
+            $geth = new EthereumRPC($url_arr['host'], $url_arr['port']);
+            $erc20 = new ERC20($geth);
+            $token = $erc20->token($v['to']);
+
+            $this->updateTokenBalance($v['from'], $v['to'],$token);
         }
         return $tx;
     }
