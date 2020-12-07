@@ -5,10 +5,12 @@ namespace App\Services;
 
 use App\Models\Address;
 use App\Models\Balances;
+use App\Models\Block;
 use App\Models\Settings;
 use App\Models\Token;
 use App\Models\TokenTx;
 use App\Models\Transactions;
+use Carbon\Carbon;
 use ERC20\ERC20;
 use ERC20\ERC20_Token;
 use EthereumRPC\EthereumRPC;
@@ -139,6 +141,8 @@ class SyncService
                 {
                     if($block['result'])
                     {
+                        // 存储区块数据
+                        $this->saveBlock($block['result']);
                         $block_time = HexDec2($block['result']['timestamp']);
                         $block_height = bcadd(HexDec2($block['result']['number']),1,0);
                         //至少需要一个区块确认
@@ -554,8 +558,40 @@ class SyncService
         $amount = $token->balanceOf($address);
         $address = Address::firstOrCreate(['address' => $address]);
         $token_db = Token::where('contract_address',$token_address)->first();
-        Balances::updateOrInsert(['address_id'=>$address->id,"token_id"=>$token_db->id, 'name' => $token->symbol()], ['amount' => $amount]);
+        if($token_db)
+        {
+            Balances::updateOrInsert(['address_id'=>$address->id,"token_id"=>$token_db->id, 'name' => $token->symbol()], ['amount' => $amount]);
+        }
     }
 
-
+    /**
+     * 保存区块信息
+     *
+     * @param array $block
+     *
+     * @return \App\Models\Block
+     */
+    public function saveBlock(array $block): Block {
+        return Block::firstOrCreate([
+            'number' => HexDec2($block['number']),
+        ], [
+            'difficulty' => HexDec2($block['difficulty']),
+            'extra_data' => $block['extraData'],
+            'gas_limit' => HexDec2($block['gasLimit']),
+            'gas_used' => HexDec2($block['gasUsed']),
+            'hash' => $block['hash'],
+            'logs_bloom' => $block['logsBloom'],
+            'miner' => $block['miner'],
+            'mix_hash' => $block['mixHash'],
+            'nonce' => HexDec2($block['nonce']),
+            'parent_hash' => $block['parentHash'],
+            'receipts_root' => $block['receiptsRoot'],
+            'sha3_uncles' => $block['sha3Uncles'],
+            'size' => HexDec2($block['size']),
+            'state_root' => $block['stateRoot'],
+            'timestamp' => Carbon::createFromTimestamp(HexDec2($block['timestamp'])),
+            'total_difficulty' => HexDec2($block['totalDifficulty']),
+            'transaction_count' => count($block['transactions']),
+        ]);
+    }
 }
