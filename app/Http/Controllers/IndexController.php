@@ -8,6 +8,7 @@ use App\Model\MasterNode;
 use App\Model\Transaction;
 use App\Model\TxOut;
 use App\Models\Balances;
+use App\Models\Settings;
 use App\Models\Transactions;
 use App\Service\APIService;
 use App\Service\SyncService;
@@ -62,15 +63,10 @@ class IndexController extends Controller
         $data['transactions_num'] = Cache::remember("home_transactions_num", 1, function () {
             return Transactions::count();
         });
-        //先查询出前一天的最大的id值 并缓存到今日结束
-        $minutes = $end->diffInMinutes(Carbon::tomorrow());
-        $maxId = Cache::remember("home_token_max_id", $minutes, function () {
-            return Transactions::where('created_at', '<', Carbon::today())->orderBy('id')->max('id');
-        });
-
         //缓存1分钟
-        $data['hour_24_num'] = Cache::remember("home_token_hour_24_num", 1, function () use ($maxId) {
-            return Transactions::where('id', '>', $maxId)->count();
+        $data['hour_24_num'] = Cache::remember("home_token_hour_24_num", 1, function () {
+            $latestNumber = Settings::getValueByKey("last_block_height");
+            return \App\Models\Block::where('number', '>', $latestNumber - 5760)->sum('transaction_count');
         });
         //缓存1分钟
         $data['address_num'] = Cache::remember("home_address_num", 1, function () {
