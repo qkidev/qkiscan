@@ -309,7 +309,6 @@ class SyncService
      * @throws \EthereumRPC\Exception\ConnectionException
      * @throws \EthereumRPC\Exception\ContractABIException
      * @throws \EthereumRPC\Exception\ContractsException
-     * @throws \EthereumRPC\Exception\GethException
      * @throws \HttpClient\Exception\HttpClientException
      */
     public function saveToken($address)
@@ -328,12 +327,23 @@ class SyncService
         $geth = new EthereumRPC($url_arr['host'], $url_arr['port']);
         $erc20 = new ERC20($geth);
         $token = $erc20->token($address);
-        $tokenModel = new Token();
-        $tokenModel->token_name = $token->name();
-        $tokenModel->token_symbol = $token->symbol();
-        $tokenModel->contract_address = $address;
-        $tokenModel->save();
-        $this->token[$address] = $tokenModel->id;
+        try {
+            //实例化通证
+            $tokenModel = new Token();
+            $tokenModel->token_symbol = $token->symbol();
+            $tokenModel->token_name = $token->name();
+            $tokenModel->contract_address = $address;
+            $tokenModel->save();
+            $this->token[$address] = $tokenModel->id;
+        } catch (\EthereumRPC\Exception\GethException $exception) {
+            /**
+            * 获取合约信息失败
+            * -32000 to -32099	Server error. Reserved for implementation-defined server-errors.
+            **/
+            if ($exception->getCode() == '-32000' && $exception->getMessage() == 'execution reverted') {
+                return false;
+            }
+        }
 
         return true;
     }
