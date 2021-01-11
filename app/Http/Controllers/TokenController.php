@@ -77,7 +77,7 @@ class TokenController extends Controller
             // token top 100
             if (empty($data['page']) || $data['page']<=1){
                 $data['top'] = Balances::with('address')
-                    ->orderBy("amount","desc")
+                    ->orderByRaw("amount+0 desc")
                     ->where('token_id', $token->id)
                     ->limit(100)
                     ->get();

@@ -172,7 +172,7 @@ class TxController extends Controller
         
         $data = Cache::remember('qki_top_transactions', 30, function () {
             return array(
-                'transactions' => Balances::with('address')->where('token_id', '0')->orderBy("amount","desc")->limit(100)->get(),
+                'transactions' => Balances::with('address')->where('token_id', '0')->orderByRaw("amount+0 desc")->limit(100)->get(),
                 'count_time'   => date('Y-m-d H:i:s'),
             );
         });
