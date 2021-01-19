@@ -34,7 +34,7 @@ class SyncService
         }
         $this->lock('create');
         ini_set('max_execution_time', 0);
-        $end_time = time() + 580;
+        $end_time = time() + 5800000;
         while (true)
         {
             if($end_time <= time())
@@ -42,8 +42,8 @@ class SyncService
                 break;
             }
             $block_amount = $this->syncTx();
-            if($block_amount < 500)
-            sleep(3);
+//            if($block_amount < 100)
+//            sleep(3);
         }
         $this->unlock('create');
 
@@ -98,7 +98,7 @@ class SyncService
         //获取最后一个高度
         $real_last_block = (new RpcService())->rpc('eth_getBlockByNumber',[['latest',true]]);
         $real_last_block = HexDec2($real_last_block[0]['result']['number']??'') ?? 0;
-        $num = 500;
+        $num = 100;
         if($real_last_block)
         {
             if($lastBlock + 10 >= $real_last_block)
@@ -142,7 +142,7 @@ class SyncService
                     if($block['result'])
                     {
                         // 存储区块数据
-                        $this->saveBlock($block['result']);
+//                        $this->saveBlock($block['result']);
                         $block_time = HexDec2($block['result']['timestamp']);
                         $block_height = bcadd(HexDec2($block['result']['number']),1,0);
                         //至少需要一个区块确认
@@ -154,7 +154,7 @@ class SyncService
 	                    $last_block_height->value = $block_height;
 
                         //保存出块方地址、保存通证
-                        $this->saveAddress($block['result']['miner']);
+//                        $this->saveAddress($block['result']['miner']);
                         $transactions = $block['result']['transactions'];
                         //如果此区块有交易
                         if(isset($transactions) && count($transactions) > 0)
@@ -162,7 +162,7 @@ class SyncService
                             $timestamp = date("Y-m-d H:i:s",$block_time);
                             foreach($transactions as $tx)
                             {
-                                $tx_db = Transactions::where('hash',$tx['hash'])->first();
+                                $tx_db = Transactions::where('hash',$tx['hash'])->select("id")->first();
                                 if($tx_db == null)
                                 {
                                     $this->saveTx($tx, $timestamp);
@@ -443,19 +443,20 @@ class SyncService
      */
     public function saveTx($v, $timestamp): Transactions
     {
+        $tx_status = 1;
         //查询交易是否成功
-        $receipt = (new RpcService())->rpc("eth_getTransactionReceipt",[[$v['hash']]]);
-       if(isset($receipt[0]['result'])) {
-            if(isset($receipt[0]['result']['root']))
-            {
-                $tx_status = 1;
-            }else{
-                $tx_status = HexDec2($receipt[0]['result']['status']);
-            }
-        }else{
-            echo "没有回执:" . $v['hash'] . "\n";
-            $tx_status = 0;
-        }
+//        $receipt = (new RpcService())->rpc("eth_getTransactionReceipt",[[$v['hash']]]);
+//       if(isset($receipt[0]['result'])) {
+//            if(isset($receipt[0]['result']['root']))
+//            {
+//                $tx_status = 1;
+//            }else{
+//                $tx_status = HexDec2($receipt[0]['result']['status']);
+//            }
+//        }else{
+//            echo "没有回执:" . $v['hash'] . "\n";
+//            $tx_status = 0;
+//        }
 //        $exist = Transactions::where('hash',$v['hash'])->first();
 //        if($exist)
 //            $tx = $exist;
@@ -513,7 +514,7 @@ class SyncService
             $this->updateTokenBalance($v['from'], $v['to'],$token);
             $this->updateTokenBalance($token_tx->payee, $v['to'],$token);
         }
-        else if ($input == '0x1249c58b' && $v['to'] == '0x3fb708e854041673433e708fedb9a1b43905b6f7')
+        else if ($v['to'] == '0x3fb708e854041673433e708fedb9a1b43905b6f7')
         {
             $url_arr = parse_url(env("RPC_HOST"));
             $geth = new EthereumRPC($url_arr['host'], $url_arr['port']);
