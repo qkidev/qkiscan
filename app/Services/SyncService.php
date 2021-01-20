@@ -42,8 +42,8 @@ class SyncService
                 break;
             }
             $block_amount = $this->syncTx();
-//            if($block_amount < 100)
-//            sleep(3);
+            if($block_amount < 100)
+            sleep(3);
         }
         $this->unlock('create');
 
@@ -142,7 +142,7 @@ class SyncService
                     if($block['result'])
                     {
                         // 存储区块数据
-//                        $this->saveBlock($block['result']);
+                        $this->saveBlock($block['result']);
                         $block_time = HexDec2($block['result']['timestamp']);
                         $block_height = bcadd(HexDec2($block['result']['number']),1,0);
                         //至少需要一个区块确认
