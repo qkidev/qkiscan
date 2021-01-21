@@ -35,18 +35,46 @@ class fillBlockData extends Command
         $real_last_block = HexDec2($real_last_block[0]['result']['number']??'') ?? 0;
 
         $this->info(now());
-        $number = Block::oldest('number')->firstOrFail()->value('number');
+        $now_block = Block::orderBy('id', 'desc')->first();
+        if(!empty($now_block))
+        {
+            $number = $now_block->number;
+        }
+        else
+        {
+            $number = 0;
+        }
         if ($number >= $real_last_block - 2) {
             $this->warn("无需填充数据");
             return ;
         }
-        $this->info("将从高度: $number, 开始逆向填充数据");
+        $this->info("将从高度: $number, 开始正向填充数据");
 
         //获取下一个区块
         $rpcService = new RpcService();
         $syncService = new SyncService();
         do {
-            $blocks = $rpcService->getBlockByNumber($this->buildParams($number));
+
+            //组装参数
+            for($i=0;$i<100;$i++)
+            {
+                $number++;
+                if(Block::where('number',$number)->exists())
+                {
+                    echo "存在$number\n";
+                    continue;
+                }
+                //组装参数
+                if($number < 10)
+                {
+                    $blockArray[$i] = ['0x' . $number,true];
+                }else{
+                    $blockArray[$i] = ['0x' . base_convert($number,10,16),true];
+                }
+            }
+
+
+            $blocks = $rpcService->getBlockByNumber($blockArray);
 
             if(!$blocks) {
                 echo "获取数据失败\n";
@@ -64,31 +92,9 @@ class fillBlockData extends Command
                     break;
                 }
             }
+            if ($number >= $real_last_block - 3)
+                break;
+
         } while ($number > 0);
-    }
-
-    /**
-     * 批量构建参数
-     * @param int $number
-     *
-     * @return array
-     */
-    protected function buildParams(int $number): array {
-        $num = 0;
-        $blockArray = [];
-
-        do{
-            $number--;
-            $num++;
-
-            //组装参数
-            if($number < 10) {
-                $blockArray[] = ['0x' . $number,true];
-            } else {
-                $blockArray[] = ['0x' . base_convert($number,10,16),true];
-            }
-        } while ($number > 0 && $num < 2);
-
-        return $blockArray;
     }
 }
