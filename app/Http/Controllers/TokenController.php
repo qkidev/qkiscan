@@ -71,7 +71,7 @@ class TokenController extends Controller
             });
             $data['address_num'] = Cache::remember("token_{$token->id}_address_num", 5, function () use ($token){
                 if('0x3fb708e854041673433e708fedb9a1b43905b6f7' == $token->contract_address)
-                    return Balances::where(['token_id', $token->id])->count();
+                    return Balances::where('token_id', $token->id)->count();
                 else
                     return Balances::where([['token_id', $token->id], ['amount', '>', 0]])->count();
             });
