@@ -30,9 +30,13 @@ class fillBlockData extends Command
      */
     public function handle()
     {
+        //获取最后一个高度
+        $real_last_block = (new RpcService())->rpc('eth_getBlockByNumber',[['latest',true]]);
+        $real_last_block = HexDec2($real_last_block[0]['result']['number']??'') ?? 0;
+
         $this->info(now());
         $number = Block::oldest('number')->firstOrFail()->value('number');
-        if ($number < 1) {
+        if ($number < $real_last_block) {
             $this->warn("无需填充数据");
             return ;
         }
