@@ -70,7 +70,10 @@ class TokenController extends Controller
                 return TokenTx::where([['tx_status', 1], ['token_id', $token_id]])->whereRaw("unix_timestamp(created_at)>$start")->sum('amount');
             });
             $data['address_num'] = Cache::remember("token_{$token->id}_address_num", 5, function () use ($token){
-                return Balances::where([['token_id', $token->id], ['amount', '>', 0]])->count();
+                if('0x3fb708e854041673433e708fedb9a1b43905b6f7' == $token->contract_address)
+                    return Balances::where(['token_id', $token->id])->count();
+                else
+                    return Balances::where([['token_id', $token->id], ['amount', '>', 0]])->count();
             });
             $token->holders = $data['address_num'];
             $token->save();
