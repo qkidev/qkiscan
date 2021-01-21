@@ -36,7 +36,7 @@ class fillBlockData extends Command
 
         $this->info(now());
         $number = Block::oldest('number')->firstOrFail()->value('number');
-        if ($number < $real_last_block) {
+        if ($number >= $real_last_block - 2) {
             $this->warn("无需填充数据");
             return ;
         }
