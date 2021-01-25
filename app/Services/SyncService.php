@@ -207,6 +207,7 @@ class SyncService
 
                                     if($tx_status != $tx_db->tx_status)
                                     {
+                                        echo "更新tx状态 {$tx['hash']}\n";
                                         $tx_db->tx_status = $tx_status;
                                         $tx_db->save();
                                     }
