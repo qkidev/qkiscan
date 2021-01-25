@@ -445,22 +445,22 @@ class SyncService
     {
         $tx_status = 1;
         //查询交易是否成功
-//        $receipt = (new RpcService())->rpc("eth_getTransactionReceipt",[[$v['hash']]]);
-//       if(isset($receipt[0]['result'])) {
-//            if(isset($receipt[0]['result']['root']))
-//            {
-//                $tx_status = 1;
-//            }else{
-//                $tx_status = HexDec2($receipt[0]['result']['status']);
-//            }
-//        }else{
-//            echo "没有回执:" . $v['hash'] . "\n";
-//            $tx_status = 0;
-//        }
-//        $exist = Transactions::where('hash',$v['hash'])->first();
-//        if($exist)
-//            $tx = $exist;
-//        else
+        $receipt = (new RpcService())->rpc("eth_getTransactionReceipt",[[$v['hash']]]);
+       if(isset($receipt[0]['result'])) {
+            if(isset($receipt[0]['result']['root']))
+            {
+                $tx_status = 1;
+            }else{
+                $tx_status = HexDec2($receipt[0]['result']['status']);
+            }
+        }else{
+            echo "没有回执:" . $v['hash'] . "\n";
+            $tx_status = 0;
+        }
+        $exist = Transactions::where('hash',$v['hash'])->first();
+        if($exist)
+            $tx = $exist;
+        else
         $tx = new Transactions();
         $tx->from = $v['from'];
         $tx->to = $v['to'] ?? '';
