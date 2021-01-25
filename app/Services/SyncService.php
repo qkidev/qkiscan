@@ -162,7 +162,7 @@ class SyncService
                             $timestamp = date("Y-m-d H:i:s",$block_time);
                             foreach($transactions as $tx)
                             {
-                                $tx_db = Transactions::where('hash',$tx['hash'])->select("id")->first();
+                                $tx_db = Transactions::where('hash',$tx['hash'])->first();
                                 if($tx_db == null)
                                 {
                                     $this->saveTx($tx, $timestamp);
@@ -189,6 +189,27 @@ class SyncService
                                     $tx_db->tx_status = $tx_status;
 
                                     $tx_db->save();
+                                }
+                                elseif ($tx_db->tx_status == 1)
+                                {
+                                    $receipt = (new RpcService())->rpc("eth_getTransactionReceipt",[[$tx['hash']]]);
+                                    if(isset($receipt[0]['result'])) {
+                                        if(isset($receipt[0]['result']['root']))
+                                        {
+                                            $tx_status = 1;
+                                        }else{
+                                            $tx_status = HexDec2($receipt[0]['result']['status']);
+                                        }
+                                    }else{
+                                        echo "没有回执:" . $tx['hash'] . "\n";
+                                        $tx_status = 0;
+                                    }
+
+                                    if($tx_status != $tx_db->tx_status)
+                                    {
+                                        $tx_db->tx_status = $tx_status;
+                                        $tx_db->save();
+                                    }
                                 }
                             }
                         }
