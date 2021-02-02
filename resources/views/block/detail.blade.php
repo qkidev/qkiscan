@@ -35,7 +35,7 @@
                             </li>
                             <li data-v-cd5b40a0="" class="item">
                                 <span data-v-cd5b40a0="" class="vcolor-192330 strong">gas上限</span>
-                                <span data-v-cd5b40a0="" class="vcolor-192330">{{$gas_limit}}</span>
+                                <span data-v-cd5b40a0="" class="vcolor-192330">{{$gasLimit}}</span>
                             </li>
                             <li data-v-cd5b40a0="" class="item">
                                 <span data-v-cd5b40a0="" class="vcolor-192330 strong">gas使用量</span>
