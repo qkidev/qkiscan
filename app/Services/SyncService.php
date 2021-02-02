@@ -22,6 +22,7 @@ class SyncService
 {
     public $address = [];
     public $token = [];
+    public $token_erc20 = [];
 
     public $geth;
     /**
@@ -336,8 +337,17 @@ class SyncService
             return true;
         }
         //实例化通证
-        $erc20 = new ERC20($this->geth);
-        $token = $erc20->token($address);
+        if(isset($this->token_erc20[$address]))
+        {
+
+            $erc20 = new ERC20($this->geth);
+            $token = $erc20->token($address);
+            $this->token_erc20[$address] = $token;
+        }
+        else
+        {
+            $token = $this->token_erc20[$address];
+        }
         try {
             //实例化通证
             $tokenModel = new Token();
@@ -427,8 +437,19 @@ class SyncService
             //保存通证接收方地址
             $this->saveAddress($token_tx->payee);
             //实例化通证
-            $erc20 = new ERC20($this->geth);
-            $token = $erc20->token($v['to']);
+            $address = $v['to'];
+            if(isset($this->token_erc20[$address]))
+            {
+
+                $erc20 = new ERC20($this->geth);
+                $token = $erc20->token($address);
+                $this->token_erc20[$address] = $token;
+            }
+            else
+            {
+                $token = $this->token_erc20[$address];
+            }
+
             $decimals = $token->decimals();
             $token_tx_amount = bcdiv(HexDec2($token_tx->amount),gmp_pow(10, $decimals),18);
 //            dump($v['to'],$v['from'],$token_tx->payee);
@@ -501,8 +522,18 @@ class SyncService
             //保存通证接收方地址
             $this->saveAddress($token_tx->payee);
             //实例化通证
-            $erc20 = new ERC20($this->geth);
-            $token = $erc20->token($v['to']);
+            $address = $v['to'];
+            if(isset($this->token_erc20[$address]))
+            {
+
+                $erc20 = new ERC20($this->geth);
+                $token = $erc20->token($address);
+                $this->token_erc20[$address] = $token;
+            }
+            else
+            {
+                $token = $this->token_erc20[$address];
+            }
             try
             {
                 $decimals = $token->decimals();
@@ -530,8 +561,18 @@ class SyncService
         }
         else if ($v['to'] == '0x3fb708e854041673433e708fedb9a1b43905b6f7')
         {
-            $erc20 = new ERC20($this->geth);
-            $token = $erc20->token($v['to']);
+            $address = $v['to'];
+            if(isset($this->token_erc20[$address]))
+            {
+
+                $erc20 = new ERC20($this->geth);
+                $token = $erc20->token($address);
+                $this->token_erc20[$address] = $token;
+            }
+            else
+            {
+                $token = $this->token_erc20[$address];
+            }
 
             $this->updateTokenBalance($v['from'], $v['to'],$token);
         }
