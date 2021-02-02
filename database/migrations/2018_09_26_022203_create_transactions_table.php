@@ -15,10 +15,10 @@ class CreateTransactionsTable extends Migration
     {
         Schema::create('transactions', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('from',50)->comment('转出地址');
-            $table->string('to',50)->comment('转入地址');
-            $table->string('hash',70)->unique()->comment('转账hash');
-            $table->string('block_hash',70)->comment('区块hash');
+            $table->string('from',42)->comment('转出地址');
+            $table->string('to',42)->comment('转入地址');
+            $table->string('hash',66)->unique()->comment('转账hash');
+            $table->string('block_hash',66)->comment('区块hash');
             $table->unsignedInteger('block_number')->comment('区块高度');
             $table->unsignedDecimal('gas_price',18,8)->comment('手续费');
             $table->unsignedDecimal('amount',18,8)->default(0.00000000)->comment('数量');

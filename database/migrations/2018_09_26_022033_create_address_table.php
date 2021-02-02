@@ -15,7 +15,7 @@ class CreateAddressTable extends Migration
     {
         Schema::create('address', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('address',50)->unique()->comment('地址');
+            $table->string('address',42)->unique()->comment('地址');
             $table->unsignedDecimal('amount',18,8)->default(0.00000000)->comment('余额');
             $table->timestamps();
         });
