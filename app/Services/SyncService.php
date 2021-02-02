@@ -589,6 +589,8 @@ class SyncService
     public function updateTokenBalance($address, $token_address,ERC20_Token $token)
     {
         $amount = $token->balanceOf($address);
+        if(strlen($amount) > 128)
+            return;
         $address = Address::firstOrCreate(['address' => $address]);
         $token_db = Token::where('contract_address',$token_address)->first();
         if($token_db)
