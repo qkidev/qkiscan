@@ -212,8 +212,6 @@ class SyncService
                     //记录下一个要同步的区块高度
                     $last_block_height->save();
                     DB::commit();
-                    echo "同步成功，当前高度:$block_height\n";
-                    return count($blocks);
                 } catch (\Exception $e) {
                     DB::rollback();
                     echo "file:" . $e->getFile() . " line:" . $e->getLine() . $e->getMessage() . "\n";
@@ -221,6 +219,8 @@ class SyncService
                 }
             }
 
+            echo "同步成功，当前高度:$block_height\n";
+            return count($blocks);
         }
     }
 
