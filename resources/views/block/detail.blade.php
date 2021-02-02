@@ -38,6 +38,14 @@
                                 <span data-v-cd5b40a0="" class="vcolor-192330">{{$gasLimit}}</span>
                             </li>
                             <li data-v-cd5b40a0="" class="item">
+                                <span data-v-cd5b40a0="" class="vcolor-192330 strong">难度</span>
+                                <span data-v-cd5b40a0="" class="vcolor-192330">{{$difficulty}}</span>
+                            </li>
+                            <li data-v-cd5b40a0="" class="item">
+                                <span data-v-cd5b40a0="" class="vcolor-192330 strong">难度</span>
+                                <span data-v-cd5b40a0="" class="vcolor-192330">{{$totalDifficulty}}</span>
+                            </li>
+                            <li data-v-cd5b40a0="" class="item">
                                 <span data-v-cd5b40a0="" class="vcolor-192330 strong">gas使用量</span>
                                 <span data-v-cd5b40a0="" class="vcolor-192330">{{$gasUsed}}</span>
                             </li>

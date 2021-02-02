@@ -90,6 +90,7 @@ class BlockController extends Controller
                 $data['size'] = bcdiv(HexDec2($blockInfo['size']),1000,3);
                 $data['miner'] = $blockInfo['miner'];
                 $data['difficulty'] = HexDec2($blockInfo['difficulty']);
+                $data['totalDifficulty'] = HexDec2($blockInfo['totalDifficulty']);
                 $data['gasLimit'] = HexDec2($blockInfo['gasLimit']);
                 $data['gasUsed'] = HexDec2($blockInfo['gasUsed']);
                 $data['transactions'] = [];
