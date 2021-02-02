@@ -13,6 +13,7 @@ use App\Models\Transactions;
 use Carbon\Carbon;
 use ERC20\ERC20;
 use ERC20\ERC20_Token;
+use ERC20\Exception\ERC20Exception;
 use EthereumRPC\EthereumRPC;
 use EthereumRPC\Response\TransactionInputTransfer;
 use Illuminate\Support\Facades\DB;
@@ -469,7 +470,8 @@ class SyncService
         if($exist)
             $tx = $exist;
         else
-        $tx = new Transactions();
+            $tx = new Transactions();
+
         $tx->from = $v['from'];
         $tx->to = $v['to'] ?? '';
         $tx->hash = $v['hash'];
@@ -498,8 +500,6 @@ class SyncService
         if (substr($input, 0, 10) === '0xa9059cbb' && !empty($this->token[$v['to']])) {
             //保存通证交易
             $token_tx =  new TransactionInputTransfer($input);
-            $tx->payee = $token_tx->payee;
-            $tx->save();
             //保存通证接收方地址
             $this->saveAddress($token_tx->payee);
             //实例化通证
@@ -507,20 +507,30 @@ class SyncService
             $geth = new EthereumRPC($url_arr['host'], $url_arr['port']);
             $erc20 = new ERC20($geth);
             $token = $erc20->token($v['to']);
-            $decimals = $token->decimals();
-            $token_tx_amount = bcdiv(HexDec2($token_tx->amount),gmp_pow(10, $decimals),18);
+            try
+            {
+                $decimals = $token->decimals();
+                $token_tx_amount = bcdiv(HexDec2($token_tx->amount),gmp_pow(10, $decimals),18);
 //            dump($v['to'],$v['from'],$token_tx->payee);
-            $this->saveTokenTx(
-                $this->token[$v['to']],
-                float_format($token_tx_amount),
-                $this->address[$v['from']],
-                $this->address[$token_tx->payee],
-                $tx->id,
-                $timestamp,
-                $tx_status);
+                $this->saveTokenTx(
+                    $this->token[$v['to']],
+                    float_format($token_tx_amount),
+                    $this->address[$v['from']],
+                    $this->address[$token_tx->payee],
+                    $tx->id,
+                    $timestamp,
+                    $tx_status);
 
-            $this->updateTokenBalance($v['from'], $v['to'],$token);
-            $this->updateTokenBalance($token_tx->payee, $v['to'],$token);
+                $tx->payee = $token_tx->payee;
+                $tx->save();
+
+                $this->updateTokenBalance($v['from'], $v['to'],$token);
+                $this->updateTokenBalance($token_tx->payee, $v['to'],$token);
+            }
+            catch (ERC20Exception $ex)
+            {
+                echo "token异常\n";
+            }
         }
         else if ($v['to'] == '0x3fb708e854041673433e708fedb9a1b43905b6f7')
         {
