@@ -16,7 +16,7 @@ class CreateBlocksTable extends Migration
         Schema::create('blocks', function (Blueprint $table) {
             $table->increments('id');
             $table->unsignedBigInteger('difficulty')->default(0)->comment('难度');
-            $table->string('extra_data')->nullable()->comment('额外数据');
+            $table->string('extra_data',1280)->nullable()->comment('额外数据');
             $table->unsignedBigInteger('gas_limit');
             $table->unsignedBigInteger('gas_used');
             $table->char('hash', 66)->unique();
