@@ -121,66 +121,58 @@ class SyncService
         //获取下一个区块
         $rpcService = new RpcService();
         $blocks = $rpcService->getBlockByNumber($blockArray);
-        if(!$blocks)
-        {
+        if (!$blocks) {
             echo "获取数据失败\n";
             return false;
+        } else {
+            echo "获取区块" . count($blocks) . "个\n";
         }
-        else
+        $block_height = $last_block_height->value;
+        if ($blocks)
         {
-        	echo "获取区块" . count($blocks) . "个\n";
-        }
-        DB::beginTransaction();
-        try{
-
-            $block_height = $last_block_height->value;
-            if($blocks)
+            echo "区块获取成功 \n";
+            foreach ($blocks as $block)
             {
-                echo "区块获取成功 \n";
-                foreach ($blocks as $block)
-                {
-                    if($block['result'])
+                DB::beginTransaction();
+                try {
+
+                    if ($block['result'])
                     {
                         // 存储区块数据
                         $this->saveBlock($block['result']);
                         $block_time = HexDec2($block['result']['timestamp']);
-                        $block_height = bcadd(HexDec2($block['result']['number']),1,0);
+                        $block_height = bcadd(HexDec2($block['result']['number']), 1, 0);
                         //至少需要一个区块确认
-                        if($block_height >= $real_last_block - 2)
-                        {
-                        	echo "区块确认数不够\n";
+                        if ($block_height >= $real_last_block - 2) {
+                            echo "区块确认数不够\n";
                             break;
                         }
-	                    $last_block_height->value = $block_height;
+                        $last_block_height->value = $block_height;
 
                         //保存出块方地址、保存通证
 //                        $this->saveAddress($block['result']['miner']);
                         $transactions = $block['result']['transactions'];
                         //如果此区块有交易
-                        if(isset($transactions) && count($transactions) > 0)
+                        if (isset($transactions) && count($transactions) > 0)
                         {
-                            $timestamp = date("Y-m-d H:i:s",$block_time);
-                            foreach($transactions as $tx)
-                            {
-                                $tx_db = Transactions::where('hash',$tx['hash'])->first();
-                                if($tx_db == null)
-                                {
+                            $timestamp = date("Y-m-d H:i:s", $block_time);
+                            foreach ($transactions as $tx) {
+                                $tx_db = Transactions::where('hash', $tx['hash'])->first();
+                                if ($tx_db == null) {
                                     $this->saveTx($tx, $timestamp);
-                                }
-                                elseif($tx_db->block_number == 0)//更新区块信息
+                                } elseif ($tx_db->block_number == 0)//更新区块信息
                                 {
                                     $tx_db->block_hash = $tx['blockHash'];
                                     $tx_db->block_number = $block_height;
 
-                                    $receipt = (new RpcService())->rpc("eth_getTransactionReceipt",[[$tx['hash']]]);
-                                    if(isset($receipt[0]['result'])) {
-                                        if(isset($receipt[0]['result']['root']))
-                                        {
+                                    $receipt = (new RpcService())->rpc("eth_getTransactionReceipt", [[$tx['hash']]]);
+                                    if (isset($receipt[0]['result'])) {
+                                        if (isset($receipt[0]['result']['root'])) {
                                             $tx_status = 1;
-                                        }else{
+                                        } else {
                                             $tx_status = HexDec2($receipt[0]['result']['status']);
                                         }
-                                    }else{
+                                    } else {
                                         echo "没有回执:" . $tx['hash'] . "\n";
                                         $tx_status = 0;
                                     }
@@ -189,24 +181,20 @@ class SyncService
                                     $tx_db->tx_status = $tx_status;
 
                                     $tx_db->save();
-                                }
-                                elseif ($tx_db->tx_status == 1)
-                                {
-                                    $receipt = (new RpcService())->rpc("eth_getTransactionReceipt",[[$tx['hash']]]);
-                                    if(isset($receipt[0]['result'])) {
-                                        if(isset($receipt[0]['result']['root']))
-                                        {
+                                } elseif ($tx_db->tx_status == 1) {
+                                    $receipt = (new RpcService())->rpc("eth_getTransactionReceipt", [[$tx['hash']]]);
+                                    if (isset($receipt[0]['result'])) {
+                                        if (isset($receipt[0]['result']['root'])) {
                                             $tx_status = 1;
-                                        }else{
+                                        } else {
                                             $tx_status = HexDec2($receipt[0]['result']['status']);
                                         }
-                                    }else{
+                                    } else {
                                         echo "没有回执:" . $tx['hash'] . "\n";
                                         $tx_status = 0;
                                     }
 
-                                    if($tx_status != $tx_db->tx_status)
-                                    {
+                                    if ($tx_status != $tx_db->tx_status) {
                                         echo "更新tx状态 {$tx['hash']}\n";
                                         $tx_db->tx_status = $tx_status;
                                         $tx_db->save();
@@ -214,27 +202,25 @@ class SyncService
                                 }
                             }
                         }
-                    }
-                    else
-                    {
-	                    $last_block_height->save();
+                    } else {
+                        $last_block_height->save();
                         DB::commit();
                         echo "没有结果，当前高度:$block_height\n";
                         return false;
                     }
-                }
 
+                    //记录下一个要同步的区块高度
+                    $last_block_height->save();
+                    DB::commit();
+                    echo "同步成功，当前高度:$block_height\n";
+                    return count($blocks);
+                } catch (\Exception $e) {
+                    DB::rollback();
+                    echo "file:" . $e->getFile() . " line:" . $e->getLine() . $e->getMessage() . "\n";
+                    return false;
+                }
             }
 
-            //记录下一个要同步的区块高度
-	        $last_block_height->save();
-            DB::commit();
-            echo "同步成功，当前高度:$block_height\n";
-            return count($blocks);
-        } catch (\Exception $e) {
-            DB::rollback();
-            echo "file:" . $e->getFile() . " line:" . $e->getLine() . $e->getMessage() . "\n";
-            return false;
         }
     }
 
