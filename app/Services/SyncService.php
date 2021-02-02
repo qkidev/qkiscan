@@ -90,7 +90,7 @@ class SyncService
         if(!$last_block_height){
             $last_block_height = new Settings();
             $last_block_height->key = 'last_block_height';
-            $last_block_height->value = 1;
+            $last_block_height->value = 0;
             $last_block_height->save();
         }
         $lastBlock = $last_block_height->value;
