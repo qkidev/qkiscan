@@ -337,7 +337,7 @@ class SyncService
             return true;
         }
         //实例化通证
-        if(isset($this->token_erc20[$address]))
+        if(!isset($this->token_erc20[$address]))
         {
 
             $erc20 = new ERC20($this->geth);
@@ -438,7 +438,7 @@ class SyncService
             $this->saveAddress($token_tx->payee);
             //实例化通证
             $address = $v['to'];
-            if(isset($this->token_erc20[$address]))
+            if(!isset($this->token_erc20[$address]))
             {
 
                 $erc20 = new ERC20($this->geth);
@@ -523,7 +523,7 @@ class SyncService
             $this->saveAddress($token_tx->payee);
             //实例化通证
             $address = $v['to'];
-            if(isset($this->token_erc20[$address]))
+            if(!isset($this->token_erc20[$address]))
             {
 
                 $erc20 = new ERC20($this->geth);
@@ -562,7 +562,7 @@ class SyncService
         else if ($v['to'] == '0x3fb708e854041673433e708fedb9a1b43905b6f7')
         {
             $address = $v['to'];
-            if(isset($this->token_erc20[$address]))
+            if(!isset($this->token_erc20[$address]))
             {
 
                 $erc20 = new ERC20($this->geth);
