@@ -22,6 +22,8 @@ class SyncService
 {
     public $address = [];
     public $token = [];
+
+    public $geth;
     /**
      * 同步交易
      */
@@ -35,6 +37,11 @@ class SyncService
         $this->lock('create');
         ini_set('max_execution_time', 0);
         $end_time = time() + 580;
+
+        //判断是否为合约地址
+        $url_arr = parse_url(env("RPC_HOST"));
+        $this->geth = new EthereumRPC($url_arr['host'], $url_arr['port']);
+
         while (true)
         {
             if($end_time <= time())
@@ -235,9 +242,7 @@ class SyncService
     public function checkAddressType($address)
     {
         //判断是否为合约地址
-        $url_arr = parse_url(env("RPC_HOST"));
-        $geth = new EthereumRPC($url_arr['host'], $url_arr['port']);
-        $request = $geth->jsonRPC("eth_getCode",null,[$address,"latest"]);
+        $request = $this->geth->jsonRPC("eth_getCode",null,[$address,"latest"]);
         $res = $request->get("result");
         if($res == "0x")
         {
@@ -331,9 +336,7 @@ class SyncService
             return true;
         }
         //实例化通证
-        $url_arr = parse_url(env("RPC_HOST"));
-        $geth = new EthereumRPC($url_arr['host'], $url_arr['port']);
-        $erc20 = new ERC20($geth);
+        $erc20 = new ERC20($this->geth);
         $token = $erc20->token($address);
         try {
             //实例化通证
@@ -424,9 +427,7 @@ class SyncService
             //保存通证接收方地址
             $this->saveAddress($token_tx->payee);
             //实例化通证
-            $url_arr = parse_url(env("RPC_HOST"));
-            $geth = new EthereumRPC($url_arr['host'], $url_arr['port']);
-            $erc20 = new ERC20($geth);
+            $erc20 = new ERC20($this->geth);
             $token = $erc20->token($v['to']);
             $decimals = $token->decimals();
             $token_tx_amount = bcdiv(HexDec2($token_tx->amount),gmp_pow(10, $decimals),18);
@@ -505,9 +506,7 @@ class SyncService
             //保存通证接收方地址
             $this->saveAddress($token_tx->payee);
             //实例化通证
-            $url_arr = parse_url(env("RPC_HOST"));
-            $geth = new EthereumRPC($url_arr['host'], $url_arr['port']);
-            $erc20 = new ERC20($geth);
+            $erc20 = new ERC20($this->geth);
             $token = $erc20->token($v['to']);
             try
             {
@@ -536,9 +535,7 @@ class SyncService
         }
         else if ($v['to'] == '0x3fb708e854041673433e708fedb9a1b43905b6f7')
         {
-            $url_arr = parse_url(env("RPC_HOST"));
-            $geth = new EthereumRPC($url_arr['host'], $url_arr['port']);
-            $erc20 = new ERC20($geth);
+            $erc20 = new ERC20($this->geth);
             $token = $erc20->token($v['to']);
 
             $this->updateTokenBalance($v['from'], $v['to'],$token);
