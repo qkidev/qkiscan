@@ -22,9 +22,6 @@ class SyncService
 {
     public $address = [];
     public $token = [];
-
-    public
-
     /**
      * 同步交易
      */
