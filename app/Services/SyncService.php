@@ -23,6 +23,8 @@ class SyncService
     public $address = [];
     public $token = [];
 
+    public
+
     /**
      * 同步交易
      */
@@ -339,9 +341,12 @@ class SyncService
         try {
             //实例化通证
             $tokenModel = new Token();
+            $token->decimals();
             $tokenModel->token_symbol = $token->symbol();
             $tokenModel->token_name = $token->name();
             $tokenModel->contract_address = $address;
+            if(strlen($tokenModel->token_name) == 0)
+                return false;
             $tokenModel->save();
             $this->token[$address] = $tokenModel->id;
         } catch (\EthereumRPC\Exception\GethException $exception) {
