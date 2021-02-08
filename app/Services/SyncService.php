@@ -21,14 +21,25 @@ use Illuminate\Support\Facades\DB;
 class SyncService
 {
     public $address = [];
-    public $token = [];
+    public $token = [];//token列表 地址->id
     public $token_erc20 = [];
 
+    public $token_amount_update = [];
+    public $qki_update = [];
+    public $address_type = [];
+
     public $geth;
+
+    public function __construct()
+    {
+        $url_arr = parse_url(env("RPC_HOST"));
+        $this->geth = new EthereumRPC($url_arr['host'], $url_arr['port']);
+    }
+
     /**
      * 同步交易
      */
-    public function synchronizeTransactions()
+    public function synchronizeTransactions($key = "last_block_height")
     {
         $this->unlock('create');
         if ($this->isLock('create')) {
@@ -37,11 +48,7 @@ class SyncService
         }
         $this->lock('create');
         ini_set('max_execution_time', 0);
-        $end_time = time() + 580;
-
-        //判断是否为合约地址
-        $url_arr = parse_url(env("RPC_HOST"));
-        $this->geth = new EthereumRPC($url_arr['host'], $url_arr['port']);
+        $end_time = time() + 580000;
 
         while (true)
         {
@@ -49,9 +56,7 @@ class SyncService
             {
                 break;
             }
-            $block_amount = $this->syncTx();
-            if($block_amount < 100)
-            sleep(3);
+            $block_amount = $this->syncTx($key);
         }
         $this->unlock('create');
 
@@ -90,14 +95,13 @@ class SyncService
         }
     }
 
-
-    public function syncTx()
+    public function collectAddress($key)
     {
         //获取setting表中记录的下一个要同步的区块高度
-        $last_block_height = Settings::where('key','last_block_height')->first();
+        $last_block_height = Settings::where('key',$key)->first();
         if(!$last_block_height){
             $last_block_height = new Settings();
-            $last_block_height->key = 'last_block_height';
+            $last_block_height->key = $key;
             $last_block_height->value = 0;
             $last_block_height->save();
         }
@@ -106,13 +110,116 @@ class SyncService
         //获取最后一个高度
         $real_last_block = (new RpcService())->rpc('eth_getBlockByNumber',[['latest',true]]);
         $real_last_block = HexDec2($real_last_block[0]['result']['number']??'') ?? 0;
-        $num = 100;
+        $num = 500;
         if($real_last_block)
         {
             if($lastBlock + 10 >= $real_last_block)
             {
                 $num = 1;
             }
+        }
+        if($lastBlock > 1880000)
+            exit("1880000");
+        for($i=0;$i<$num;$i++)
+        {
+            //组装参数
+            if($lastBlock < 10)
+            {
+                $blockArray[$i] = ['0x' . $lastBlock,true];
+            }else{
+                $blockArray[$i] = ['0x' . base_convert($lastBlock,10,16),true];
+            }
+            if($lastBlock >= 1880000)
+                break;
+            $lastBlock++;
+        }
+        //获取下一个区块
+        $rpcService = new RpcService();
+        $blocks = $rpcService->getBlockByNumber($blockArray);
+        if (!$blocks) {
+            echo "获取数据失败\n";
+            return false;
+        } else {
+            echo "获取区块" . count($blocks) . "个\n";
+        }
+        $block_height = $last_block_height->value;
+        if ($blocks)
+        {
+            echo "区块获取成功 \n";
+            foreach ($blocks as $block)
+            {
+                DB::beginTransaction();
+                try {
+
+                    if ($block['result'])
+                    {
+                        $block_time = HexDec2($block['result']['timestamp']);
+                        $block_height = bcadd(HexDec2($block['result']['number']), 1, 0);
+                        //至少需要一个区块确认
+                        if ($block_height >= $real_last_block - 2) {
+                            echo "区块确认数不够\n";
+                            break;
+                        }
+                        $last_block_height->value = $block_height;
+
+                        $transactions = $block['result']['transactions'];
+                        //如果此区块有交易
+                        $tx_amount = count($block['result']['transactions']);
+                        if (isset($block['result']['transactions']) && $tx_amount > 0)
+                        {
+                            foreach ($block['result']['transactions'] as $tx) {
+                                $this->saveAddress($tx['from']);
+                            }
+                        }
+                    } else {
+                        $last_block_height->save();
+                        DB::commit();
+                        echo "没有结果，当前高度:$block_height\n";
+                        return false;
+                    }
+
+                    //记录下一个要同步的区块高度
+                    $last_block_height->save();
+                    DB::commit();
+                } catch (\Exception $e) {
+                    DB::rollback();
+                    echo "file:" . $e->getFile() . " line:" . $e->getLine() . $e->getMessage() . "\n";
+                    return false;
+                }
+            }
+
+            echo "同步成功，当前高度:$block_height\n";
+            return count($blocks);
+        }
+    }
+
+
+    public function syncTx($key)
+    {
+        //获取setting表中记录的下一个要同步的区块高度
+        $last_block_height = Settings::where('key',$key)->first();
+        if(!$last_block_height){
+            $last_block_height = new Settings();
+            $last_block_height->key = $key;
+            $last_block_height->value = 0;
+            $last_block_height->save();
+        }
+        $lastBlock = $last_block_height->value;
+        $blockArray = array();
+        //获取最后一个高度
+        $real_last_block = (new RpcService())->rpc('eth_getBlockByNumber',[['latest',true]]);
+        $real_last_block = HexDec2($real_last_block[0]['result']['number']??'') ?? 0;
+        $num = 20;
+        if($real_last_block)
+        {
+            if($lastBlock + 10 >= $real_last_block)
+            {
+                $num = 1;
+            }
+        }
+        if(Block::where('number',$lastBlock)->exists())
+        {
+            exit("同步完成$lastBlock\n");
         }
         for($i=0;$i<$num;$i++)
         {
@@ -161,8 +268,10 @@ class SyncService
 //                        $this->saveAddress($block['result']['miner']);
                         $transactions = $block['result']['transactions'];
                         //如果此区块有交易
+                        $tx_amount = count($transactions);
                         if (isset($transactions) && count($transactions) > 0)
                         {
+                            echo "新增交易笔数$tx_amount\n";
                             $timestamp = date("Y-m-d H:i:s", $block_time);
                             foreach ($transactions as $tx) {
                                 $tx_db = Transactions::where('hash', $tx['hash'])->first();
@@ -242,15 +351,21 @@ class SyncService
      */
     public function checkAddressType($address)
     {
+        if(isset($this->address_type[$address]))
+        {
+            return $this->address_type[$address];
+        }
         //判断是否为合约地址
         $request = $this->geth->jsonRPC("eth_getCode",null,[$address,"latest"]);
         $res = $request->get("result");
         if($res == "0x")
         {
             //普通地址
+            $this->address_type[$address] = Address::TYPE_NORMAL_ADDRESS;
             return Address::TYPE_NORMAL_ADDRESS;
         }else{
             //合约地址
+            $this->address_type[$address] = Address::TYPE_CONTRACT_ADDRESS;
             return Address::TYPE_CONTRACT_ADDRESS;
         }
     }
@@ -277,10 +392,11 @@ class SyncService
         if(isset($this->address[$address]))
             return true;
 
-        $address_type = $this->checkAddressType($address);
 
-        $is_exist = Address::where('address',$address)->first();
-        if(empty($is_exist))
+        $address_id = $this->getAddressId($address);
+        $address_type = Address::TYPE_NORMAL_ADDRESS;
+
+        if($address_id < 0)
         {
             $addressModel = new Address();
             $addressModel->type = $address_type;
@@ -292,21 +408,21 @@ class SyncService
             //如果为合约地址，保存通证
             if($address_type == 2)
             {
-                $token = Token::where('contract_address',$address)->first();
-                if ($token){
-                    $this->token[$address] = $token->id;
+                $token_id = $this->getTokenId($address);
+                if ($token_id){
+                    $this->token_id[$address] = $token_id;
                 } else {
                     $this->saveToken($address);
                 }
             }
             return $addressModel->id;
         }else{
-            $this->address[$address] = $is_exist->id;
+            $this->address[$address] = $address_id;
             if($address_type == 2)
             {
-                $token = Token::where('contract_address',$address)->first();
-                if ($token){
-                    $this->token[$address] = $token->id;
+                $token_id = $this->getTokenId($address);
+                if ($token_id){
+                    $this->token_id[$address] = $token_id;
                 } else {
                     $this->saveToken($address);
                 }
@@ -327,14 +443,15 @@ class SyncService
      */
     public function saveToken($address)
     {
-        //判断通证是否存在
-        if(isset($this->token[$address]))
-            return true;
-        $token_is_exist = Token::where('contract_address',$address)->first();
-        if(!empty($token_is_exist))
+        $token_id = $this->getAddressId($address);
+        if($token_id > 0)
         {
-            $this->token[$address] = $token_is_exist->id;
+            $this->token_id[$address] = $token_id;
             return true;
+        }
+        elseif ($token_id < 0)
+        {
+            return false;
         }
         //实例化通证
         if(!isset($this->token_erc20[$address]))
@@ -358,13 +475,14 @@ class SyncService
             if(strlen($tokenModel->token_name) == 0)
                 return false;
             $tokenModel->save();
-            $this->token[$address] = $tokenModel->id;
+            $this->token_id[$address] = $tokenModel->id;
         } catch (\EthereumRPC\Exception\GethException $exception) {
             /**
             * 获取合约信息失败
             * -32000 to -32099	Server error. Reserved for implementation-defined server-errors.
             **/
             if ($exception->getCode() == '-32000' && $exception->getMessage() == 'execution reverted') {
+                $this->token_id[$address] = -1;
                 return false;
             }
         }
@@ -429,7 +547,7 @@ class SyncService
         $input = $v['input'] ?? '';
 
         // 通证转账
-        if (substr($input, 0, 10) === '0xa9059cbb' && !empty($this->token[$v['to']])) {
+        if (substr($input, 0, 10) === '0xa9059cbb' && !empty($this->token_id[$v['to']])) {
             //保存通证交易
             $token_tx =  new TransactionInputTransfer($input);
             $tx->payee = $token_tx->payee;
@@ -454,7 +572,7 @@ class SyncService
             $token_tx_amount = bcdiv(HexDec2($token_tx->amount),gmp_pow(10, $decimals),18);
 //            dump($v['to'],$v['from'],$token_tx->payee);
             $this->saveTokenTx(
-                $this->token[$v['to']],
+                $this->token_id[$v['to']],
                 float_format($token_tx_amount),
                 $this->address[$v['from']],
                 $this->address[$token_tx->payee],
@@ -516,7 +634,7 @@ class SyncService
         $input = $v['input'] ?? '';
 
         // 通证转账
-        if (substr($input, 0, 10) === '0xa9059cbb' && !empty($this->token[$v['to']])) {
+        if (substr($input, 0, 10) === '0xa9059cbb' && !empty($this->token_id[$v['to']])) {
             //保存通证交易
             $token_tx =  new TransactionInputTransfer($input);
             //保存通证接收方地址
@@ -540,7 +658,7 @@ class SyncService
                 $token_tx_amount = bcdiv(HexDec2($token_tx->amount),gmp_pow(10, $decimals),18);
 //            dump($v['to'],$v['from'],$token_tx->payee);
                 $this->saveTokenTx(
-                    $this->token[$v['to']],
+                    $this->token_id[$v['to']],
                     float_format($token_tx_amount),
                     $this->address[$v['from']],
                     $this->address[$token_tx->payee],
@@ -554,7 +672,7 @@ class SyncService
                 $this->updateTokenBalance($v['from'], $v['to'],$token);
                 $this->updateTokenBalance($token_tx->payee, $v['to'],$token);
             }
-            catch (ERC20Exception $ex)
+            catch (\Exception $ex)
             {
                 echo "token异常\n";
             }
@@ -607,26 +725,80 @@ class SyncService
 
     public function updateQkiBalance($address)
     {
+        //10分钟同步一次
+        if(isset($this->qki_update[$address]) &&
+            time() -  $this->qki_update[$address] < 600)
+        {
+            return;
+        }
         $rpc = new RpcService();
         $rs = $rpc->rpc('eth_getBalance', [[$address,"latest"]]);
         if(!isset($rs[0]['result']))
             return;
         $rs = isset($rs[0])?$rs[0]:array();
         $qki = bcdiv(gmp_strval($rs['result']) ,gmp_pow(10,18),8);
+        $this->qki_update[$address] = time();
         $address = Address::firstOrCreate(['address' => $address]);
         Balances::updateOrInsert(['address_id'=>$address->id, 'name' => 'qki'], ['amount' => $qki]);
     }
 
     public function updateTokenBalance($address, $token_address,ERC20_Token $token)
     {
+        //10分钟同步一次
+        if(isset($this->token_amount_update[$address]) &&
+          time() -  $this->token_amount_update[$address] < 600)
+        {
+            return;
+        }
         $amount = $token->balanceOf($address);
         if(strlen($amount) > 128)
             return;
-        $address = Address::firstOrCreate(['address' => $address]);
-        $token_db = Token::where('contract_address',$token_address)->first();
-        if($token_db)
+
+        $this->token_amount_update[$address] = time();
+        $token_id = $this->getTokenId($token_address);
+        if($token_id > 0)
         {
-            Balances::updateOrInsert(['address_id'=>$address->id,"token_id"=>$token_db->id, 'name' => $token->symbol()], ['amount' => $amount]);
+            Balances::updateOrInsert(['address_id'=>$this->getAddressId($address),"token_id"=>$token_id, 'name' =>
+                $token->symbol()], ['amount' => $amount]);
+        }
+    }
+
+
+    public $address_id = [];
+    public function getAddressId($address)
+    {
+        if(isset($this->address_id[$address]))
+        {
+            return $this->address_id[$address];
+        }
+        else
+        {
+            $address_model = Address::firstOrCreate(['address' => $address]);
+            $this->address_id[$address] = $address_model->id;
+            return $this->address_id[$address];
+        }
+    }
+
+
+    public $token_id = [];
+    public function getTokenId($address)
+    {
+        if(isset($this->token_id[$address]))
+        {
+            return $this->token_id[$address];
+        }
+        else
+        {
+            $token_db = Token::where('contract_address',$address)->first();
+            if(!empty($token_db))
+            {
+                $this->token_id[$address] = $token_db->id;
+                return $this->token_id[$address];
+            }
+            else
+            {
+                return 0;
+            }
         }
     }
 
