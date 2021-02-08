@@ -394,7 +394,7 @@ class SyncService
 
 
         $address_id = $this->getAddressId($address);
-        $address_type = Address::TYPE_NORMAL_ADDRESS;
+        $address_type = $this->checkAddressType($address);
 
         if($address_id < 0)
         {
