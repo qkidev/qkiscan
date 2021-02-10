@@ -11,6 +11,7 @@
         "fideloper/proxy": "^4.0",
         "furqansiddiqui/erc20-php": "^0.1.2",
         "laravel/framework": "^8.0",
+        "laravel/helpers": "^1.4",
         "laravel/tinker": "^2.0",
         "predis/predis": "^1.1",
         "sentry/sentry-laravel": "^1.2"
