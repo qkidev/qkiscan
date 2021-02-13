@@ -39,6 +39,7 @@ Route::get('/qki-page', 'TxController@qkiPage');
 //cct排行榜
 Route::get('/cct-page', 'TxController@cctPage');
 Route::get('/bp', 'IndexController@bp');
+Route::get('/rpc', 'IndexController@rpc');
 
 //节点统计列表
 Route::get('/node-statistics', 'NodeStatisticsController@index');
