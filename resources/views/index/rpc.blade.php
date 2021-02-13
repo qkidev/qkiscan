@@ -33,7 +33,7 @@
                                     {{$node->url}}
                                 </td>
                                 <td aria-colindex="1" class="">
-                                    {{number_format($node->success/($node->success+$node->failure+1)*100,2)}}%
+                                    {{number_format($node->success/($node->success+$node->failure)*100,2)}}%
                                 </td>
                                 <td aria-colindex="1" class="">
                                     {{$node->last_success_time}}
