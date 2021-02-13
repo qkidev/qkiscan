@@ -57,6 +57,8 @@ class SyncService
                 break;
             }
             $block_amount = $this->syncTx($key);
+            if($block_amount < 20)
+                sleep(3);
         }
         $this->unlock('create');
 
@@ -217,10 +219,6 @@ class SyncService
                 $num = 1;
             }
         }
-        if(Block::where('number',$lastBlock)->exists())
-        {
-            exit("同步完成$lastBlock\n");
-        }
         for($i=0;$i<$num;$i++)
         {
             //组装参数
@@ -274,7 +272,7 @@ class SyncService
                             echo "新增交易笔数$tx_amount\n";
                             $timestamp = date("Y-m-d H:i:s", $block_time);
                             foreach ($transactions as $tx) {
-                                $tx_db = Transactions::where('hash', $tx['hash'])->first();
+                                $tx_db = null;Transactions::where('hash', $tx['hash'])->first();
                                 if ($tx_db == null) {
                                     $this->saveTx($tx, $timestamp);
                                 } elseif ($tx_db->block_number == 0)//更新区块信息
@@ -608,6 +606,10 @@ class SyncService
             echo "没有回执:" . $v['hash'] . "\n";
             $tx_status = 0;
         }
+        $exist = Transactions::where('hash',$v['hash'])->first();
+        if($exist)
+            $tx = $exist;
+        else
         $tx = new Transactions();
         $tx->from = $v['from'];
         $tx->to = $v['to'] ?? '';
@@ -674,7 +676,7 @@ class SyncService
             }
             catch (\Exception $ex)
             {
-                echo "token异常\n";
+                echo "token异常" . $ex->getMessage();;
             }
         }
         else if ($v['to'] == '0x3fb708e854041673433e708fedb9a1b43905b6f7')

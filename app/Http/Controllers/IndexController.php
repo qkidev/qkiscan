@@ -8,6 +8,7 @@ use App\Model\MasterNode;
 use App\Model\Transaction;
 use App\Model\TxOut;
 use App\Models\Balances;
+use App\Models\RpcNode;
 use App\Models\Settings;
 use App\Models\Transactions;
 use App\Service\APIService;
@@ -173,6 +174,16 @@ class IndexController extends Controller
         }
 
         return view('index.bp', $data);
+    }
+
+
+
+    public function rpc()
+    {
+        $data['rpc_nodes'] = RpcNode::all();
+        }
+
+        return view('index.rpc', $data);
     }
 
 }
