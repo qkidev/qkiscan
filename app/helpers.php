@@ -109,4 +109,19 @@ function replaceStr(string $str)
     }
 }
 
-
+function diffTimeStr($time)
+{
+    $diff_time = time() - $time;
+    $d = floor($diff_time / (3600*24));
+    $h = floor(($diff_time % (3600*24)) / 3600);
+    $m = floor((($diff_time % (3600*24)) % 3600) / 60);
+    if($d>'0'){
+        return $d.'天'.$h.'小时'.$m.'分';
+    }else{
+        if($h!='0'){
+            return $h.'小时'.$m.'分';
+        }else{
+            return $m.'分';
+        }
+    }
+}
