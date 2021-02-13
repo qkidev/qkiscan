@@ -46,6 +46,12 @@ class CheckRpcNode extends Command
             {
                 echo $node->name . "\n";
                 $real_last_block = $this->rpc($node->url,'eth_getBlockByNumber',['latest',false]);
+                if($real_last_block == null)
+                {
+                    $node->failure++;
+                    $node->save();
+                    return;
+                }
                 $block_time = HexDec2($real_last_block["result"]['timestamp']);
                 if(time() - $block_time < 20)
                 {
@@ -60,7 +66,9 @@ class CheckRpcNode extends Command
             }
             catch (\Exception $exception)
             {
-
+                echo $exception->getMessage() . "\n";
+                $node->failure++;
+                $node->save();
             }
         }
     }
@@ -111,6 +119,7 @@ class CheckRpcNode extends Command
         ));
         // post的变量
         curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+        curl_setopt($ch, CURLOPT_TIMEOUT,5);   //只需要设置一个秒的数量就可以
         curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
         $output = curl_exec($ch);
