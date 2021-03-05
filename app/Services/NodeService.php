@@ -28,6 +28,8 @@ class NodeService
                 if (isset($val['protocols']['qki']['head'])) {
                     //用hash获取高度
                     $blockInfo = $rpcService->getBlockByHash($val['protocols']['qki']['head'])['result'];
+                    if(empty($blockInfo))
+                    continue;
                     $currentBlock = HexDec2($blockInfo['number']);
                 }
                 //数据库操作
