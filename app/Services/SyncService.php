@@ -65,38 +65,6 @@ class SyncService
         echo "区块同步成功";
     }
 
-
-    public function txpool_sync()
-    {
-        ini_set('max_execution_time', 0);
-        $end_time = time() + 580;
-        while (true)
-        {
-            if($end_time <= time())
-            {
-                break;
-            }
-            $block_amount = $this->txpool();
-            sleep(1);
-        }
-    }
-
-    public function txpool()
-    {
-        $txpool = (new RpcService())->rpc1('txpool_content',[]);
-        if(isset($txpool['result']['pending']) && count($txpool['result']['pending']))
-        {
-            foreach ($txpool['result']['pending'] as $pending)
-            {
-                foreach ($pending as $tx)
-                {
-                    if(!Transactions::where('hash',$tx['hash'])->exists())
-                    $this->saveUnpackedTx($tx);
-                }
-            }
-        }
-    }
-
     public function collectAddress($key)
     {
         //获取setting表中记录的下一个要同步的区块高度
@@ -246,24 +214,26 @@ class SyncService
             echo "区块获取成功 \n";
             foreach ($blocks as $block)
             {
-                DB::beginTransaction();
-                try {
+                if ($block['result'])
+                {
+                    $block_time = HexDec2($block['result']['timestamp']);
+                    $block_height = bcadd(HexDec2($block['result']['number']), 1, 0);
+                    //至少需要一个区块确认
+                    if ($block_height >= $real_last_block - 2) {
+                        echo "区块确认数不够\n";
+                        break;
+                    }
 
-                    if ($block['result'])
+                    DB::beginTransaction();
+                    try
                     {
-                        // 存储区块数据
-                        $this->saveBlock($block['result']);
-                        $block_time = HexDec2($block['result']['timestamp']);
-                        $block_height = bcadd(HexDec2($block['result']['number']), 1, 0);
-                        //至少需要一个区块确认
-                        if ($block_height >= $real_last_block - 2) {
-                            echo "区块确认数不够\n";
-                            break;
-                        }
+
                         $last_block_height->value = $block_height;
 
+                        // 存储区块数据
+                        $this->saveBlock($block['result']);
                         //保存出块方地址、保存通证
-//                        $this->saveAddress($block['result']['miner']);
+                        //$this->saveAddress($block['result']['miner']);
                         $transactions = $block['result']['transactions'];
                         //如果此区块有交易
                         $tx_amount = count($transactions);
@@ -317,21 +287,26 @@ class SyncService
                                 }
                             }
                         }
-                    } else {
-                        $last_block_height->save();
-                        DB::commit();
-                        echo "没有结果，当前高度:$block_height\n";
+
+                            //记录下一个要同步的区块高度
+                            $last_block_height->save();
+                            DB::commit();
+                    } catch (\Exception $e) {
+                        DB::rollback();
+                        echo "file:" . $e->getFile() . " line:" . $e->getLine() . $e->getMessage() . "\n";
                         return false;
                     }
 
-                    //记录下一个要同步的区块高度
+                }
+                else
+                {
                     $last_block_height->save();
                     DB::commit();
-                } catch (\Exception $e) {
-                    DB::rollback();
-                    echo "file:" . $e->getFile() . " line:" . $e->getLine() . $e->getMessage() . "\n";
+                    echo "没有结果，当前高度:$block_height\n";
                     return false;
                 }
+
+
             }
 
             echo "同步成功，当前高度:$block_height\n";
