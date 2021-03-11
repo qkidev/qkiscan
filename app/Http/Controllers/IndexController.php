@@ -180,7 +180,7 @@ class IndexController extends Controller
 
     public function rpc()
     {
-        $data['rpc_nodes'] = RpcNode::orderBy("success","desc")->all();
+        $data['rpc_nodes'] = RpcNode::orderBy("success","desc")->get();
 
         return view('index.rpc', $data);
     }
