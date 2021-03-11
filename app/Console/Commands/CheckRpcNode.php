@@ -39,7 +39,7 @@ class CheckRpcNode extends Command
      */
     public function handle()
     {
-        $RpcNode = RpcNode::all();
+        $RpcNode = RpcNode::orderBy("success","desc")->all();
         foreach ($RpcNode as $node)
         {
             try
