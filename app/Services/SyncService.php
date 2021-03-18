@@ -654,7 +654,7 @@ class SyncService
                 echo "token异常" . $ex->getMessage();;
             }
         }
-        else if ($v['to'] == '0x3fb708e854041673433e708fedb9a1b43905b6f7')
+        else if ($v['to'] == '0x22fBF74b4269A00e27816fa9E5AEb43fde0be529')
         {
             $address = $v['to'];
             if(!isset($this->token_erc20[$address]))
