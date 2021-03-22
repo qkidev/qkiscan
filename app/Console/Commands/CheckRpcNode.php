@@ -48,27 +48,26 @@ class CheckRpcNode extends Command
                 $real_last_block = $this->rpc($node->url,'eth_getBlockByNumber',['latest',false]);
                 if($real_last_block == null)
                 {
-                    $node->failure++;
-                    $node->save();
-                    return;
+                    $node->increment('failure');
+                    continue;
                 }
+
                 $block_time = HexDec2($real_last_block["result"]['timestamp']);
                 if(time() - $block_time < 20)
                 {
                     $node->success++;
                     $node->last_success_time = time();
+                    $node->save();
                 }
                 else
                 {
-                    $node->failure++;
+                    $node->increment('failure');
                 }
-                $node->save();
             }
             catch (\Exception $exception)
             {
                 echo $exception->getMessage() . "\n";
-                $node->failure++;
-                $node->save();
+                $node->increment('failure');
             }
         }
     }
