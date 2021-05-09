@@ -382,7 +382,7 @@ class SyncService
             if($address_type == 2)
             {
                 $token_id = $this->getTokenId($address);
-                if ($token_id){
+                if ($token_id > 0){
                     $this->token_id[$address] = $token_id;
                 } else {
                     $this->saveToken($address);
@@ -448,6 +448,7 @@ class SyncService
             if(strlen($tokenModel->token_name) == 0)
                 return false;
             $tokenModel->save();
+            echo "新增token:$address\n";
             $this->token_id[$address] = $tokenModel->id;
         } catch (\EthereumRPC\Exception\GethException $exception) {
             /**

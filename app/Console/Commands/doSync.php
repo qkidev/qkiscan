@@ -12,7 +12,7 @@ class doSync extends Command
      *
      * @var string
      */
-    protected $signature = 'doSync';
+    protected $signature = 'doSync {key}';
 
     /**
      * The console command description.
@@ -38,6 +38,11 @@ class doSync extends Command
      */
     public function handle()
     {
-        (new SyncService())->synchronizeTransactions();
+        $key = $this->argument('key');
+        if(strlen($key) < 1)
+        {
+            $key = 'last_block_height';
+        }
+        (new SyncService())->synchronizeTransactions($key);
     }
 }
