@@ -475,6 +475,13 @@ class SyncService
     public function saveTokenTx($token_id,$amount,$from_address_id,$to_address_id,$tx_id,$timestamp,$tx_status)
     {
         $tokenTx = new TokenTx();
+
+        $exist = TokenTx::where('tx_id',$tx_id)->first();
+        if($exist)
+            $tx = $exist;
+        else
+            $tokenTx = new TokenTx();
+
         $tokenTx->token_id = $token_id;
         $tokenTx->from_address_id = $from_address_id;
         $tokenTx->to_address_id = $to_address_id;
