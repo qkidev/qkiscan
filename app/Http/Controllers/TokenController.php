@@ -98,7 +98,7 @@ class TokenController extends Controller
 
     public function tokens()
     {
-        $data['tokens'] = Token::orderBy("holders","desc")->get();
+        $data['tokens'] = Token::orderBy("holders","desc")->limit(100)->get();
         return view("token.tokens",$data);
     }
 }
