@@ -463,7 +463,7 @@ class SyncService
 
         $exist = TokenTx::where('tx_id',$tx_id)->first();
         if($exist)
-            $tx = $exist;
+            $tokenTx = $exist;
         else
             $tokenTx = new TokenTx();
 
