@@ -369,7 +369,7 @@ class SyncService
         $address_id = $this->getAddressId($address);
         $address_type = $this->checkAddressType($address);
 
-        if($address_id < 0)
+        if($address_id <= 0)
         {
             $addressModel = new Address();
             $addressModel->type = $address_type;
@@ -394,7 +394,7 @@ class SyncService
             if($address_type == 2)
             {
                 $token_id = $this->getTokenId($address);
-                if ($token_id){
+                if ($token_id > 0){
                     $this->token_id[$address] = $token_id;
                 } else {
                     $this->saveToken($address);
@@ -416,16 +416,13 @@ class SyncService
      */
     public function saveToken($address)
     {
-        $token_id = $this->getAddressId($address);
+        $token_id = $this->getTokenId($address);
         if($token_id > 0)
         {
             $this->token_id[$address] = $token_id;
             return true;
         }
-        elseif ($token_id < 0)
-        {
-            return false;
-        }
+
         //实例化通证
         if(!isset($this->token_erc20[$address]))
         {
