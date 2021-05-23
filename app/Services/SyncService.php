@@ -267,23 +267,8 @@ class SyncService
 
                                     $tx_db->save();
                                 } elseif ($tx_db->tx_status == 1) {
-                                    $receipt = (new RpcService())->rpc("eth_getTransactionReceipt", [[$tx['hash']]]);
-                                    if (isset($receipt[0]['result'])) {
-                                        if (isset($receipt[0]['result']['root'])) {
-                                            $tx_status = 1;
-                                        } else {
-                                            $tx_status = HexDec2($receipt[0]['result']['status']);
-                                        }
-                                    } else {
-                                        echo "没有回执:" . $tx['hash'] . "\n";
-                                        $tx_status = 0;
-                                    }
-
-                                    if ($tx_status != $tx_db->tx_status) {
-                                        echo "更新tx状态 {$tx['hash']}\n";
-                                        $tx_db->tx_status = $tx_status;
-                                        $tx_db->save();
-                                    }
+                                    //更新交易
+                                    $this->saveTx($tx, $timestamp);
                                 }
                             }
                         }
