@@ -600,8 +600,9 @@ class SyncService
         //input可能为空
         $input = $v['input'] ?? '';
 
+        $method_id = substr($input, 0, 10);
         // 通证转账
-        if (substr($input, 0, 10) === '0xa9059cbb' && !empty($this->token_id[$v['to']])) {
+        if ($method_id === '0xa9059cbb' && !empty($this->token_id[$v['to']])) {
             //保存通证交易
             $token_tx =  new TransactionInputTransfer($input);
             //保存通证接收方地址
@@ -644,7 +645,7 @@ class SyncService
                 echo "token异常" . $ex->getMessage();;
             }
         }
-        else if ($v['to'] == '0x22fbf74b4269a00e27816fa9e5aeb43fde0be529')
+        else if ($method_id == '0x1249c58b') //mint
         {
             $address = $v['to'];
             if(!isset($this->token_erc20[$address]))
