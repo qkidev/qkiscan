@@ -109,6 +109,21 @@ class RpcService
 
 
     /**
+     * 获取区块的签名者
+     */
+    public function cliqueGetSigner($blockNumber)
+    {
+        $method = 'clique_getSigner';
+        $param = array(
+            [$blockNumber]
+        );
+        $blockInfo = $this->rpc1($method, $param);
+
+        return $blockInfo["result"];
+    }
+
+
+    /**
      * post请求
      * @param $data
      * @return mixed
