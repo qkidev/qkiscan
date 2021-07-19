@@ -88,7 +88,8 @@ class BlockController extends Controller
                 $data['created_at'] = date("Y-m-d H:i:s",HexDec2($blockInfo['timestamp'])+28800);
                 $data['tx_count'] = count($blockInfo['transactions']);
                 $data['size'] = bcdiv(HexDec2($blockInfo['size']),1000,3);
-                $data['miner'] = $rpcService->cliqueGetSigner($blockInfo['number']);
+                $Signer_data  = $rpcService->cliqueGetSigner($blockInfo['number']);
+                $data['miner'] = isset($Signer_data["result"]) ? $Signer_data["result"] : "";
                 $data['difficulty'] = HexDec2($blockInfo['difficulty']);
                 $data['totalDifficulty'] = HexDec2($blockInfo['totalDifficulty']);
                 $data['gasLimit'] = HexDec2($blockInfo['gasLimit']);
