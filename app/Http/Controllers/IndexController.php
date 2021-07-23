@@ -172,8 +172,10 @@ class IndexController extends Controller
 
         if (isset($rpc_data) && $rpc_data['result']) {
             $data['bps'] = $rpc_data['result']['sealerActivity'];
+            $data['numBlocks'] = $rpc_data['result']['numBlocks'];
         } else {
             $data['bps'] = [];
+            $data['numBlocks'] = 0;
         }
 
         return view('index.bp', $data);
