@@ -46,12 +46,6 @@
                     <li class="nuxt-link-exact-active nuxt-link-active nav-item @if(isset($currentPage) && $currentPage=='unpacked-tx-list') current @endif">
                         <a href="/unpacked-tx-list">未打包Tx</a>
                     </li>
-                    <li class="nuxt-link-exact-active nuxt-link-active nav-item @if(isset($currentPage) && $currentPage=='qki-page') current @endif">
-                        <a href="/qki-page">富豪榜</a>
-                    </li>
-{{--                    <li class="nuxt-link-exact-active nuxt-link-active nav-item @if(isset($currentPage) && $currentPage=='cct-page') current @endif">--}}
-{{--                        <a href="/cct-page">CCT排行榜</a>--}}
-{{--                    </li>--}}
                 </ul>
                 <div class="search-container d-lg-block d-none">
                     <div class="vsearch-panel" data-v-2f615f5c="">

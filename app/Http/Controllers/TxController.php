@@ -162,24 +162,6 @@ class TxController extends Controller
         return view('tx.unpacked-list',$data);
     }
 
-    /**
-     * qki排行榜
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
-     */
-    public function qkiPage()
-    {
-        date_default_timezone_set('PRC');
-        
-        $data = Cache::remember('qki_top_transactions', 30, function () {
-            return array(
-                'transactions' => Balances::with('address')->where('token_id', '0')->orderByRaw("amount+0 desc")->limit(100)->get(),
-                'count_time'   => date('Y-m-d H:i:s'),
-            );
-        });
-
-        $data['currentPage'] = 'qki-page';
-        return view('tx.rank',$data);
-    }
 
     /**
      * cct排行榜
