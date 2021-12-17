@@ -114,39 +114,6 @@ class TxController extends Controller
     }
 
     /**
-     * 交易列表
-     * @param $type
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
-     */
-    public function list($type)
-    {
-        if (!in_array($type, [1, 2])) abort(404);
-
-        if (Cache::has(self::TX_CACHE_KEY.$type)) {
-            return view("tx.list", Cache::get(self::TX_CACHE_KEY.$type));
-        }
-
-        if ($type==1){
-            $data['transactions'] = Transactions::orderBy("id","desc")->where('amount', '>', 0)->paginate(20);
-        }else{
-            $data['transactions'] = Transactions::with(['tokenTx'])->orderBy("id","desc")
-                ->where('amount', '<=', 0)->paginate(20);
-        }
-        foreach ($data['transactions'] as $v){
-            if ($type==2 && $v->tokenTx){
-                $v->token = Token::where('id', $v->tokenTx->token_id)->first();
-            }
-            if ($type == 1){
-                $v->created_at = formatTime($v->created_at, 2);
-            }
-        }
-        $data['currentPage'] = 'tx-list';
-        $data['type'] = $type;
-        Cache::put(self::TX_CACHE_KEY . $type, $data, Carbon::now()->addSeconds(15));
-        return view("tx.list",$data);
-    }
-
-    /**
      * 未打包交易列表
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */

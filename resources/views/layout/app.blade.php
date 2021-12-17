@@ -40,9 +40,6 @@
                     <li class="nuxt-link-exact-active nuxt-link-active nav-item @if(isset($currentPage) && $currentPage=='block') current @endif">
                         <a href="/block">区块</a>
                     </li>
-                    <li class="nuxt-link-exact-active nuxt-link-active nav-item @if(isset($currentPage) && $currentPage=='tx-list') current @endif">
-                        <a href="/tx-list/1">Tx</a>
-                    </li>
                     <li class="nuxt-link-exact-active nuxt-link-active nav-item @if(isset($currentPage) && $currentPage=='unpacked-tx-list') current @endif">
                         <a href="/unpacked-tx-list">未打包Tx</a>
                     </li>
