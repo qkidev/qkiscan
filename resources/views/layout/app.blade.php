@@ -110,7 +110,7 @@
 
         <div class="vfooter">
             <p class="panel-bottom">
-                Copyright ©2018-2020 quarkblockchain <a href="/apis">api</a> <a href="/bp">bp</a> <a href="/tokens">tokens</a>  <a href="/node-statistics">node-statistics</a>
+                Copyright ©2018-2022 quarkblockchain <a href="/bp">bp</a> <a href="/node-statistics">node-statistics</a>
 
             </p>
             <p class="panel-bottom">
