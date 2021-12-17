@@ -62,7 +62,7 @@ class IndexController extends Controller
         $end = Carbon::now();
         //缓存1分钟
         $data['transactions_num'] = Cache::remember("home_transactions_num", 1, function () {
-            return Transactions::count();
+            return Transactions::max("id");
         });
         //缓存1分钟
         $data['hour_24_num'] = Cache::remember("home_token_hour_24_num", 1, function () {
@@ -71,7 +71,7 @@ class IndexController extends Controller
         });
         //缓存1分钟
         $data['address_num'] = Cache::remember("home_address_num", 1, function () {
-            return Balances::where('name', 'qki')->where('amount', '>', 0)->count();
+            return Balances::max("id");
         });
 
 
