@@ -45,7 +45,10 @@ class IndexController extends Controller
                 if (!$item['result']) {
                     break;
                 }
+
                 $blockList[$key] = $item['result'];
+                $Signer_data  = $rpcService->cliqueGetSigner($blockList[$key]['number']);
+                $blockList[$key]['miner'] = isset($Signer_data["result"]) ? $Signer_data["result"] : "";
                 $blockList[$key]['height'] = base_convert($blockList[$key]['number'], 16, 10);
                 $blockList[$key]['gasLimit'] = base_convert($blockList[$key]['gasLimit'], 16, 10);
                 $blockList[$key]['gasUsed'] = base_convert($blockList[$key]['gasUsed'], 16, 10);
@@ -169,8 +172,10 @@ class IndexController extends Controller
 
         if (isset($rpc_data) && $rpc_data['result']) {
             $data['bps'] = $rpc_data['result']['sealerActivity'];
+            $data['numBlocks'] = $rpc_data['result']['numBlocks'];
         } else {
             $data['bps'] = [];
+            $data['numBlocks'] = 0;
         }
 
         return view('index.bp', $data);

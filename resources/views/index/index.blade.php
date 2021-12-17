@@ -15,9 +15,10 @@
                             <th aria-colindex="2" class="time-label" style="text-align: center;">出块时间</th>
                             <th aria-colindex="3" class="pc-hash">Tx数量</th>
                             <th aria-colindex="4" class="">大小(KB)</th>
-                            <th aria-colindex="5" class="pc-hash">gas上限</th>
                             <th aria-colindex="6" class="pc-hash">gas使用</th>
-                            <th aria-colindex="7" class="">区块Hash</th></tr>
+                            <th aria-colindex="7" class="pc-hash">出块方</th>
+                            <th aria-colindex="8" class="">区块Hash</th>
+                        </tr>
                         </thead>
                         <!---->
                         <tbody class="">
@@ -30,12 +31,18 @@
                                     </td>
                                     <td aria-colindex="3" class="pc-hash">{{$item['tx_count']}}</td>
                                     <td aria-colindex="4" class="">{{$item['size']}}</td>
-                                    <td aria-colindex="5" class="pc-hash">{{$item['gasLimit']}}</td>
                                     <td aria-colindex="6" class="pc-hash">{{$item['gasUsed']}}</td>
+                                    
                                     <td aria-colindex="7" class="pc-hash">
-                                        <a href="/block/detail?hash={{$item['hash']}}" class="text3 vtext-monospace">{{$item['hash']}}</a>
+                                        <a href="/address/{{$item['miner']}}" class="text3 vtext-monospace">{{$item['miner']}}</a>
                                     </td>
                                     <td aria-colindex="7" class="web-hash">
+                                        <a href="/address?hash={{$item['miner']}}" class="text3 vtext-monospace">{{mb_substr($item['miner'],0,5,'utf-8')}}</a>
+                                    </td>
+                                    <td aria-colindex="8" class="pc-hash">
+                                        <a href="/block/detail?hash={{$item['hash']}}" class="text3 vtext-monospace">{{$item['hash']}}</a>
+                                    </td>
+                                    <td aria-colindex="8" class="web-hash">
                                         <a href="/block/detail?hash={{$item['hash']}}" class="text3 vtext-monospace">{{mb_substr($item['hash'],0,12,'utf-8')}}</a>
                                     </td>
                                 </tr>

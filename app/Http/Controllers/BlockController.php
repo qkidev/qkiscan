@@ -34,6 +34,8 @@ class BlockController extends Controller
                     break;
                 }
                 $blockList[$key] = $item['result'];
+                $Signer_data  = $rpcService->cliqueGetSigner($blockList[$key]['number']);
+                $blockList[$key]['miner'] = isset($Signer_data["result"]) ? $Signer_data["result"] : "";
                 $blockList[$key]['height'] = base_convert($blockList[$key]['number'],16,10);
                 $blockList[$key]['gasLimit'] = base_convert($blockList[$key]['gasLimit'],16,10);
                 $blockList[$key]['created_at'] = date("Y-m-d H:i:s",HexDec2($blockList[$key]['timestamp'])+28800);
@@ -88,7 +90,8 @@ class BlockController extends Controller
                 $data['created_at'] = date("Y-m-d H:i:s",HexDec2($blockInfo['timestamp'])+28800);
                 $data['tx_count'] = count($blockInfo['transactions']);
                 $data['size'] = bcdiv(HexDec2($blockInfo['size']),1000,3);
-                $data['miner'] = $rpcService->cliqueGetSigner($blockInfo['number']);
+                $Signer_data  = $rpcService->cliqueGetSigner($blockInfo['number']);
+                $data['miner'] = isset($Signer_data["result"]) ? $Signer_data["result"] : "";
                 $data['difficulty'] = HexDec2($blockInfo['difficulty']);
                 $data['totalDifficulty'] = HexDec2($blockInfo['totalDifficulty']);
                 $data['gasLimit'] = HexDec2($blockInfo['gasLimit']);

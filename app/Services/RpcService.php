@@ -115,11 +115,11 @@ class RpcService
     {
         $method = 'clique_getSigner';
         $param = array(
-            [$blockNumber]
+            $blockNumber
         );
         $blockInfo = $this->rpc1($method, $param);
 
-        return $blockInfo["result"];
+        return $blockInfo;
     }
 
 
