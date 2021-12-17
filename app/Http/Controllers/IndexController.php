@@ -64,19 +64,10 @@ class IndexController extends Controller
         }
         $end = Carbon::now();
         //缓存1分钟
-        $data['transactions_num'] = Cache::remember("home_transactions_num", 1, function () {
-            return Transactions::max("id");
-        });
-        //缓存1分钟
         $data['hour_24_num'] = Cache::remember("home_token_hour_24_num", 1, function () {
             $latestNumber = Settings::getValueByKey("last_block_height");
             return \App\Models\Block::where('number', '>', $latestNumber - 17280)->sum('transaction_count');
         });
-        //缓存1分钟
-        $data['address_num'] = Cache::remember("home_address_num", 1, function () {
-            return Balances::max("id");
-        });
-
 
         $data['block'] = $blockList;
         $data['currentPage'] = "index";

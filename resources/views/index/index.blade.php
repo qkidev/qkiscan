@@ -58,14 +58,6 @@
                             <div class="inner-panel col-12 col-lg-12 collapsed-padding">
                                 <ul class="vsection vshadow">
                                     <li class="item">
-                                        <span class="text2 strong">累计Tx笔数</span>
-                                        <span class="text2">{{$transactions_num}}</span>
-                                    </li>
-                                    <li class="item">
-                                        <span class="text2 strong">有余额地址数</span>
-                                        <span class="text2">{{$address_num}}</span>
-                                    </li>
-                                    <li class="item">
                                         <span class="text2 strong">累计区块数</span>
                                         <span class="text2">{{$max_height}}</span>
                                     </li>
