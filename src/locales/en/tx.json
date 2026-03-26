@@ -1,0 +1,18 @@
+{
+  "listTitle": "Transactions",
+  "detailTitle": "Transaction",
+  "nonce": "Nonce",
+  "gasPrice": "Gas price",
+  "gasLimit": "Gas limit",
+  "gasUsed": "Gas used",
+  "maxFee": "Max fee per gas",
+  "maxPrio": "Max priority fee",
+  "input": "Input data",
+  "tabs": {
+    "overview": "Overview",
+    "tokenTransfers": "Token transfers",
+    "logs": "Logs",
+    "internal": "Internal txns",
+    "state": "State changes"
+  }
+}

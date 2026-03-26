@@ -1,0 +1,15 @@
+{
+  "listTitle": "区块",
+  "detailTitle": "区块",
+  "height": "高度",
+  "hash": "哈希",
+  "timestamp": "时间",
+  "txCount": "交易数",
+  "parentHash": "父区块哈希",
+  "gasLimit": "Gas 上限",
+  "gasUsed": "Gas 用量",
+  "baseFee": "基础费（每 gas）",
+  "burntFees": "销毁费用",
+  "miner": "矿工 / 验证者",
+  "blockTxs": "区块内交易"
+}

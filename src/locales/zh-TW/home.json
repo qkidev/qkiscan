@@ -1,0 +1,15 @@
+{
+  "title": "區塊鏈瀏覽器",
+  "subtitle": "網路概覽",
+  "stats": {
+    "totalBlocks": "區塊總數",
+    "totalTxs": "交易總數",
+    "totalAddresses": "地址總數",
+    "goBlocks": "開啟區塊列表",
+    "goTxs": "開啟交易列表",
+    "goAddresses": "開啟搜尋以查詢地址"
+  },
+  "latestBlocks": "最新區塊",
+  "latestTxs": "最新交易",
+  "viewAll": "檢視全部"
+}

@@ -1,0 +1,35 @@
+{
+  "detailTitle": "地址",
+  "balance": "餘額",
+  "contract": "合約",
+  "eoa": "外部帳戶",
+  "tabs": {
+    "transactions": "交易",
+    "tokenTransfers": "代幣轉帳",
+    "internal": "內部交易",
+    "logs": "日誌",
+    "tokens": "代幣",
+    "contract": "合約"
+  },
+  "contractUnavailable": "無法從瀏覽器介面取得該合約的元資料。",
+  "contractMeta": {
+    "name": "名稱",
+    "compiler": "編譯器",
+    "language": "語言",
+    "verified": "已驗證",
+    "yes": "是",
+    "no": "否"
+  },
+  "contractNotVerified": "此合約未驗證或未公開原始碼。",
+  "contractNoSource": "暫無可展示的原始碼檔案。",
+  "contractAbi": "合約 ABI",
+  "contractAbiMethods": "可呼叫方法",
+  "contractAbiMethodKind": "類型",
+  "contractAbiMethodRead": "唯讀",
+  "contractAbiMethodWrite": "寫入",
+  "contractAbiSignature": "簽名",
+  "contractAbiParams": "參數",
+  "contractAbiStateMutability": "狀態可變性",
+  "contractAbiFragment": "ABI 片段",
+  "contractAbiMethodsHint": "可複製單一函式的 ABI 片段用於 viem/ethers，或將多條片段拼成完整 abi 陣列。"
+}

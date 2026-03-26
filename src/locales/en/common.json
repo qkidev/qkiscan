@@ -1,0 +1,49 @@
+{
+  "appName": "Explorer",
+  "nav": {
+    "home": "Home",
+    "blocks": "Blocks",
+    "transactions": "Transactions",
+    "tokens": "Tokens"
+  },
+  "search": {
+    "placeholder": "Search by address / tx hash / block / token",
+    "submit": "Search"
+  },
+  "state": {
+    "loading": "Loading…",
+    "error": "Something went wrong",
+    "empty": "No data",
+    "retry": "Retry",
+    "notFound": "Not found",
+    "rateLimited": "Too many requests. Please wait and try again."
+  },
+  "pagination": {
+    "next": "Next",
+    "prev": "Previous",
+    "more": "Load more"
+  },
+  "table": {
+    "block": "Block",
+    "tx": "Transaction",
+    "method": "Method",
+    "time": "Time",
+    "from": "From",
+    "to": "To",
+    "value": "Value",
+    "fee": "Fee",
+    "status": "Status",
+    "hash": "Hash",
+    "gas": "Gas",
+    "miner": "Miner / Validator"
+  },
+  "status": {
+    "ok": "Success",
+    "fail": "Failed",
+    "pending": "Pending",
+    "unknown": "Unknown"
+  },
+  "copy": "Copy",
+  "copied": "Copied",
+  "footer": "QKISCAN © 2018-{{year}}"
+}

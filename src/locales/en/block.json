@@ -1,0 +1,15 @@
+{
+  "listTitle": "Blocks",
+  "detailTitle": "Block",
+  "height": "Height",
+  "hash": "Hash",
+  "timestamp": "Timestamp",
+  "txCount": "Transactions",
+  "parentHash": "Parent hash",
+  "gasLimit": "Gas limit",
+  "gasUsed": "Gas used",
+  "baseFee": "Base fee per gas",
+  "burntFees": "Burnt fees",
+  "miner": "Miner / Validator",
+  "blockTxs": "Block transactions"
+}

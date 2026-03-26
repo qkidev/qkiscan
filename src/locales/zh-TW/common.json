@@ -1,0 +1,49 @@
+{
+  "appName": "區塊瀏覽器",
+  "nav": {
+    "home": "首頁",
+    "blocks": "區塊",
+    "transactions": "交易",
+    "tokens": "代幣"
+  },
+  "search": {
+    "placeholder": "依地址 / 交易雜湊 / 區塊 / 代幣搜尋",
+    "submit": "搜尋"
+  },
+  "state": {
+    "loading": "載入中…",
+    "error": "發生錯誤",
+    "empty": "暫無資料",
+    "retry": "重試",
+    "notFound": "找不到",
+    "rateLimited": "請求過於頻繁，請稍後再試。"
+  },
+  "pagination": {
+    "next": "下一頁",
+    "prev": "上一頁",
+    "more": "載入更多"
+  },
+  "table": {
+    "block": "區塊",
+    "tx": "交易",
+    "method": "方法",
+    "time": "時間",
+    "from": "發送方",
+    "to": "接收方",
+    "value": "數額",
+    "fee": "手續費",
+    "status": "狀態",
+    "hash": "雜湊",
+    "gas": "Gas",
+    "miner": "礦工 / 驗證者"
+  },
+  "status": {
+    "ok": "成功",
+    "fail": "失敗",
+    "pending": "待確認",
+    "unknown": "未知"
+  },
+  "copy": "複製",
+  "copied": "已複製",
+  "footer": "QKISCAN © 2018-{{year}}"
+}

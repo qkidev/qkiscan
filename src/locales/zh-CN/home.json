@@ -1,0 +1,15 @@
+{
+  "title": "区块链浏览器",
+  "subtitle": "网络概览",
+  "stats": {
+    "totalBlocks": "区块总数",
+    "totalTxs": "交易总数",
+    "totalAddresses": "地址总数",
+    "goBlocks": "打开区块列表",
+    "goTxs": "打开交易列表",
+    "goAddresses": "打开搜索以查询地址"
+  },
+  "latestBlocks": "最新区块",
+  "latestTxs": "最新交易",
+  "viewAll": "查看全部"
+}

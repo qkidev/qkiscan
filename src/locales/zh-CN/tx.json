@@ -1,0 +1,18 @@
+{
+  "listTitle": "交易",
+  "detailTitle": "交易",
+  "nonce": "Nonce",
+  "gasPrice": "Gas 价格",
+  "gasLimit": "Gas 上限",
+  "gasUsed": "Gas 用量",
+  "maxFee": "最大基础费",
+  "maxPrio": "最大优先费",
+  "input": "输入数据",
+  "tabs": {
+    "overview": "概览",
+    "tokenTransfers": "代币转账",
+    "logs": "日志",
+    "internal": "内部交易",
+    "state": "状态变更"
+  }
+}

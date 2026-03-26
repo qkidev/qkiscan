@@ -1,0 +1,35 @@
+{
+  "detailTitle": "Address",
+  "balance": "Balance",
+  "contract": "Contract",
+  "eoa": "EOA",
+  "tabs": {
+    "transactions": "Transactions",
+    "tokenTransfers": "Token transfers",
+    "internal": "Internal txns",
+    "logs": "Logs",
+    "tokens": "Tokens",
+    "contract": "Contract"
+  },
+  "contractUnavailable": "Contract metadata is not available from the explorer API.",
+  "contractMeta": {
+    "name": "Name",
+    "compiler": "Compiler",
+    "language": "Language",
+    "verified": "Verified",
+    "yes": "Yes",
+    "no": "No"
+  },
+  "contractNotVerified": "This contract is not verified, or no source code was published.",
+  "contractNoSource": "No source code files to display.",
+  "contractAbi": "Contract ABI",
+  "contractAbiMethods": "Callable methods",
+  "contractAbiMethodKind": "Kind",
+  "contractAbiMethodRead": "Read",
+  "contractAbiMethodWrite": "Write",
+  "contractAbiSignature": "Signature",
+  "contractAbiParams": "Parameters",
+  "contractAbiStateMutability": "State mutability",
+  "contractAbiFragment": "Fragment",
+  "contractAbiMethodsHint": "Copy a single-function ABI fragment to use with viem/ethers, or combine fragments into a full ABI array."
+}

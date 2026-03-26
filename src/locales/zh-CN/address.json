@@ -1,0 +1,35 @@
+{
+  "detailTitle": "地址",
+  "balance": "余额",
+  "contract": "合约",
+  "eoa": "外部账户",
+  "tabs": {
+    "transactions": "交易",
+    "tokenTransfers": "代币转账",
+    "internal": "内部交易",
+    "logs": "日志",
+    "tokens": "代币",
+    "contract": "合约"
+  },
+  "contractUnavailable": "无法从浏览器接口获取该合约的元数据。",
+  "contractMeta": {
+    "name": "名称",
+    "compiler": "编译器",
+    "language": "语言",
+    "verified": "已验证",
+    "yes": "是",
+    "no": "否"
+  },
+  "contractNotVerified": "该合约未验证或未公开源码。",
+  "contractNoSource": "暂无可展示的源码文件。",
+  "contractAbi": "合约 ABI",
+  "contractAbiMethods": "可调用方法",
+  "contractAbiMethodKind": "类型",
+  "contractAbiMethodRead": "只读",
+  "contractAbiMethodWrite": "写入",
+  "contractAbiSignature": "签名",
+  "contractAbiParams": "参数",
+  "contractAbiStateMutability": "状态可变性",
+  "contractAbiFragment": "ABI 片段",
+  "contractAbiMethodsHint": "可复制单条函数的 ABI 片段用于 viem/ethers，或将多条片段拼成完整 abi 数组。"
+}

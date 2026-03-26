@@ -1,0 +1,15 @@
+{
+  "listTitle": "區塊",
+  "detailTitle": "區塊",
+  "height": "高度",
+  "hash": "雜湊",
+  "timestamp": "時間",
+  "txCount": "交易數",
+  "parentHash": "父區塊雜湊",
+  "gasLimit": "Gas 上限",
+  "gasUsed": "Gas 用量",
+  "baseFee": "基礎費（每 gas）",
+  "burntFees": "銷毀費用",
+  "miner": "礦工 / 驗證者",
+  "blockTxs": "區塊內交易"
+}

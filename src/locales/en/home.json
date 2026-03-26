@@ -1,0 +1,15 @@
+{
+  "title": "Blockchain explorer",
+  "subtitle": "Overview of the network",
+  "stats": {
+    "totalBlocks": "Total blocks",
+    "totalTxs": "Total transactions",
+    "totalAddresses": "Total addresses",
+    "goBlocks": "Open block list",
+    "goTxs": "Open transaction list",
+    "goAddresses": "Open search to look up addresses"
+  },
+  "latestBlocks": "Latest blocks",
+  "latestTxs": "Latest transactions",
+  "viewAll": "View all"
+}

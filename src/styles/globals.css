@@ -1,0 +1,54 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --color-surface: 255 255 255;
+  --color-surface-muted: 248 250 252;
+  --color-border: 226 232 240;
+  --color-accent: 59 130 246;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-surface: 15 23 42;
+    --color-surface-muted: 30 41 59;
+    --color-border: 51 65 85;
+    --color-accent: 96 165 250;
+  }
+}
+
+@layer base {
+  html {
+    @apply max-w-[100vw] overflow-x-clip;
+  }
+
+  body {
+    @apply min-w-0 overflow-x-clip break-words bg-surface-muted text-slate-900 antialiased dark:text-slate-100;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+  }
+
+  #root {
+    @apply min-w-0 max-w-full overflow-x-clip;
+  }
+
+  /* 长哈希、合约字节码等 */
+  pre {
+    @apply max-w-full whitespace-pre-wrap break-all;
+  }
+
+  code {
+    @apply break-all;
+  }
+
+  img,
+  video,
+  canvas {
+    @apply max-h-full max-w-full;
+  }
+
+  a {
+    @apply text-accent hover:underline;
+  }
+}

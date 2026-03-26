@@ -1,0 +1,49 @@
+{
+  "appName": "区块浏览器",
+  "nav": {
+    "home": "首页",
+    "blocks": "区块",
+    "transactions": "交易",
+    "tokens": "代币"
+  },
+  "search": {
+    "placeholder": "按地址 / 交易哈希 / 区块 / 代币搜索",
+    "submit": "搜索"
+  },
+  "state": {
+    "loading": "加载中…",
+    "error": "出错了",
+    "empty": "暂无数据",
+    "retry": "重试",
+    "notFound": "未找到",
+    "rateLimited": "请求过于频繁，请稍后再试。"
+  },
+  "pagination": {
+    "next": "下一页",
+    "prev": "上一页",
+    "more": "加载更多"
+  },
+  "table": {
+    "block": "区块",
+    "tx": "交易",
+    "method": "方法",
+    "time": "时间",
+    "from": "发送方",
+    "to": "接收方",
+    "value": "数额",
+    "fee": "手续费",
+    "status": "状态",
+    "hash": "哈希",
+    "gas": "Gas",
+    "miner": "矿工 / 验证者"
+  },
+  "status": {
+    "ok": "成功",
+    "fail": "失败",
+    "pending": "待确认",
+    "unknown": "未知"
+  },
+  "copy": "复制",
+  "copied": "已复制",
+  "footer": "QKISCAN © 2018-{{year}}"
+}
