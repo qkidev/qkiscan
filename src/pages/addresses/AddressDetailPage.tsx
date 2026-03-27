@@ -492,7 +492,7 @@ export function AddressDetailPage() {
         ) : contractQuery.data == null ? (
           <EmptyState title={t('address:contractUnavailable')} />
         ) : (
-          <ContractSourcePanel vm={contractQuery.data} />
+          <ContractSourcePanel vm={contractQuery.data} contractAddress={address} />
         )
       ) : null}
     </div>

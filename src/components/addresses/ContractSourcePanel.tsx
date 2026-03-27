@@ -4,7 +4,13 @@ import { ContractAbiMethods } from '@/components/addresses/ContractAbiMethods'
 import { flattenContractSources } from '@/utils/contractSource'
 import { CopyButton } from '@/components/common/CopyButton'
 
-export function ContractSourcePanel({ vm }: { vm: ExplorerContractVM }) {
+export function ContractSourcePanel({
+  vm,
+  contractAddress,
+}: {
+  vm: ExplorerContractVM
+  contractAddress: string
+}) {
   const { t } = useTranslation('address')
   const files = flattenContractSources(vm)
 
@@ -29,7 +35,9 @@ export function ContractSourcePanel({ vm }: { vm: ExplorerContractVM }) {
         </div>
       </dl>
 
-      {vm.abiMethods.length > 0 ? <ContractAbiMethods methods={vm.abiMethods} /> : null}
+      {vm.abiMethods.length > 0 ? (
+        <ContractAbiMethods methods={vm.abiMethods} contractAddress={contractAddress} canInteract={vm.isVerified} />
+      ) : null}
 
       {!vm.isVerified && files.length === 0 ? (
         <p className="rounded-lg border border-dashed border-border bg-surface-muted px-4 py-8 text-center text-slate-600">

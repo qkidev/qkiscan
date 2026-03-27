@@ -1,5 +1,7 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { type ReactNode, useState } from 'react'
+import { WagmiProvider } from 'wagmi'
+import { wagmiConfig } from '@/wallet/wagmiConfig'
 
 export function AppProviders({ children }: { children: ReactNode }) {
   const [client] = useState(
@@ -18,5 +20,9 @@ export function AppProviders({ children }: { children: ReactNode }) {
       }),
   )
 
-  return <QueryClientProvider client={client}>{children}</QueryClientProvider>
+  return (
+    <WagmiProvider config={wagmiConfig}>
+      <QueryClientProvider client={client}>{children}</QueryClientProvider>
+    </WagmiProvider>
+  )
 }

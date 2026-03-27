@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { normalizeJsonValue } from './FormattedJson'
+import { normalizeJsonValue } from '@/utils/normalizeJsonValue'
 
 describe('normalizeJsonValue', () => {
   it('解析 JSON 字符串', () => {

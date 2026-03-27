@@ -36,5 +36,24 @@
   "contractAbiParams": "Parameters",
   "contractAbiStateMutability": "State mutability",
   "contractAbiFragment": "Fragment",
-  "contractAbiMethodsHint": "Copy a single-function ABI fragment to use with viem/ethers, or combine fragments into a full ABI array."
+  "contractAbiMethodsHint": "Copy a single-function ABI fragment to use with viem/ethers, or combine fragments into a full ABI array.",
+  "contractInteract": {
+    "title": "Contract interaction",
+    "connectWallet": "Connect wallet",
+    "disconnect": "Disconnect",
+    "selectMethod": "Select method",
+    "callRead": "Read",
+    "callWrite": "Send transaction",
+    "valueWei": "Value (wei, payable)",
+    "result": "Result",
+    "txHash": "Transaction hash",
+    "txPending": "Confirming…",
+    "txSuccess": "Confirmed",
+    "walletRequired": "Connect your wallet to send transactions.",
+    "invalidValueWei": "Invalid wei amount.",
+    "placeholderTuple": "JSON array in field order",
+    "rpcHint": "Configured chain: {{chain}} (chainId {{id}}). Ensure your wallet and RPC use the same network.",
+    "rpcMissing": "VITE_APP_WALLET_RPC_URL is not set: contract reads and transactions require a JSON-RPC URL in .env, then restart the dev server.",
+    "noConnector": "No browser wallet extension detected."
+  }
 }

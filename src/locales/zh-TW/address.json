@@ -36,5 +36,24 @@
   "contractAbiParams": "參數",
   "contractAbiStateMutability": "狀態可變性",
   "contractAbiFragment": "ABI 片段",
-  "contractAbiMethodsHint": "可複製單一函式的 ABI 片段用於 viem/ethers，或將多條片段拼成完整 abi 陣列。"
+  "contractAbiMethodsHint": "可複製單一函式的 ABI 片段用於 viem/ethers，或將多條片段拼成完整 abi 陣列。",
+  "contractInteract": {
+    "title": "合約互動",
+    "connectWallet": "連接錢包",
+    "disconnect": "斷開",
+    "selectMethod": "選擇方法",
+    "callRead": "讀取",
+    "callWrite": "發送交易",
+    "valueWei": "附帶金額（wei，payable）",
+    "result": "返回結果",
+    "txHash": "交易雜湊",
+    "txPending": "確認中…",
+    "txSuccess": "已確認",
+    "walletRequired": "寫入方法需先連接錢包。",
+    "invalidValueWei": "無效的 wei 金額。",
+    "placeholderTuple": "JSON 陣列，依欄位順序",
+    "rpcHint": "目前設定鏈：{{chain}}（chainId {{id}}）。請確保錢包與 RPC 指向同一網路。",
+    "rpcMissing": "未設定 VITE_APP_WALLET_RPC_URL：讀取合約與發送交易需要有效的 JSON-RPC 位址，請在 .env 填寫後重啟開發伺服器。",
+    "noConnector": "未偵測到瀏覽器錢包擴充功能。"
+  }
 }
