@@ -35,7 +35,9 @@ export interface ExplorerTransactionListItemVM {
   blockNumber: string | null
   timestampIso: string | null
   from: string | null
+  fromName: string | null
   to: string | null
+  toName: string | null
   status: 'ok' | 'fail' | 'pending' | 'unknown'
   method: string | null
   valueWei: string | null
@@ -47,7 +49,9 @@ export interface ExplorerTransactionDetailVM {
   blockNumber: string | null
   timestampIso: string | null
   from: string | null
+  fromName: string | null
   to: string | null
+  toName: string | null
   status: 'ok' | 'fail' | 'pending' | 'unknown'
   nonce: number | null
   valueWei: string | null
@@ -67,7 +71,9 @@ export interface ExplorerTokenTransferVM {
   timestampIso: string | null
   method: string | null
   from: string | null
+  fromName: string | null
   to: string | null
+  toName: string | null
   amountRaw: string | null
   tokenSymbol: string | null
   tokenAddress: string | null
@@ -86,7 +92,9 @@ export interface ExplorerInternalTxVM {
   transactionHash: string | null
   type: string | null
   from: string | null
+  fromName: string | null
   to: string | null
+  toName: string | null
   value: string | null
   success: boolean | null
 }
@@ -105,9 +113,15 @@ export interface ExplorerAddressCountersVM {
 }
 
 export interface ExplorerTokenBalanceVM {
+  /** 代币合约地址 */
   token: string | null
+  /** 已按 decimals 处理后的可读数量 */
   value: string | null
   tokenId: string | null
+  tokenAddress: string | null
+  tokenSymbol: string | null
+  tokenName: string | null
+  tokenDecimals: number | null
 }
 
 export interface ExplorerTokenListItemVM {

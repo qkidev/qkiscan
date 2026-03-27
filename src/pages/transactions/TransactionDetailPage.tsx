@@ -144,8 +144,8 @@ export function TransactionDetailPage() {
           />
           <DetailRow label={t('common:table.time')} value={<Timestamp iso={tx.timestampIso} />} />
           <DetailRow label={t('tx:nonce')} value={tx.nonce ?? '—'} />
-          <DetailRow label={t('common:table.from')} value={<AddressLink address={tx.from} shorten={false} />} />
-          <DetailRow label={t('common:table.to')} value={<AddressLink address={tx.to} shorten={false} />} />
+          <DetailRow label={t('common:table.from')} value={<AddressLink address={tx.from} label={tx.fromName} shorten={false} />} />
+          <DetailRow label={t('common:table.to')} value={<AddressLink address={tx.to} label={tx.toName} shorten={false} />} />
           <DetailRow label={t('common:table.value')} value={<Amount wei={tx.valueWei} />} />
           <DetailRow label={t('tx:gasPrice')} value={formatWeiToGwei(tx.gasPrice)} />
           <DetailRow label={t('tx:gasUsed')} value={tx.gasUsed ?? '—'} />
@@ -189,10 +189,10 @@ export function TransactionDetailPage() {
                         </td>
                         <td className="px-3 py-2 font-mono text-xs">{row.method ?? '—'}</td>
                         <td className="px-3 py-2">
-                          <AddressLink address={row.from} />
+                          <AddressLink address={row.from} label={row.fromName} />
                         </td>
                         <td className="px-3 py-2">
-                          <AddressLink address={row.to} />
+                          <AddressLink address={row.to} label={row.toName} />
                         </td>
                         <td className="px-3 py-2">{row.tokenSymbol ?? '—'}</td>
                         <td className="px-3 py-2 font-mono text-xs">{row.amountRaw ?? '—'}</td>
@@ -267,10 +267,10 @@ export function TransactionDetailPage() {
                       <tr key={i} className="border-b border-border last:border-0">
                         <td className="px-3 py-2">{row.type ?? '—'}</td>
                         <td className="px-3 py-2">
-                          <AddressLink address={row.from} />
+                          <AddressLink address={row.from} label={row.fromName} />
                         </td>
                         <td className="px-3 py-2">
-                          <AddressLink address={row.to} />
+                          <AddressLink address={row.to} label={row.toName} />
                         </td>
                         <td className="px-3 py-2 font-mono text-xs">{row.value ?? '—'}</td>
                       </tr>

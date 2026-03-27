@@ -6,7 +6,7 @@ import type {
   ExplorerTransactionDetailVM,
   ExplorerTransactionListItemVM,
 } from '../view-models'
-import { addressFromField, parseTxStatus, pickNextPageParams } from './common'
+import { addressFromField, addressNameFromField, parseTxStatus, pickNextPageParams } from './common'
 import { formatNativeTransactionFee, normalizeAmountLike, normalizeTokenTransferAmount } from '@/utils/tokenAmount'
 import type { PaginatedVM } from '../view-models'
 
@@ -21,7 +21,9 @@ export function mapTxListItem(r: BlockscoutTransactionItemRaw): ExplorerTransact
       r.block_number != null ? String(r.block_number) : r.block != null ? String(r.block) : null,
     timestampIso: r.timestamp ?? null,
     from: addressFromField(r.from),
+    fromName: addressNameFromField(r.from),
     to: addressFromField(r.to),
+    toName: addressNameFromField(r.to),
     status: parseTxStatus(r),
     method: r.method ?? r.type ?? null,
     valueWei: normalizeAmountLike(r.value),
@@ -32,7 +34,9 @@ export function mapTxListItem(r: BlockscoutTransactionItemRaw): ExplorerTransact
 export function mapTxDetail(raw: unknown): ExplorerTransactionDetailVM {
   const r = raw as Record<string, unknown>
   const from = addressFromField(r.from as BlockscoutTransactionItemRaw['from'])
+  const fromName = addressNameFromField(r.from as BlockscoutTransactionItemRaw['from'])
   const to = addressFromField(r.to as BlockscoutTransactionItemRaw['to'])
+  const toName = addressNameFromField(r.to as BlockscoutTransactionItemRaw['to'])
   const status = parseTxStatus(r as BlockscoutTransactionItemRaw)
   return {
     hash: String(r.hash ?? ''),
@@ -44,7 +48,9 @@ export function mapTxDetail(raw: unknown): ExplorerTransactionDetailVM {
           : null,
     timestampIso: (r.timestamp as string | null) ?? null,
     from,
+    fromName,
     to,
+    toName,
     status,
     nonce: typeof r.nonce === 'number' ? r.nonce : null,
     valueWei: normalizeAmountLike(r.value),
@@ -113,7 +119,9 @@ export function mapTokenTransferItem(raw: unknown): ExplorerTokenTransferVM {
     timestampIso: typeof ts === 'string' && ts.trim() !== '' ? ts : null,
     method: tokenTransferMethod(r),
     from: addressFromField(r.from as BlockscoutTransactionItemRaw['from']),
+    fromName: addressNameFromField(r.from as BlockscoutTransactionItemRaw['from']),
     to: addressFromField(r.to as BlockscoutTransactionItemRaw['to']),
+    toName: addressNameFromField(r.to as BlockscoutTransactionItemRaw['to']),
     amountRaw:
       normalizeTokenTransferAmount(r.total, r.token) ??
       normalizeAmountLike(r.value) ??
@@ -160,7 +168,9 @@ export function mapInternalTxItem(raw: unknown): ExplorerInternalTxVM {
     transactionHash: (r.transaction_hash as string | undefined) ?? null,
     type: (r.type as string | undefined) ?? null,
     from: addressFromField(r.from as BlockscoutTransactionItemRaw['from']),
+    fromName: addressNameFromField(r.from as BlockscoutTransactionItemRaw['from']),
     to: addressFromField(r.to as BlockscoutTransactionItemRaw['to']),
+    toName: addressNameFromField(r.to as BlockscoutTransactionItemRaw['to']),
     value: (r.value as string | undefined) ?? null,
     success: typeof r.success === 'boolean' ? r.success : null,
   }

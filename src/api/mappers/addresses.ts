@@ -9,6 +9,7 @@ import type { PaginatedVM } from '../view-models'
 import type { BlockscoutTransactionItemRaw } from '../types'
 import { mapInternalTxList, mapLogList, mapTokenTransferList, mapTxListResponse } from './transactions'
 import { normalizeAmountLike } from '@/utils/tokenAmount'
+import { formatWeiToDecimal } from '@/utils/number'
 import { asItemArray } from '../responseNormalize'
 
 export function mapAddress(raw: unknown): ExplorerAddressVM {
@@ -37,17 +38,56 @@ export function mapAddressCounters(raw: unknown): ExplorerAddressCountersVM {
 
 export function mapTokenBalanceItem(raw: unknown): ExplorerTokenBalanceVM {
   const r = raw as Record<string, unknown>
-  const token = r.token as { address_hash?: string; address?: string; hash?: string; name?: string } | undefined
+  const token = r.token as
+    | {
+        address_hash?: string
+        address?: string
+        hash?: string
+        name?: string
+        symbol?: string
+        decimals?: string | number
+      }
+    | undefined
+  const tokenAddress =
+    token?.address_hash ??
+    token?.address ??
+    token?.hash ??
+    (r.token_address as string | undefined) ??
+    (r.token as string | undefined) ??
+    null
+  const tokenSymbol = (token?.symbol as string | undefined) ?? (r.symbol as string | undefined) ?? null
+  const tokenName = (token?.name as string | undefined) ?? null
+  const tokenDecimalsRaw = token?.decimals ?? (r.decimals as number | string | undefined)
+  const tokenDecimals =
+    typeof tokenDecimalsRaw === 'number'
+      ? (Number.isFinite(tokenDecimalsRaw) && tokenDecimalsRaw >= 0 ? Math.floor(tokenDecimalsRaw) : null)
+      : typeof tokenDecimalsRaw === 'string'
+        ? (() => {
+            const n = parseInt(tokenDecimalsRaw, 10)
+            return Number.isFinite(n) && n >= 0 ? n : null
+          })()
+        : null
+  const normalized = normalizeAmountLike(r.value)
+  let value = normalized
+  if (tokenDecimals != null) {
+    if (typeof r.value === 'string') {
+      value = formatWeiToDecimal(r.value, tokenDecimals, 18)
+    } else if (typeof r.value === 'object' && r.value !== null && 'value' in r.value) {
+      const rawValue = (r.value as { value?: unknown }).value
+      const hasOwnDecimals = 'decimals' in (r.value as Record<string, unknown>)
+      if (typeof rawValue === 'string' && !hasOwnDecimals) {
+        value = formatWeiToDecimal(rawValue, tokenDecimals, 18)
+      }
+    }
+  }
   return {
-    token:
-      token?.address_hash ??
-      token?.address ??
-      token?.hash ??
-      (r.token_address as string | undefined) ??
-      (r.token as string | undefined) ??
-      null,
-    value: normalizeAmountLike(r.value),
+    token: tokenAddress,
+    value,
     tokenId: (r.token_id as string | undefined) ?? null,
+    tokenAddress,
+    tokenSymbol,
+    tokenName,
+    tokenDecimals,
   }
 }
 

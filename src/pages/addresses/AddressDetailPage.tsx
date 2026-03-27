@@ -232,9 +232,9 @@ export function AddressDetailPage() {
                       <StatusBadge status={tx.status} />
                     </div>
                     <div className="mt-2 flex items-center gap-2 text-xs">
-                      <AddressLink address={tx.from} />
+                      <AddressLink address={tx.from} label={tx.fromName} />
                       <span className="text-slate-400">→</span>
-                      <AddressLink address={tx.to} />
+                      <AddressLink address={tx.to} label={tx.toName} />
                     </div>
                     <div className="mt-2 text-xs font-mono">
                       <Amount wei={tx.valueWei} />
@@ -268,10 +268,10 @@ export function AddressDetailPage() {
                           <Timestamp iso={tx.timestampIso} />
                         </td>
                         <td className="px-3 py-2">
-                          <AddressLink address={tx.from} />
+                          <AddressLink address={tx.from} label={tx.fromName} />
                         </td>
                         <td className="px-3 py-2">
-                          <AddressLink address={tx.to} />
+                          <AddressLink address={tx.to} label={tx.toName} />
                         </td>
                         <td className="px-3 py-2">
                           <Amount wei={tx.valueWei} />
@@ -313,9 +313,9 @@ export function AddressDetailPage() {
                       </span>
                     </div>
                     <div className="mt-2 flex items-center gap-2 text-xs">
-                      <AddressLink address={row.from} />
+                      <AddressLink address={row.from} label={row.fromName} />
                       <span className="text-slate-400">→</span>
-                      <AddressLink address={row.to} />
+                      <AddressLink address={row.to} label={row.toName} />
                     </div>
                     <div className="mt-2 text-xs">{renderTokenTransferAmount(row)}</div>
                   </div>
@@ -341,10 +341,10 @@ export function AddressDetailPage() {
                         </td>
                         <td className="px-3 py-2 font-mono text-xs">{row.method ?? '—'}</td>
                         <td className="px-3 py-2">
-                          <AddressLink address={row.from} />
+                          <AddressLink address={row.from} label={row.fromName} />
                         </td>
                         <td className="px-3 py-2">
-                          <AddressLink address={row.to} />
+                          <AddressLink address={row.to} label={row.toName} />
                         </td>
                         <td className="px-3 py-2 text-xs">{renderTokenTransferAmount(row)}</td>
                       </tr>
@@ -387,10 +387,10 @@ export function AddressDetailPage() {
                       <tr key={i} className="border-b border-border last:border-0">
                         <td className="px-3 py-2">{row.type ?? '—'}</td>
                         <td className="px-3 py-2">
-                          <AddressLink address={row.from} />
+                          <AddressLink address={row.from} label={row.fromName} />
                         </td>
                         <td className="px-3 py-2">
-                          <AddressLink address={row.to} />
+                          <AddressLink address={row.to} label={row.toName} />
                         </td>
                         <td className="px-3 py-2 font-mono text-xs">{row.value ?? '—'}</td>
                       </tr>
@@ -457,12 +457,17 @@ export function AddressDetailPage() {
                   </thead>
                   <tbody>
                     {tokQuery.data.items.map((row, i) => (
-                      <tr key={`${row.token}-${i}`} className="border-b border-border last:border-0">
+                      <tr key={`${row.tokenAddress ?? row.token}-${i}`} className="border-b border-border last:border-0">
                         <td className="px-3 py-2">
-                          {row.token ? (
-                            <Link className="font-mono text-accent" to={`/token/${row.token}`}>
-                              {row.token}
-                            </Link>
+                          {row.tokenAddress ? (
+                            <div className="space-y-0.5">
+                              <Link className="text-accent" to={`/token/${row.tokenAddress}`}>
+                                {row.tokenSymbol ?? row.tokenName ?? row.tokenAddress}
+                              </Link>
+                              {(row.tokenSymbol || row.tokenName) && row.tokenAddress ? (
+                                <div className="font-mono text-xs text-slate-500">{row.tokenAddress}</div>
+                              ) : null}
+                            </div>
                           ) : (
                             '—'
                           )}

@@ -25,3 +25,18 @@ export function addressFromField(
   if (Array.isArray(v)) return v[0]?.hash ?? null
   return v.hash ?? null
 }
+
+export function addressNameFromField(
+  v:
+    | { hash?: string; name?: string | null }
+    | { hash?: string; name?: string | null }[]
+    | string
+    | null
+    | undefined,
+): string | null {
+  if (v == null || typeof v === 'string') return null
+  const raw = Array.isArray(v) ? v[0]?.name : v.name
+  if (typeof raw !== 'string') return null
+  const s = raw.trim()
+  return s === '' ? null : s
+}

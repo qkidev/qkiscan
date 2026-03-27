@@ -177,9 +177,9 @@ export function TokenDetailPage() {
                     </span>
                   </div>
                   <div className="mt-2 flex items-center gap-2 text-xs">
-                    <AddressLink address={row.from} />
+                    <AddressLink address={row.from} label={row.fromName} />
                     <span className="text-slate-400">→</span>
-                    <AddressLink address={row.to} />
+                    <AddressLink address={row.to} label={row.toName} />
                   </div>
                   <div className="mt-2 text-xs">{renderTransferAmountWithSymbol(row)}</div>
                 </div>
@@ -209,10 +209,10 @@ export function TokenDetailPage() {
                       </td>
                       <td className="px-3 py-2 font-mono text-xs">{row.method ?? '—'}</td>
                       <td className="px-3 py-2">
-                        <AddressLink address={row.from} />
+                        <AddressLink address={row.from} label={row.fromName} />
                       </td>
                       <td className="px-3 py-2">
-                        <AddressLink address={row.to} />
+                        <AddressLink address={row.to} label={row.toName} />
                       </td>
                       <td className="px-3 py-2 text-xs">{renderTransferAmountWithSymbol(row)}</td>
                     </tr>

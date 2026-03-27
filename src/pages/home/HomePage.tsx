@@ -134,10 +134,10 @@ export function HomePage() {
                         <Timestamp iso={tx.timestampIso} />
                       </td>
                       <td className="hidden px-3 py-2 md:table-cell">
-                        <AddressLink address={tx.from} />
+                        <AddressLink address={tx.from} label={tx.fromName} />
                       </td>
                       <td className="hidden px-3 py-2 lg:table-cell">
-                        <AddressLink address={tx.to} />
+                        <AddressLink address={tx.to} label={tx.toName} />
                       </td>
                     </tr>
                   ))}
