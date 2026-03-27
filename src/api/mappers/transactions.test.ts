@@ -43,6 +43,13 @@ describe('mapTokenTransferItem', () => {
     })
     expect(vm.method).toBe('token_transfer')
   })
+
+  it('映射 timestamp', () => {
+    const vm = mapTokenTransferItem({
+      timestamp: '2024-01-01T00:00:00.000000Z',
+    })
+    expect(vm.timestampIso).toBe('2024-01-01T00:00:00.000000Z')
+  })
 })
 
 describe('mapLogItem', () => {

@@ -63,6 +63,8 @@ export interface ExplorerTransactionDetailVM {
 
 export interface ExplorerTokenTransferVM {
   transactionHash: string | null
+  /** Blockscout token transfer 的 block/交易时间 */
+  timestampIso: string | null
   method: string | null
   from: string | null
   to: string | null
@@ -97,8 +99,9 @@ export interface ExplorerAddressVM {
 }
 
 export interface ExplorerAddressCountersVM {
-  transactionsCount: number | null
-  tokenTransfersCount: number | null
+  transactionsCount: string | null
+  tokenTransfersCount: string | null
+  gasUsageCount: string | null
 }
 
 export interface ExplorerTokenBalanceVM {

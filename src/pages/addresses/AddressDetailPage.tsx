@@ -25,7 +25,7 @@ import { PaginationControls } from '@/components/common/PaginationControls'
 import { keysetHasNext } from '@/utils/query'
 import { useKeysetPagination } from '@/hooks/useKeysetPagination'
 import { stableStringifyParams } from '@/utils/query'
-import { CopyButton } from '@/components/common/CopyButton'
+import { CopyIconButton } from '@/components/common/CopyIconButton'
 import { getSmartContract } from '@/api/contracts'
 import { ContractSourcePanel } from '@/components/addresses/ContractSourcePanel'
 
@@ -137,13 +137,28 @@ export function AddressDetailPage() {
   const a = detailQuery.data
   const counters = countersQuery.data
 
+  function renderTokenTransferAmount(row: { amountRaw: string | null; tokenSymbol: string | null; tokenAddress: string | null }) {
+    const amount = row.amountRaw ?? '—'
+    const symbol = row.tokenSymbol ?? row.tokenAddress
+    if (!symbol) return <span className="font-mono">{amount}</span>
+    if (!row.tokenAddress) return <span className="font-mono">{`${amount} ${symbol}`}</span>
+    return (
+      <span className="font-mono">
+        {amount}{' '}
+        <Link className="text-accent" to={`/token/${row.tokenAddress}`}>
+          {symbol}
+        </Link>
+      </span>
+    )
+  }
+
   return (
     <div className="space-y-6">
       <div>
         <h1 className="text-2xl font-semibold">{t('address:detailTitle')}</h1>
         <div className="mt-2 flex flex-wrap items-center gap-2 break-all font-mono text-sm">
           <span>{a.hash}</span>
-          <CopyButton text={a.hash} />
+          <CopyIconButton text={a.hash} />
         </div>
         <p className="mt-1 text-sm text-slate-500">
           {a.isContract ? t('address:contract') : t('address:eoa')}
@@ -159,8 +174,16 @@ export function AddressDetailPage() {
           </dd>
         </div>
         <div>
-          <dt className="text-xs uppercase text-slate-500">Tx</dt>
+          <dt className="text-xs uppercase text-slate-500">{t('address:counters.transactions')}</dt>
           <dd className="mt-1">{counters?.transactionsCount ?? '—'}</dd>
+        </div>
+        <div>
+          <dt className="text-xs uppercase text-slate-500">{t('address:counters.tokenTransfers')}</dt>
+          <dd className="mt-1">{counters?.tokenTransfersCount ?? '—'}</dd>
+        </div>
+        <div>
+          <dt className="text-xs uppercase text-slate-500">{t('address:counters.gasUsage')}</dt>
+          <dd className="mt-1">{counters?.gasUsageCount ?? '—'}</dd>
         </div>
       </dl>
 
@@ -198,7 +221,29 @@ export function AddressDetailPage() {
         >
           {txQuery.isSuccess ? (
             <>
-              <div className="overflow-x-auto rounded-lg border border-border bg-surface">
+              <div className="space-y-3 md:hidden">
+                {txQuery.data.items.map((tx) => (
+                  <div key={tx.hash} className="rounded-lg border border-border bg-surface p-3 text-sm">
+                    <div className="flex items-center justify-between gap-2">
+                      <HashText hash={tx.hash} to={`/tx/${tx.hash}`} />
+                      <Timestamp iso={tx.timestampIso} />
+                    </div>
+                    <div className="mt-2">
+                      <StatusBadge status={tx.status} />
+                    </div>
+                    <div className="mt-2 flex items-center gap-2 text-xs">
+                      <AddressLink address={tx.from} />
+                      <span className="text-slate-400">→</span>
+                      <AddressLink address={tx.to} />
+                    </div>
+                    <div className="mt-2 text-xs font-mono">
+                      <Amount wei={tx.valueWei} />
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              <div className="hidden overflow-x-auto rounded-lg border border-border bg-surface md:block">
                 <table className="min-w-full text-left text-sm">
                   <thead className="border-b border-border bg-surface-muted text-xs uppercase text-slate-500">
                     <tr>
@@ -256,7 +301,28 @@ export function AddressDetailPage() {
         >
           {ttQuery.isSuccess ? (
             <>
-              <div className="overflow-x-auto rounded-lg border border-border bg-surface">
+              <div className="space-y-3 md:hidden">
+                {ttQuery.data.items.map((row, i) => (
+                  <div key={`${row.transactionHash}-${i}`} className="rounded-lg border border-border bg-surface p-3 text-sm">
+                    <div className="flex items-center justify-between gap-2">
+                      <HashText hash={row.transactionHash} to={row.transactionHash ? `/tx/${row.transactionHash}` : undefined} />
+                    </div>
+                    <div className="mt-2 text-xs">
+                      <span className="inline-flex rounded-full bg-slate-200 px-2 py-0.5 font-mono text-slate-700 dark:bg-slate-700 dark:text-slate-200">
+                        {row.method ?? '—'}
+                      </span>
+                    </div>
+                    <div className="mt-2 flex items-center gap-2 text-xs">
+                      <AddressLink address={row.from} />
+                      <span className="text-slate-400">→</span>
+                      <AddressLink address={row.to} />
+                    </div>
+                    <div className="mt-2 text-xs">{renderTokenTransferAmount(row)}</div>
+                  </div>
+                ))}
+              </div>
+
+              <div className="hidden overflow-x-auto rounded-lg border border-border bg-surface md:block">
                 <table className="min-w-full text-left text-sm">
                   <thead className="border-b border-border bg-surface-muted text-xs uppercase text-slate-500">
                     <tr>
@@ -264,7 +330,6 @@ export function AddressDetailPage() {
                       <th className="px-3 py-2">{t('common:table.method')}</th>
                       <th className="px-3 py-2">{t('common:table.from')}</th>
                       <th className="px-3 py-2">{t('common:table.to')}</th>
-                      <th className="px-3 py-2">{t('token:symbol')}</th>
                       <th className="px-3 py-2">{t('common:table.value')}</th>
                     </tr>
                   </thead>
@@ -281,8 +346,7 @@ export function AddressDetailPage() {
                         <td className="px-3 py-2">
                           <AddressLink address={row.to} />
                         </td>
-                        <td className="px-3 py-2">{row.tokenSymbol ?? '—'}</td>
-                        <td className="px-3 py-2 font-mono text-xs">{row.amountRaw ?? '—'}</td>
+                        <td className="px-3 py-2 text-xs">{renderTokenTransferAmount(row)}</td>
                       </tr>
                     ))}
                   </tbody>
@@ -357,7 +421,9 @@ export function AddressDetailPage() {
               <div className="space-y-2">
                 {logsQuery.data.items.map((log, i) => (
                   <div key={i} className="rounded border border-border bg-surface p-3 text-xs font-mono">
-                    <div className="break-all">{log.address ?? '—'}</div>
+                    <div className="break-all">
+                      <AddressLink address={log.address} shorten={false} />
+                    </div>
                   </div>
                 ))}
               </div>

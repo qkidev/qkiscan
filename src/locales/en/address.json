@@ -11,6 +11,11 @@
     "tokens": "Tokens",
     "contract": "Contract"
   },
+  "counters": {
+    "transactions": "Transactions",
+    "tokenTransfers": "Token transfers",
+    "gasUsage": "Gas usage"
+  },
   "contractUnavailable": "Contract metadata is not available from the explorer API.",
   "contractMeta": {
     "name": "Name",

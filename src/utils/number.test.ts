@@ -2,8 +2,8 @@ import { describe, expect, it } from 'vitest'
 import { formatThousandsTrim, formatWeiToDecimal, formatWeiToGwei } from './number'
 
 describe('formatThousandsTrim', () => {
-  it('为整数添加千分位', () => {
-    expect(formatThousandsTrim('1234567')).toContain(',')
+  it('整数不加千分位分隔符', () => {
+    expect(formatThousandsTrim('1234567')).toBe('1234567')
   })
 })
 

@@ -107,8 +107,10 @@ function tokenAddressFromTransfer(r: Record<string, unknown>): string | null {
 
 export function mapTokenTransferItem(raw: unknown): ExplorerTokenTransferVM {
   const r = raw as Record<string, unknown>
+  const ts = r.timestamp
   return {
     transactionHash: (r.transaction_hash as string | undefined) ?? (r.tx_hash as string | undefined) ?? null,
+    timestampIso: typeof ts === 'string' && ts.trim() !== '' ? ts : null,
     method: tokenTransferMethod(r),
     from: addressFromField(r.from as BlockscoutTransactionItemRaw['from']),
     to: addressFromField(r.to as BlockscoutTransactionItemRaw['to']),

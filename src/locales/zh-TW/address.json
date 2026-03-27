@@ -11,6 +11,11 @@
     "tokens": "代幣",
     "contract": "合約"
   },
+  "counters": {
+    "transactions": "交易數",
+    "tokenTransfers": "代幣轉帳數",
+    "gasUsage": "Gas 使用量"
+  },
   "contractUnavailable": "無法從瀏覽器介面取得該合約的元資料。",
   "contractMeta": {
     "name": "名稱",

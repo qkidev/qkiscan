@@ -9,16 +9,28 @@ import { ErrorState } from '@/components/common/ErrorState'
 import { EmptyState } from '@/components/common/EmptyState'
 import { AddressLink } from '@/components/common/AddressLink'
 import { HashText } from '@/components/common/HashText'
+import { Timestamp } from '@/components/common/Timestamp'
 import { PaginationControls } from '@/components/common/PaginationControls'
 import { keysetHasNext } from '@/utils/query'
 import { useKeysetPagination } from '@/hooks/useKeysetPagination'
 import { stableStringifyParams } from '@/utils/query'
+import { formatWeiToDecimal } from '@/utils/number'
 
 const TABS = ['transfers', 'holders'] as const
 type TabId = (typeof TABS)[number]
 
 function isTab(s: string | null): s is TabId {
   return s !== null && (TABS as readonly string[]).includes(s)
+}
+
+function formatHolderValue(value: string | null, decimals: number | null): string {
+  if (value == null || value === '') return '—'
+  if (decimals == null || !Number.isFinite(decimals) || decimals < 0) return value
+  // 仅当是最小单位整数字符串时做换算，避免对已带小数的值重复处理
+  if (/^-?\d+$/.test(value)) {
+    return formatWeiToDecimal(value, Math.floor(decimals), 18)
+  }
+  return value
 }
 
 export function TokenDetailPage() {
@@ -70,6 +82,21 @@ export function TokenDetailPage() {
   }
 
   const tok = detailQuery.data
+
+  function renderTransferAmountWithSymbol(row: { amountRaw: string | null; tokenSymbol: string | null; tokenAddress: string | null }) {
+    const amount = row.amountRaw ?? '—'
+    const symbol = row.tokenSymbol ?? (row.tokenAddress ? row.tokenAddress : null)
+    if (!symbol) return <span className="font-mono">{amount}</span>
+    if (!row.tokenAddress) return <span className="font-mono">{`${amount} ${symbol}`}</span>
+    return (
+      <span className="font-mono">
+        {amount}{' '}
+        <Link className="text-accent" to={`/token/${row.tokenAddress}`}>
+          {symbol}
+        </Link>
+      </span>
+    )
+  }
 
   return (
     <div className="space-y-6">
@@ -137,11 +164,34 @@ export function TokenDetailPage() {
           <EmptyState title={t('common:state.empty')} />
         ) : (
           <>
-            <div className="overflow-x-auto rounded-lg border border-border bg-surface">
+            <div className="space-y-3 md:hidden">
+              {trQuery.data.items.map((row, i) => (
+                <div key={`${row.transactionHash}-${i}`} className="rounded-lg border border-border bg-surface p-3 text-sm">
+                  <div className="flex items-center justify-between gap-2">
+                    <HashText hash={row.transactionHash} to={row.transactionHash ? `/tx/${row.transactionHash}` : undefined} />
+                    <Timestamp iso={row.timestampIso} />
+                  </div>
+                  <div className="mt-2 text-xs">
+                    <span className="inline-flex rounded-full bg-slate-200 px-2 py-0.5 font-mono text-slate-700 dark:bg-slate-700 dark:text-slate-200">
+                      {row.method ?? '—'}
+                    </span>
+                  </div>
+                  <div className="mt-2 flex items-center gap-2 text-xs">
+                    <AddressLink address={row.from} />
+                    <span className="text-slate-400">→</span>
+                    <AddressLink address={row.to} />
+                  </div>
+                  <div className="mt-2 text-xs">{renderTransferAmountWithSymbol(row)}</div>
+                </div>
+              ))}
+            </div>
+
+            <div className="hidden overflow-x-auto rounded-lg border border-border bg-surface md:block">
               <table className="min-w-full text-left text-sm">
                 <thead className="border-b border-border bg-surface-muted text-xs uppercase text-slate-500">
                   <tr>
                     <th className="px-3 py-2">{t('common:table.tx')}</th>
+                    <th className="px-3 py-2">{t('common:table.time')}</th>
                     <th className="px-3 py-2">{t('common:table.method')}</th>
                     <th className="px-3 py-2">{t('common:table.from')}</th>
                     <th className="px-3 py-2">{t('common:table.to')}</th>
@@ -154,6 +204,9 @@ export function TokenDetailPage() {
                       <td className="px-3 py-2">
                         <HashText hash={row.transactionHash} to={row.transactionHash ? `/tx/${row.transactionHash}` : undefined} />
                       </td>
+                      <td className="px-3 py-2 whitespace-nowrap">
+                        <Timestamp iso={row.timestampIso} />
+                      </td>
                       <td className="px-3 py-2 font-mono text-xs">{row.method ?? '—'}</td>
                       <td className="px-3 py-2">
                         <AddressLink address={row.from} />
@@ -161,7 +214,7 @@ export function TokenDetailPage() {
                       <td className="px-3 py-2">
                         <AddressLink address={row.to} />
                       </td>
-                      <td className="px-3 py-2 font-mono text-xs">{row.amountRaw ?? '—'}</td>
+                      <td className="px-3 py-2 text-xs">{renderTransferAmountWithSymbol(row)}</td>
                     </tr>
                   ))}
                 </tbody>
@@ -198,11 +251,9 @@ export function TokenDetailPage() {
                   {hQuery.data.items.map((row) => (
                     <tr key={row.address} className="border-b border-border last:border-0">
                       <td className="px-3 py-2">
-                        <Link className="font-mono text-accent" to={`/address/${row.address}`}>
-                          {row.address}
-                        </Link>
+                        <AddressLink address={row.address} shorten={false} />
                       </td>
-                      <td className="px-3 py-2 font-mono text-xs">{row.value ?? '—'}</td>
+                      <td className="px-3 py-2 font-mono text-xs">{formatHolderValue(row.value, tok.decimals)}</td>
                     </tr>
                   ))}
                 </tbody>

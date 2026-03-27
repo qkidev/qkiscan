@@ -45,7 +45,7 @@ export function formatThousandsTrim(s: string, maxFraction = 8): string {
     return n.toExponential(4)
   }
   const parts = s.split('.')
-  const intPart = parts[0]!.replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+  const intPart = parts[0]!
   if (parts.length === 1) return intPart
   let frac = parts[1]!
   if (frac.length > maxFraction) frac = frac.slice(0, maxFraction).replace(/0+$/, '')

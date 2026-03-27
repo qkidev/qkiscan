@@ -8,6 +8,7 @@ import { TransactionDetailPage } from '@/pages/transactions/TransactionDetailPag
 import { AddressDetailPage } from '@/pages/addresses/AddressDetailPage'
 import { TokensPage } from '@/pages/tokens/TokensPage'
 import { TokenDetailPage } from '@/pages/tokens/TokenDetailPage'
+import { TokenTransfersPage } from '@/pages/token-transfers/TokenTransfersPage'
 import { SearchPage } from '@/pages/search/SearchPage'
 import { NotFoundPage } from '@/pages/not-found/NotFoundPage'
 
@@ -23,6 +24,7 @@ export const router = createBrowserRouter([
       { path: 'tx/:hash', element: <TransactionDetailPage /> },
       { path: 'address/:address', element: <AddressDetailPage /> },
       { path: 'tokens', element: <TokensPage /> },
+      { path: 'token-transfers', element: <TokenTransfersPage /> },
       { path: 'token/:address', element: <TokenDetailPage /> },
       { path: 'search', element: <SearchPage /> },
       { path: '404', element: <NotFoundPage /> },

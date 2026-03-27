@@ -8,6 +8,8 @@ import { pickNextPageParams } from './common'
 import type { PaginatedVM } from '../view-models'
 import type { BlockscoutTransactionItemRaw } from '../types'
 import { mapInternalTxList, mapLogList, mapTokenTransferList, mapTxListResponse } from './transactions'
+import { normalizeAmountLike } from '@/utils/tokenAmount'
+import { asItemArray } from '../responseNormalize'
 
 export function mapAddress(raw: unknown): ExplorerAddressVM {
   const r = raw as BlockscoutAddressRaw
@@ -21,36 +23,42 @@ export function mapAddress(raw: unknown): ExplorerAddressVM {
 
 export function mapAddressCounters(raw: unknown): ExplorerAddressCountersVM {
   const r = raw as Record<string, unknown>
+  const count = (v: unknown): string | null => {
+    if (typeof v === 'string') return v
+    if (typeof v === 'number' && Number.isFinite(v)) return String(v)
+    return null
+  }
   return {
-    transactionsCount:
-      typeof r.transactions_count === 'number'
-        ? r.transactions_count
-        : typeof r.transaction_count === 'number'
-          ? r.transaction_count
-          : null,
-    tokenTransfersCount:
-      typeof r.token_transfers_count === 'number'
-        ? r.token_transfers_count
-        : typeof r.token_transfer_count === 'number'
-          ? r.token_transfer_count
-          : null,
+    transactionsCount: count(r.transactions_count) ?? count(r.transaction_count),
+    tokenTransfersCount: count(r.token_transfers_count) ?? count(r.token_transfer_count),
+    gasUsageCount: count(r.gas_usage_count),
   }
 }
 
 export function mapTokenBalanceItem(raw: unknown): ExplorerTokenBalanceVM {
   const r = raw as Record<string, unknown>
-  const token = r.token as { address_hash?: string; name?: string } | undefined
+  const token = r.token as { address_hash?: string; address?: string; hash?: string; name?: string } | undefined
   return {
-    token: token?.address_hash ?? (r.token_address as string | undefined) ?? null,
-    value: (r.value as string | undefined) ?? null,
+    token:
+      token?.address_hash ??
+      token?.address ??
+      token?.hash ??
+      (r.token_address as string | undefined) ??
+      (r.token as string | undefined) ??
+      null,
+    value: normalizeAmountLike(r.value),
     tokenId: (r.token_id as string | undefined) ?? null,
   }
 }
 
-export function mapTokenBalanceList(raw: BlockscoutListEnvelope<unknown>): PaginatedVM<ExplorerTokenBalanceVM> {
+export function mapTokenBalanceList(
+  raw: BlockscoutListEnvelope<unknown> | unknown[] | null | undefined,
+): PaginatedVM<ExplorerTokenBalanceVM> {
+  const items = asItemArray(raw as unknown[] | { items?: unknown[] } | null | undefined)
+  const nextPageParams = Array.isArray(raw) ? null : pickNextPageParams((raw ?? {}) as BlockscoutListEnvelope<unknown>)
   return {
-    items: (raw.items ?? []).map(mapTokenBalanceItem),
-    nextPageParams: pickNextPageParams(raw),
+    items: items.map(mapTokenBalanceItem),
+    nextPageParams,
   }
 }
 

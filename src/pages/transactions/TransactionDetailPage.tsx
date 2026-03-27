@@ -225,7 +225,9 @@ export function TransactionDetailPage() {
                 {logsQuery.data.items.map((log, i) => (
                   <div key={i} className="rounded border border-border bg-surface p-3 text-xs font-mono">
                     <div className="text-slate-500">#{log.index ?? i}</div>
-                    <div className="mt-1 break-all">{log.address ?? '—'}</div>
+                    <div className="mt-1 break-all">
+                      <AddressLink address={log.address} shorten={false} />
+                    </div>
                     <div className="mt-1 break-all text-slate-600 dark:text-slate-300">{log.data ?? ''}</div>
                   </div>
                 ))}

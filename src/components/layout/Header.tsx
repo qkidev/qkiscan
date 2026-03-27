@@ -54,6 +54,15 @@ export function Header() {
       >
         {t('nav.tokens')}
       </NavLink>
+      <NavLink
+        to="/token-transfers"
+        className={({ isActive }) =>
+          clsx('rounded px-2 py-1 text-sm', isActive ? 'bg-surface-muted font-semibold' : 'hover:bg-surface-muted')
+        }
+        onClick={() => setMobile(false)}
+      >
+        {t('nav.tokenTransfers')}
+      </NavLink>
     </>
   )
 
@@ -80,7 +89,7 @@ export function Header() {
           </div>
         </div>
         <SearchBar />
-        <nav className={clsx('hidden flex-wrap gap-2 sm:flex', mobileOpen && 'flex')}>{nav}</nav>
+        <nav className={clsx('flex-wrap gap-2 sm:flex', mobileOpen ? 'flex' : 'hidden')}>{nav}</nav>
         <div className="sm:hidden">
           <LanguageSwitcher className="w-full justify-between" />
         </div>

@@ -37,6 +37,16 @@ export async function getTokenTransfers(
   return mapTokenTransfersResponse(data)
 }
 
+/** 全网代币转账列表 */
+export async function getAllTokenTransfers(next?: NextPageParams): Promise<PaginatedVM<ExplorerTokenTransferVM>> {
+  const data = await unwrap(
+    apiClient.get<BlockscoutListEnvelope<unknown>>('/v2/token-transfers', {
+      params: mergeParams(next),
+    }),
+  )
+  return mapTokenTransfersResponse(data)
+}
+
 export async function getTokenHolders(
   address: string,
   next?: NextPageParams,
