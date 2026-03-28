@@ -313,6 +313,7 @@ export function AddressDetailPage() {
                   <div key={`${row.transactionHash}-${i}`} className="rounded-lg border border-border bg-surface p-3 text-sm">
                     <div className="flex items-center justify-between gap-2">
                       <HashText hash={row.transactionHash} to={row.transactionHash ? `/tx/${row.transactionHash}` : undefined} />
+                      <Timestamp iso={row.timestampIso} />
                     </div>
                     <div className="mt-2 text-xs">
                       <span className="inline-flex rounded-full bg-slate-200 px-2 py-0.5 font-mono text-slate-700 dark:bg-slate-700 dark:text-slate-200">
@@ -334,6 +335,7 @@ export function AddressDetailPage() {
                   <thead className="border-b border-border bg-surface-muted text-xs uppercase text-slate-500">
                     <tr>
                       <th className="px-3 py-2">{t('common:table.tx')}</th>
+                      <th className="px-3 py-2">{t('common:table.time')}</th>
                       <th className="px-3 py-2">{t('common:table.method')}</th>
                       <th className="px-3 py-2">{t('common:table.from')}</th>
                       <th className="px-3 py-2">{t('common:table.to')}</th>
@@ -345,6 +347,9 @@ export function AddressDetailPage() {
                       <tr key={`${row.transactionHash}-${i}`} className="border-b border-border last:border-0">
                         <td className="px-3 py-2">
                           <HashText hash={row.transactionHash} to={row.transactionHash ? `/tx/${row.transactionHash}` : undefined} />
+                        </td>
+                        <td className="px-3 py-2 whitespace-nowrap">
+                          <Timestamp iso={row.timestampIso} />
                         </td>
                         <td className="px-3 py-2 font-mono text-xs">{row.method ?? '—'}</td>
                         <td className="px-3 py-2">
