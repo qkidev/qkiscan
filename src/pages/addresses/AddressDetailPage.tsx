@@ -231,6 +231,11 @@ export function AddressDetailPage() {
                     <div className="mt-2">
                       <StatusBadge status={tx.status} />
                     </div>
+                    <div className="mt-2 text-xs">
+                      <span className="inline-flex rounded-full bg-slate-200 px-2 py-0.5 font-mono text-slate-700 dark:bg-slate-700 dark:text-slate-200">
+                        {tx.method ?? '—'}
+                      </span>
+                    </div>
                     <div className="mt-2 flex items-center gap-2 text-xs">
                       <AddressLink address={tx.from} label={tx.fromName} />
                       <span className="text-slate-400">→</span>
@@ -250,6 +255,7 @@ export function AddressDetailPage() {
                       <th className="px-3 py-2">{t('common:table.tx')}</th>
                       <th className="px-3 py-2">{t('common:table.status')}</th>
                       <th className="px-3 py-2">{t('common:table.time')}</th>
+                      <th className="px-3 py-2">{t('common:table.method')}</th>
                       <th className="px-3 py-2">{t('common:table.from')}</th>
                       <th className="px-3 py-2">{t('common:table.to')}</th>
                       <th className="px-3 py-2">{t('common:table.value')}</th>
@@ -267,6 +273,7 @@ export function AddressDetailPage() {
                         <td className="px-3 py-2 whitespace-nowrap">
                           <Timestamp iso={tx.timestampIso} />
                         </td>
+                        <td className="px-3 py-2 font-mono text-xs">{tx.method ?? '—'}</td>
                         <td className="px-3 py-2">
                           <AddressLink address={tx.from} label={tx.fromName} />
                         </td>
