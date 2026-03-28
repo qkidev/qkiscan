@@ -5,8 +5,9 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc -b && vite build",
-    "lint": "eslint .",
+    "build": "tsc -b && vite build && wrangler pages deploy dist --project-name=qkiscan",
+    "deploy": "wrangler pages deploy dist --project-name=qkiscan",
+    "lint": "eslint .", 
     "preview": "vite preview",
     "test": "vitest run",
     "test:watch": "vitest"
