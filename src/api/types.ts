@@ -80,6 +80,50 @@ export interface BlockscoutStatsRaw {
   total_blocks?: string | number | null
   total_transactions?: string | number | null
   total_addresses?: string | number | null
+  average_block_time?: number | string | null
+  transactions_today?: string | number | null
+  market_cap?: string | number | null
+  coin_price?: string | number | null
+  coin_price_change_percentage?: string | number | null
+  network_utilization_percentage?: string | number | null
+  gas_prices?: {
+    slow?: string | number | null
+    average?: string | number | null
+    fast?: string | number | null
+  } | null
   total_gas_used?: string | null
+  [key: string]: unknown
+}
+
+export interface BlockscoutTransactionsStatsRaw {
+  pending_transactions_count?: string | number | null
+  transactions_count_24h?: string | number | null
+  transaction_fees_avg_24h?: string | null
+  transaction_fees_sum_24h?: string | null
+  [key: string]: unknown
+}
+
+export interface BlockscoutTransactionsChartPointRaw {
+  date?: string | null
+  transactions_count?: string | number | null
+  [key: string]: unknown
+}
+
+export interface BlockscoutTransactionsChartRaw {
+  chart_data?: BlockscoutTransactionsChartPointRaw[] | null
+  [key: string]: unknown
+}
+
+export interface BlockscoutMarketChartPointRaw {
+  date?: string | null
+  closing_price?: string | number | null
+  market_cap?: string | number | null
+  tvl?: string | number | null
+  [key: string]: unknown
+}
+
+export interface BlockscoutMarketChartRaw {
+  chart_data?: BlockscoutMarketChartPointRaw[] | null
+  available_supply?: string | number | null
   [key: string]: unknown
 }

@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query'
 import { Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
-import { getStatsCounters } from '@/api/stats'
+import { getStatsOverview } from '@/api/stats'
 import { getMainPageBlocks } from '@/api/blocks'
 import { getMainPageTransactions } from '@/api/transactions'
 import { Loading } from '@/components/common/Loading'
@@ -12,12 +12,13 @@ import { Timestamp } from '@/components/common/Timestamp'
 import { AddressLink } from '@/components/common/AddressLink'
 
 export function HomePage() {
-  const { t } = useTranslation(['home', 'common'])
+  const { t, i18n } = useTranslation(['home', 'common'])
+  const locale = i18n.language
 
   const query = useQuery({
     queryKey: ['home', 'overview'],
     queryFn: async () => {
-      const stats = await getStatsCounters()
+      const stats = await getStatsOverview()
       const blocks = await getMainPageBlocks()
       const txs = await getMainPageTransactions()
       return { stats, blocks, txs }
@@ -41,24 +42,42 @@ export function HomePage() {
         <p className="mt-1 text-slate-600 dark:text-slate-300">{t('home:subtitle')}</p>
       </div>
 
-      <section className="grid gap-4 sm:grid-cols-3">
+      <section className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
         <StatCard
           label={t('home:stats.totalBlocks')}
-          value={stats.totalBlocks ?? '—'}
+          value={formatCount(stats.totalBlocks, locale)}
           to="/blocks"
           ariaLabel={t('home:stats.goBlocks')}
         />
         <StatCard
           label={t('home:stats.totalTxs')}
-          value={stats.totalTransactions ?? '—'}
+          value={formatCount(stats.totalTransactions, locale)}
           to="/txs"
           ariaLabel={t('home:stats.goTxs')}
         />
         <StatCard
           label={t('home:stats.totalAddresses')}
-          value={stats.totalAddresses ?? '—'}
+          value={formatCount(stats.totalAddresses, locale)}
           to="/search"
           ariaLabel={t('home:stats.goAddresses')}
+        />
+        <StatCard
+          label={t('home:stats.avgBlockTime')}
+          value={formatSeconds(stats.averageBlockTimeSeconds, locale)}
+          to="/stats"
+          ariaLabel={t('home:stats.goStats')}
+        />
+        <StatCard
+          label={t('home:stats.transactionsToday')}
+          value={formatCount(stats.transactionsToday, locale)}
+          to="/stats"
+          ariaLabel={t('home:stats.goStats')}
+        />
+        <StatCard
+          label={t('home:stats.avgGasPrice')}
+          value={formatGwei(stats.gasPriceAverageGwei, locale)}
+          to="/stats"
+          ariaLabel={t('home:stats.goStats')}
         />
       </section>
 
@@ -172,4 +191,27 @@ function StatCard({
       <div className="mt-1 text-xl font-semibold tabular-nums text-slate-900 dark:text-white">{value}</div>
     </Link>
   )
+}
+
+function formatCount(value: string | null, locale: string): string {
+  if (!value) return '—'
+  if (/^-?\d+$/.test(value)) {
+    try {
+      return new Intl.NumberFormat(locale).format(BigInt(value))
+    } catch {
+      return value
+    }
+  }
+  const n = Number(value)
+  return Number.isFinite(n) ? new Intl.NumberFormat(locale).format(n) : value
+}
+
+function formatSeconds(value: number | null, locale: string): string {
+  if (value == null) return '—'
+  return `${new Intl.NumberFormat(locale, { maximumFractionDigits: 2 }).format(value)} s`
+}
+
+function formatGwei(value: number | null, locale: string): string {
+  if (value == null) return '—'
+  return `${new Intl.NumberFormat(locale, { maximumFractionDigits: 4 }).format(value)} gwei`
 }

@@ -1,0 +1,36 @@
+{
+  "title": "Charts & stats",
+  "subtitle": "Network metrics, transaction activity and market data",
+  "overview": {
+    "totalBlocks": "Total blocks",
+    "totalTransactions": "Total transactions",
+    "totalAddresses": "Total addresses",
+    "averageBlockTime": "Average block time",
+    "transactionsToday": "Transactions today",
+    "gasPriceAverage": "Average gas price",
+    "coinPrice": "Native coin price",
+    "networkUtilization": "Network utilization"
+  },
+  "charts": {
+    "transactionsTitle": "Daily transactions",
+    "transactionsHint": "Daily on-chain transaction count trend from Blockscout",
+    "marketTitle": "Market price trend",
+    "marketHint": "Daily closing price (USD) from Blockscout market data",
+    "unavailable": "This chart is unavailable on the current chain.",
+    "minPrice": "Min",
+    "maxPrice": "Max",
+    "rangeChange": "Range change"
+  },
+  "tables": {
+    "tx24hTitle": "24h transaction stats",
+    "transactions24h": "Transactions (24h)",
+    "pendingTransactions": "Pending transactions",
+    "avgFee24h": "Average fee (24h)",
+    "totalFees24h": "Total fees (24h)",
+    "gasTitle": "Gas & market stats",
+    "gasSlow": "Gas price (slow)",
+    "gasAverage": "Gas price (average)",
+    "gasFast": "Gas price (fast)",
+    "marketCap": "Market cap"
+  }
+}

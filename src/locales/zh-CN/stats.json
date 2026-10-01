@@ -1,0 +1,36 @@
+{
+  "title": "图表与统计",
+  "subtitle": "网络指标、交易活跃度与市场数据",
+  "overview": {
+    "totalBlocks": "区块总数",
+    "totalTransactions": "交易总数",
+    "totalAddresses": "地址总数",
+    "averageBlockTime": "平均出块时间",
+    "transactionsToday": "今日交易数",
+    "gasPriceAverage": "平均 Gas 价格",
+    "coinPrice": "原生币价格",
+    "networkUtilization": "网络利用率"
+  },
+  "charts": {
+    "transactionsTitle": "每日交易数",
+    "transactionsHint": "来自 Blockscout 的链上每日交易量趋势",
+    "marketTitle": "市场价格趋势",
+    "marketHint": "来自 Blockscout 市场数据的每日收盘价（USD）",
+    "unavailable": "当前链暂不支持该图表接口。",
+    "minPrice": "最低",
+    "maxPrice": "最高",
+    "rangeChange": "区间变动"
+  },
+  "tables": {
+    "tx24hTitle": "24 小时交易统计",
+    "transactions24h": "24 小时交易数",
+    "pendingTransactions": "待处理交易数",
+    "avgFee24h": "24 小时平均手续费",
+    "totalFees24h": "24 小时总手续费",
+    "gasTitle": "Gas 与市场指标",
+    "gasSlow": "Gas 价格（慢）",
+    "gasAverage": "Gas 价格（平均）",
+    "gasFast": "Gas 价格（快）",
+    "marketCap": "市值"
+  }
+}

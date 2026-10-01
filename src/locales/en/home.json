@@ -5,9 +5,13 @@
     "totalBlocks": "Total blocks",
     "totalTxs": "Total transactions",
     "totalAddresses": "Total addresses",
+    "avgBlockTime": "Average block time",
+    "transactionsToday": "Transactions today",
+    "avgGasPrice": "Average gas price",
     "goBlocks": "Open block list",
     "goTxs": "Open transaction list",
-    "goAddresses": "Open search to look up addresses"
+    "goAddresses": "Open search to look up addresses",
+    "goStats": "Open charts and stats"
   },
   "latestBlocks": "Latest blocks",
   "latestTxs": "Latest transactions",

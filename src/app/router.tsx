@@ -10,6 +10,7 @@ import { TokensPage } from '@/pages/tokens/TokensPage'
 import { TokenDetailPage } from '@/pages/tokens/TokenDetailPage'
 import { TokenTransfersPage } from '@/pages/token-transfers/TokenTransfersPage'
 import { SearchPage } from '@/pages/search/SearchPage'
+import { StatsPage } from '@/pages/stats/StatsPage'
 import { NotFoundPage } from '@/pages/not-found/NotFoundPage'
 
 export const router = createBrowserRouter([
@@ -27,6 +28,7 @@ export const router = createBrowserRouter([
       { path: 'token-transfers', element: <TokenTransfersPage /> },
       { path: 'token/:address', element: <TokenDetailPage /> },
       { path: 'search', element: <SearchPage /> },
+      { path: 'stats', element: <StatsPage /> },
       { path: '404', element: <NotFoundPage /> },
       { path: '*', element: <Navigate to="/404" replace /> },
     ],

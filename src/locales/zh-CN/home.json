@@ -5,9 +5,13 @@
     "totalBlocks": "区块总数",
     "totalTxs": "交易总数",
     "totalAddresses": "地址总数",
+    "avgBlockTime": "平均出块时间",
+    "transactionsToday": "今日交易数",
+    "avgGasPrice": "平均 Gas 价格",
     "goBlocks": "打开区块列表",
     "goTxs": "打开交易列表",
-    "goAddresses": "打开搜索以查询地址"
+    "goAddresses": "打开搜索以查询地址",
+    "goStats": "打开图表与统计"
   },
   "latestBlocks": "最新区块",
   "latestTxs": "最新交易",
