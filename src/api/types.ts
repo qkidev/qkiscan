@@ -80,6 +80,44 @@ export interface BlockscoutStatsRaw {
   total_blocks?: string | number | null
   total_transactions?: string | number | null
   total_addresses?: string | number | null
-  total_gas_used?: string | null
+  total_gas_used?: string | number | null
+  transactions_today?: string | number | null
+  average_block_time?: string | number | null
+  network_utilization_percentage?: string | number | null
+  coin_price?: string | number | null
+  coin_price_change_percentage?: string | number | null
+  market_cap?: string | number | null
+  gas_prices?:
+    | {
+        slow?: string | number | null
+        average?: string | number | null
+        fast?: string | number | null
+      }
+    | null
+  [key: string]: unknown
+}
+
+export interface BlockscoutTransactionsChartPointRaw {
+  date?: string | null
+  transactions_count?: string | number | null
+  [key: string]: unknown
+}
+
+export interface BlockscoutTransactionsChartRaw {
+  chart_data?: BlockscoutTransactionsChartPointRaw[] | null
+  [key: string]: unknown
+}
+
+export interface BlockscoutMarketChartPointRaw {
+  date?: string | null
+  closing_price?: string | number | null
+  market_cap?: string | number | null
+  tvl?: string | number | null
+  [key: string]: unknown
+}
+
+export interface BlockscoutMarketChartRaw {
+  available_supply?: string | number | null
+  chart_data?: BlockscoutMarketChartPointRaw[] | null
   [key: string]: unknown
 }

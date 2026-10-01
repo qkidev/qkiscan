@@ -5,7 +5,8 @@
     "blocks": "Blocks",
     "transactions": "Transactions",
     "tokens": "Tokens",
-    "tokenTransfers": "Token transfers"
+    "tokenTransfers": "Token transfers",
+    "chartsStats": "Charts & stats"
   },
   "search": {
     "placeholder": "Search by address / tx hash / block / token",

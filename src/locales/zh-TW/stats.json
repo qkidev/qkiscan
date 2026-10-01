@@ -1,0 +1,54 @@
+{
+  "title": "圖表與統計",
+  "subtitle": "基於 Blockscout API 的網路趨勢與關鍵指標",
+  "summaryTitle": "總覽",
+  "detailsTitle": "統計明細表",
+  "cards": {
+    "totalBlocks": "區塊總數",
+    "totalTxs": "交易總數",
+    "totalAddresses": "地址總數",
+    "txsToday": "今日交易數",
+    "avgBlockTime": "平均出塊時間",
+    "avgGasPrice": "平均 Gas 價格",
+    "marketCap": "市值",
+    "coinPrice": "原生幣價格"
+  },
+  "charts": {
+    "latest": "最新值",
+    "transactions": {
+      "title": "每日交易量",
+      "description": "最近一段時間的日交易量趨勢"
+    },
+    "price": {
+      "title": "原生幣收盤價",
+      "description": "市場圖表中的每日收盤價"
+    },
+    "marketCap": {
+      "title": "原生幣市值",
+      "description": "每日市值變化趨勢"
+    }
+  },
+  "table": {
+    "totalBlocks": "區塊總數",
+    "totalTransactions": "交易總數",
+    "totalAddresses": "地址總數",
+    "totalGasUsed": "累計 Gas 用量",
+    "transactionsToday": "今日交易數",
+    "avgBlockTime": "平均出塊時間",
+    "networkUtilization": "網路利用率",
+    "coinPrice": "原生幣價格",
+    "coinPriceChange": "24 小時漲跌",
+    "marketCap": "市值",
+    "gasSlow": "Gas 價格（慢速）",
+    "gasAverage": "Gas 價格（平均）",
+    "gasFast": "Gas 價格（快速）",
+    "availableSupply": "可流通供應量"
+  },
+  "units": {
+    "seconds": "秒",
+    "gwei": "gwei"
+  },
+  "state": {
+    "noChartData": "暫無圖表資料"
+  }
+}

@@ -63,6 +63,15 @@ export function Header() {
       >
         {t('nav.tokenTransfers')}
       </NavLink>
+      <NavLink
+        to="/stats"
+        className={({ isActive }) =>
+          clsx('rounded px-2 py-1 text-sm', isActive ? 'bg-surface-muted font-semibold' : 'hover:bg-surface-muted')
+        }
+        onClick={() => setMobile(false)}
+      >
+        {t('nav.chartsStats')}
+      </NavLink>
     </>
   )
 
