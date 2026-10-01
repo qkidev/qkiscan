@@ -9,7 +9,7 @@
 - TanStack Query v5
 - axios（统一 `src/api/client.ts` 实例）
 - react-i18next / i18next
-- Tailwind CSS 3
+- Tailwind CSS 4（`@tailwindcss/vite`）
 - dayjs（时间）
 - Vitest（单元测试）
 
