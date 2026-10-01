@@ -5,7 +5,8 @@
     "blocks": "区块",
     "transactions": "交易",
     "tokens": "代币",
-    "tokenTransfers": "代币转账"
+    "tokenTransfers": "代币转账",
+    "chartsStats": "图表与统计"
   },
   "search": {
     "placeholder": "按地址 / 交易哈希 / 区块 / 代币搜索",

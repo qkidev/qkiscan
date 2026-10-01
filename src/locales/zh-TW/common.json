@@ -5,7 +5,8 @@
     "blocks": "區塊",
     "transactions": "交易",
     "tokens": "代幣",
-    "tokenTransfers": "代幣轉帳"
+    "tokenTransfers": "代幣轉帳",
+    "chartsStats": "圖表與統計"
   },
   "search": {
     "placeholder": "依地址 / 交易雜湊 / 區塊 / 代幣搜尋",

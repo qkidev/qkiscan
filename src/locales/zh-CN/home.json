@@ -2,12 +2,22 @@
   "title": "区块链浏览器",
   "subtitle": "网络概览",
   "stats": {
+    "sectionTitle": "网络统计",
+    "viewCharts": "查看图表与统计",
     "totalBlocks": "区块总数",
     "totalTxs": "交易总数",
     "totalAddresses": "地址总数",
+    "txsToday": "今日交易数",
+    "avgBlockTime": "平均出块时间",
+    "avgGasPrice": "平均 Gas 价格",
+    "marketCap": "市值",
+    "networkUtilization": "网络利用率",
+    "unitSeconds": "秒",
+    "unitGwei": "gwei",
     "goBlocks": "打开区块列表",
     "goTxs": "打开交易列表",
-    "goAddresses": "打开搜索以查询地址"
+    "goAddresses": "打开搜索以查询地址",
+    "goCharts": "打开图表与详细网络统计"
   },
   "latestBlocks": "最新区块",
   "latestTxs": "最新交易",

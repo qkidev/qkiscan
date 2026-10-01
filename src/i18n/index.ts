@@ -8,6 +8,7 @@ import enTx from '@/locales/en/tx.json'
 import enAddress from '@/locales/en/address.json'
 import enToken from '@/locales/en/token.json'
 import enSearch from '@/locales/en/search.json'
+import enStats from '@/locales/en/stats.json'
 
 import zhCNCommon from '@/locales/zh-CN/common.json'
 import zhCNHome from '@/locales/zh-CN/home.json'
@@ -16,6 +17,7 @@ import zhCNTx from '@/locales/zh-CN/tx.json'
 import zhCNAddress from '@/locales/zh-CN/address.json'
 import zhCNToken from '@/locales/zh-CN/token.json'
 import zhCNSearch from '@/locales/zh-CN/search.json'
+import zhCNStats from '@/locales/zh-CN/stats.json'
 
 import zhTWCommon from '@/locales/zh-TW/common.json'
 import zhTWHome from '@/locales/zh-TW/home.json'
@@ -24,6 +26,7 @@ import zhTWTx from '@/locales/zh-TW/tx.json'
 import zhTWAddress from '@/locales/zh-TW/address.json'
 import zhTWToken from '@/locales/zh-TW/token.json'
 import zhTWSearch from '@/locales/zh-TW/search.json'
+import zhTWStats from '@/locales/zh-TW/stats.json'
 
 const resources = {
   en: {
@@ -34,6 +37,7 @@ const resources = {
     address: enAddress,
     token: enToken,
     search: enSearch,
+    stats: enStats,
   },
   'zh-CN': {
     common: zhCNCommon,
@@ -43,6 +47,7 @@ const resources = {
     address: zhCNAddress,
     token: zhCNToken,
     search: zhCNSearch,
+    stats: zhCNStats,
   },
   'zh-TW': {
     common: zhTWCommon,
@@ -52,6 +57,7 @@ const resources = {
     address: zhTWAddress,
     token: zhTWToken,
     search: zhTWSearch,
+    stats: zhTWStats,
   },
 } as const
 
@@ -60,7 +66,7 @@ void i18n.use(initReactI18next).init({
   lng: 'en',
   fallbackLng: 'en',
   defaultNS: 'common',
-  ns: ['common', 'home', 'block', 'tx', 'address', 'token', 'search'],
+  ns: ['common', 'home', 'block', 'tx', 'address', 'token', 'search', 'stats'],
   interpolation: { escapeValue: false },
 })
 

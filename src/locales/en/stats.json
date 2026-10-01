@@ -1,0 +1,54 @@
+{
+  "title": "Charts & stats",
+  "subtitle": "Network trends and key metrics powered by Blockscout API",
+  "summaryTitle": "Overview",
+  "detailsTitle": "Stats table",
+  "cards": {
+    "totalBlocks": "Total blocks",
+    "totalTxs": "Total transactions",
+    "totalAddresses": "Total addresses",
+    "txsToday": "Transactions today",
+    "avgBlockTime": "Avg block time",
+    "avgGasPrice": "Avg gas price",
+    "marketCap": "Market cap",
+    "coinPrice": "Native coin price"
+  },
+  "charts": {
+    "latest": "Latest",
+    "transactions": {
+      "title": "Daily transactions",
+      "description": "Recent daily transaction count trend"
+    },
+    "price": {
+      "title": "Native coin closing price",
+      "description": "Daily closing price from market chart"
+    },
+    "marketCap": {
+      "title": "Native coin market cap",
+      "description": "Daily market capitalization trend"
+    }
+  },
+  "table": {
+    "totalBlocks": "Total blocks",
+    "totalTransactions": "Total transactions",
+    "totalAddresses": "Total addresses",
+    "totalGasUsed": "Total gas used",
+    "transactionsToday": "Transactions today",
+    "avgBlockTime": "Average block time",
+    "networkUtilization": "Network utilization",
+    "coinPrice": "Native coin price",
+    "coinPriceChange": "Price change (24h)",
+    "marketCap": "Market cap",
+    "gasSlow": "Gas price (slow)",
+    "gasAverage": "Gas price (average)",
+    "gasFast": "Gas price (fast)",
+    "availableSupply": "Available supply"
+  },
+  "units": {
+    "seconds": "s",
+    "gwei": "gwei"
+  },
+  "state": {
+    "noChartData": "No chart data"
+  }
+}

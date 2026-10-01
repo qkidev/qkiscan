@@ -2,12 +2,22 @@
   "title": "Blockchain explorer",
   "subtitle": "Overview of the network",
   "stats": {
+    "sectionTitle": "Network stats",
+    "viewCharts": "View Charts & stats",
     "totalBlocks": "Total blocks",
     "totalTxs": "Total transactions",
     "totalAddresses": "Total addresses",
+    "txsToday": "Transactions today",
+    "avgBlockTime": "Avg block time",
+    "avgGasPrice": "Avg gas price",
+    "marketCap": "Market cap",
+    "networkUtilization": "Network utilization",
+    "unitSeconds": "s",
+    "unitGwei": "gwei",
     "goBlocks": "Open block list",
     "goTxs": "Open transaction list",
-    "goAddresses": "Open search to look up addresses"
+    "goAddresses": "Open search to look up addresses",
+    "goCharts": "Open charts and detailed network stats"
   },
   "latestBlocks": "Latest blocks",
   "latestTxs": "Latest transactions",

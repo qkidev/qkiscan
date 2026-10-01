@@ -148,6 +148,39 @@ export interface ExplorerStatsVM {
   totalBlocks: string | null
   totalTransactions: string | null
   totalAddresses: string | null
+  totalGasUsed: string | null
+  transactionsToday: string | null
+  averageBlockTimeSec: number | null
+  networkUtilizationPercent: number | null
+  coinPriceUsd: number | null
+  coinPriceChangePercent: number | null
+  marketCapUsd: number | null
+  gasPrices: {
+    slow: number | null
+    average: number | null
+    fast: number | null
+  } | null
+}
+
+export interface ExplorerTransactionsChartPointVM {
+  date: string
+  transactionsCount: number
+}
+
+export interface ExplorerTransactionsChartVM {
+  points: ExplorerTransactionsChartPointVM[]
+}
+
+export interface ExplorerMarketChartPointVM {
+  date: string
+  closingPrice: number | null
+  marketCap: number | null
+  tvl: number | null
+}
+
+export interface ExplorerMarketChartVM {
+  availableSupply: string | null
+  points: ExplorerMarketChartPointVM[]
 }
 
 export interface ExplorerContractSourceFileVM {
