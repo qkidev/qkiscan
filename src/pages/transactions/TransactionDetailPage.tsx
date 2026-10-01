@@ -13,12 +13,12 @@ import { ApiError } from '@/api/client'
 import { Loading } from '@/components/common/Loading'
 import { ErrorState } from '@/components/common/ErrorState'
 import { EmptyState } from '@/components/common/EmptyState'
-import { HashText } from '@/components/common/HashText'
 import { Timestamp } from '@/components/common/Timestamp'
 import { AddressLink } from '@/components/common/AddressLink'
 import { Amount } from '@/components/common/Amount'
 import { StatusBadge } from '@/components/common/StatusBadge'
 import { PaginationControls } from '@/components/common/PaginationControls'
+import { TokenTransferFlowList } from '@/components/common/TokenTransferFlow'
 import { keysetHasNext } from '@/utils/query'
 import { useKeysetPagination } from '@/hooks/useKeysetPagination'
 import { stableStringifyParams } from '@/utils/query'
@@ -47,10 +47,12 @@ export function TransactionDetailPage() {
   })
 
   const ttPg = useKeysetPagination()
+  // 概览始终展示首页；专用 Tab 才走分页游标
+  const tokenTransferCursor = tab === 'token-transfers' ? ttPg.requestCursor : null
   const tokenTransfersQuery = useQuery({
-    queryKey: ['transactions', hash, 'token-transfers', stableStringifyParams(ttPg.requestCursor)],
-    queryFn: () => getTransactionTokenTransfers(hash, ttPg.requestCursor ?? undefined),
-    enabled: Boolean(hash) && tab === 'token-transfers',
+    queryKey: ['transactions', hash, 'token-transfers', stableStringifyParams(tokenTransferCursor)],
+    queryFn: () => getTransactionTokenTransfers(hash, tokenTransferCursor ?? undefined),
+    enabled: Boolean(hash) && (tab === 'overview' || tab === 'token-transfers'),
   })
 
   const logsPg = useKeysetPagination()
@@ -95,6 +97,7 @@ export function TransactionDetailPage() {
   }
 
   const tx = detailQuery.data
+  const overviewTransfers = tokenTransfersQuery.data?.items ?? []
 
   return (
     <div className="space-y-6">
@@ -131,6 +134,16 @@ export function TransactionDetailPage() {
         <dl className="grid gap-3 rounded-lg border border-border bg-surface p-4 text-sm sm:grid-cols-2">
           <DetailRow label={t('common:table.status')} value={<StatusBadge status={tx.status} />} />
           <DetailRow
+            label={t('tx:method')}
+            value={
+              tx.method ? (
+                <span className="inline-flex rounded-md bg-surface-muted px-2 py-0.5 font-mono text-xs">{tx.method}</span>
+              ) : (
+                '—'
+              )
+            }
+          />
+          <DetailRow
             label={t('common:table.block')}
             value={
               tx.blockNumber ? (
@@ -146,6 +159,20 @@ export function TransactionDetailPage() {
           <DetailRow label={t('tx:nonce')} value={tx.nonce ?? '—'} />
           <DetailRow label={t('common:table.from')} value={<AddressLink address={tx.from} label={tx.fromName} shorten={false} />} />
           <DetailRow label={t('common:table.to')} value={<AddressLink address={tx.to} label={tx.toName} shorten={false} />} />
+          <div className="sm:col-span-2">
+            <dt className="text-xs uppercase text-slate-500">{t('tx:tokenTransfer.title')}</dt>
+            <dd className="mt-2">
+              {tokenTransfersQuery.isPending ? (
+                <Loading label={t('common:state.loading')} />
+              ) : tokenTransfersQuery.isError ? (
+                <ErrorState error={tokenTransfersQuery.error} onRetry={() => void tokenTransfersQuery.refetch()} />
+              ) : overviewTransfers.length === 0 ? (
+                <span className="text-slate-400">—</span>
+              ) : (
+                <TokenTransferFlowList items={overviewTransfers} />
+              )}
+            </dd>
+          </div>
           <DetailRow label={t('common:table.value')} value={<Amount wei={tx.valueWei} />} />
           <DetailRow label={t('tx:gasPrice')} value={formatWeiToGwei(tx.gasPrice)} />
           <DetailRow label={t('tx:gasUsed')} value={tx.gasUsed ?? '—'} />
@@ -169,37 +196,8 @@ export function TransactionDetailPage() {
         >
           {tokenTransfersQuery.isSuccess ? (
             <>
-              <div className="overflow-x-auto rounded-lg border border-border bg-surface">
-                <table className="min-w-full text-left text-sm">
-                  <thead className="border-b border-border bg-surface-muted text-xs uppercase text-slate-500">
-                    <tr>
-                      <th className="px-3 py-2">{t('common:table.tx')}</th>
-                      <th className="px-3 py-2">{t('common:table.method')}</th>
-                      <th className="px-3 py-2">{t('common:table.from')}</th>
-                      <th className="px-3 py-2">{t('common:table.to')}</th>
-                      <th className="px-3 py-2">{t('token:symbol')}</th>
-                      <th className="px-3 py-2">{t('common:table.value')}</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {tokenTransfersQuery.data.items.map((row, i) => (
-                      <tr key={`${row.transactionHash}-${i}`} className="border-b border-border last:border-0">
-                        <td className="px-3 py-2">
-                          <HashText hash={row.transactionHash} to={row.transactionHash ? `/tx/${row.transactionHash}` : undefined} />
-                        </td>
-                        <td className="px-3 py-2 font-mono text-xs">{row.method ?? '—'}</td>
-                        <td className="px-3 py-2">
-                          <AddressLink address={row.from} label={row.fromName} />
-                        </td>
-                        <td className="px-3 py-2">
-                          <AddressLink address={row.to} label={row.toName} />
-                        </td>
-                        <td className="px-3 py-2">{row.tokenSymbol ?? '—'}</td>
-                        <td className="px-3 py-2 font-mono text-xs">{row.amountRaw ?? '—'}</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
+              <div className="rounded-lg border border-border bg-surface p-4">
+                <TokenTransferFlowList items={tokenTransfersQuery.data.items} />
               </div>
               <PaginationControls
                 hasPrev={ttPg.canGoPrev}

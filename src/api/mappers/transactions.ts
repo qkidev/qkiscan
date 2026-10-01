@@ -38,6 +38,13 @@ export function mapTxDetail(raw: unknown): ExplorerTransactionDetailVM {
   const to = addressFromField(r.to as BlockscoutTransactionItemRaw['to'])
   const toName = addressNameFromField(r.to as BlockscoutTransactionItemRaw['to'])
   const status = parseTxStatus(r as BlockscoutTransactionItemRaw)
+  const decoded = r.decoded_input as { method_call?: string; method_id?: string } | null | undefined
+  const method =
+    (typeof r.method === 'string' && r.method.trim() !== '' ? r.method.trim() : null) ??
+    (typeof decoded?.method_call === 'string' && decoded.method_call.trim() !== ''
+      ? decoded.method_call.trim().split('(')[0] || null
+      : null) ??
+    (typeof r.type === 'string' && r.type.trim() !== '' ? r.type.trim() : null)
   return {
     hash: String(r.hash ?? ''),
     blockNumber:
@@ -52,6 +59,7 @@ export function mapTxDetail(raw: unknown): ExplorerTransactionDetailVM {
     to,
     toName,
     status,
+    method,
     nonce: typeof r.nonce === 'number' ? r.nonce : null,
     valueWei: normalizeAmountLike(r.value),
     gasPrice: (r.gas_price as string | undefined) ?? null,

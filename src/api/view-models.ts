@@ -53,6 +53,7 @@ export interface ExplorerTransactionDetailVM {
   to: string | null
   toName: string | null
   status: 'ok' | 'fail' | 'pending' | 'unknown'
+  method: string | null
   nonce: number | null
   valueWei: string | null
   gasPrice: string | null

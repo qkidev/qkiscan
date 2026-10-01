@@ -14,5 +14,10 @@
     "logs": "日誌",
     "internal": "內部交易",
     "state": "狀態變更"
+  },
+  "method": "方法",
+  "tokenTransfer": {
+    "title": "代幣轉帳",
+    "for": "轉帳"
   }
 }

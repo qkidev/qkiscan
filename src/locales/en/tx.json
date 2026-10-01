@@ -14,5 +14,10 @@
     "logs": "Logs",
     "internal": "Internal txns",
     "state": "State changes"
+  },
+  "method": "Method",
+  "tokenTransfer": {
+    "title": "Tokens transferred",
+    "for": "for"
   }
 }
