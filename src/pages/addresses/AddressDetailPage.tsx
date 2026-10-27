@@ -226,7 +226,7 @@ export function AddressDetailPage() {
                   <div key={tx.hash} className="rounded-lg border border-border bg-surface p-3 text-sm">
                     <div className="flex items-center justify-between gap-2">
                       <HashText hash={tx.hash} to={`/tx/${tx.hash}`} />
-                      <Timestamp iso={tx.timestampIso} />
+                      <Timestamp iso={tx.timestampIso} format="absolute" />
                     </div>
                     <div className="mt-2">
                       <StatusBadge status={tx.status} />
@@ -271,7 +271,7 @@ export function AddressDetailPage() {
                           <StatusBadge status={tx.status} />
                         </td>
                         <td className="px-3 py-2 whitespace-nowrap">
-                          <Timestamp iso={tx.timestampIso} />
+                          <Timestamp iso={tx.timestampIso} format="absolute" />
                         </td>
                         <td className="px-3 py-2 font-mono text-xs">{tx.method ?? '—'}</td>
                         <td className="px-3 py-2">
@@ -313,7 +313,7 @@ export function AddressDetailPage() {
                   <div key={`${row.transactionHash}-${i}`} className="rounded-lg border border-border bg-surface p-3 text-sm">
                     <div className="flex items-center justify-between gap-2">
                       <HashText hash={row.transactionHash} to={row.transactionHash ? `/tx/${row.transactionHash}` : undefined} />
-                      <Timestamp iso={row.timestampIso} />
+                      <Timestamp iso={row.timestampIso} format="absolute" />
                     </div>
                     <div className="mt-2 text-xs">
                       <span className="inline-flex rounded-full bg-slate-200 px-2 py-0.5 font-mono text-slate-700 dark:bg-slate-700 dark:text-slate-200">
@@ -349,7 +349,7 @@ export function AddressDetailPage() {
                           <HashText hash={row.transactionHash} to={row.transactionHash ? `/tx/${row.transactionHash}` : undefined} />
                         </td>
                         <td className="px-3 py-2 whitespace-nowrap">
-                          <Timestamp iso={row.timestampIso} />
+                          <Timestamp iso={row.timestampIso} format="absolute" />
                         </td>
                         <td className="px-3 py-2 font-mono text-xs">{row.method ?? '—'}</td>
                         <td className="px-3 py-2">

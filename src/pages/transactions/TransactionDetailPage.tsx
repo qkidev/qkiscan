@@ -155,7 +155,7 @@ export function TransactionDetailPage() {
               )
             }
           />
-          <DetailRow label={t('common:table.time')} value={<Timestamp iso={tx.timestampIso} />} />
+          <DetailRow label={t('common:table.time')} value={<Timestamp iso={tx.timestampIso} format="absolute" />} />
           <DetailRow label={t('tx:nonce')} value={tx.nonce ?? '—'} />
           <DetailRow label={t('common:table.from')} value={<AddressLink address={tx.from} label={tx.fromName} shorten={false} />} />
           <DetailRow label={t('common:table.to')} value={<AddressLink address={tx.to} label={tx.toName} shorten={false} />} />

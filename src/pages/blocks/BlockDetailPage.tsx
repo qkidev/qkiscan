@@ -62,7 +62,7 @@ export function BlockDetailPage() {
 
       <dl className="grid gap-3 rounded-lg border border-border bg-surface p-4 text-sm sm:grid-cols-2">
         <DetailRow label={t('block:hash')} value={<HashText hash={b.hash} />} />
-        <DetailRow label={t('block:timestamp')} value={<Timestamp iso={b.timestampIso} />} />
+        <DetailRow label={t('block:timestamp')} value={<Timestamp iso={b.timestampIso} format="absolute" />} />
         <DetailRow label={t('block:parentHash')} value={<HashText hash={b.parentHash} to={b.parentHash ? `/blocks/${b.parentHash}` : undefined} />} />
         <DetailRow label={t('block:txCount')} value={b.txCount ?? '—'} />
         <DetailRow label={t('block:gasLimit')} value={b.gasLimit ?? '—'} />
