@@ -55,5 +55,15 @@
     "rpcHint": "目前設定鏈：{{chain}}（chainId {{id}}）。請確保錢包與 RPC 指向同一網路。",
     "rpcMissing": "未設定 VITE_APP_WALLET_RPC_URL：讀取合約與發送交易需要有效的 JSON-RPC 位址，請在 .env 填寫後重啟開發伺服器。",
     "noConnector": "未偵測到瀏覽器錢包擴充功能。"
+  },
+  "tokenHistory": {
+    "hint": "點擊某一代幣，查看此地址下該資產的轉帳明細。合約地址仍可進入代幣頁。",
+    "title": "{{symbol}} 的轉帳明細",
+    "close": "收起",
+    "open": "查看轉帳明細",
+    "direction": "方向",
+    "in": "轉入",
+    "out": "轉出",
+    "self": "自身"
   }
 }

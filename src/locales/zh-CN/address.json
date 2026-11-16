@@ -55,5 +55,15 @@
     "rpcHint": "当前配置链：{{chain}}（chainId {{id}}）。请确保钱包与 RPC 指向同一网络。",
     "rpcMissing": "未配置 VITE_APP_WALLET_RPC_URL：读合约与发交易需要有效的 JSON-RPC 地址，请在 .env 中填写后重启开发服务器。",
     "noConnector": "未检测到浏览器钱包扩展。"
+  },
+  "tokenHistory": {
+    "hint": "点击某一代币，查看该地址下这一资产的转账明细。合约地址仍可进入代币页。",
+    "title": "{{symbol}} 的转账明细",
+    "close": "收起",
+    "open": "查看转账明细",
+    "direction": "方向",
+    "in": "转入",
+    "out": "转出",
+    "self": "自身"
   }
 }

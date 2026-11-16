@@ -55,5 +55,15 @@
     "rpcHint": "Configured chain: {{chain}} (chainId {{id}}). Ensure your wallet and RPC use the same network.",
     "rpcMissing": "VITE_APP_WALLET_RPC_URL is not set: contract reads and transactions require a JSON-RPC URL in .env, then restart the dev server.",
     "noConnector": "No browser wallet extension detected."
+  },
+  "tokenHistory": {
+    "hint": "Click a token to see this address's transfers for that asset. The contract address still opens the token page.",
+    "title": "{{symbol}} transfers",
+    "close": "Hide",
+    "open": "View transfers",
+    "direction": "Direction",
+    "in": "In",
+    "out": "Out",
+    "self": "Self"
   }
 }

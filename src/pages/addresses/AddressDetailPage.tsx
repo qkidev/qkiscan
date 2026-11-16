@@ -27,6 +27,7 @@ import { useKeysetPagination } from '@/hooks/useKeysetPagination'
 import { stableStringifyParams } from '@/utils/query'
 import { CopyIconButton } from '@/components/common/CopyIconButton'
 import { getSmartContract } from '@/api/contracts'
+import { AddressTokenHistory } from '@/components/addresses/AddressTokenHistory'
 import { ContractSourcePanel } from '@/components/addresses/ContractSourcePanel'
 
 const TABS = ['transactions', 'token-transfers', 'internal-txs', 'logs', 'tokens', 'contract'] as const
@@ -113,9 +114,29 @@ export function AddressDetailPage() {
     enabled: Boolean(address) && tab === 'tokens',
   })
 
+  const selectedAsset = tab === 'tokens' ? searchParams.get('asset') : null
+
   function setTab(next: TabId) {
     const nextParams = new URLSearchParams(searchParams)
     nextParams.set('tab', next)
+    setSearchParams(nextParams, { replace: true })
+  }
+
+  function toggleAsset(tokenAddress: string) {
+    const nextParams = new URLSearchParams(searchParams)
+    nextParams.set('tab', 'tokens')
+    const current = nextParams.get('asset')
+    if (current && current.toLowerCase() === tokenAddress.toLowerCase()) {
+      nextParams.delete('asset')
+    } else {
+      nextParams.set('asset', tokenAddress)
+    }
+    setSearchParams(nextParams, { replace: true })
+  }
+
+  function closeAssetHistory() {
+    const nextParams = new URLSearchParams(searchParams)
+    nextParams.delete('asset')
     setSearchParams(nextParams, { replace: true })
   }
 
@@ -136,6 +157,10 @@ export function AddressDetailPage() {
 
   const a = detailQuery.data
   const counters = countersQuery.data
+  const selectedAssetRow = selectedAsset
+    ? tokQuery.data?.items.find((row) => row.tokenAddress?.toLowerCase() === selectedAsset.toLowerCase())
+    : undefined
+  const selectedAssetLabel = selectedAssetRow?.tokenSymbol ?? selectedAssetRow?.tokenName ?? selectedAsset ?? ''
 
   function renderTokenTransferAmount(row: { amountRaw: string | null; tokenSymbol: string | null; tokenAddress: string | null }) {
     const amount = row.amountRaw ?? '—'
@@ -451,54 +476,99 @@ export function AddressDetailPage() {
       ) : null}
 
       {tab === 'tokens' ? (
-        <TabBody
-          loading={tokQuery.isPending}
-          error={tokQuery.isError ? tokQuery.error : null}
-          empty={!tokQuery.isPending && tokQuery.isSuccess && tokQuery.data.items.length === 0}
-          onRetry={() => void tokQuery.refetch()}
-        >
-          {tokQuery.isSuccess ? (
-            <>
-              <div className="overflow-x-auto rounded-lg border border-border bg-surface">
-                <table className="min-w-full text-left text-sm">
-                  <thead className="border-b border-border bg-surface-muted text-xs uppercase text-slate-500">
-                    <tr>
-                      <th className="px-3 py-2">{t('token:symbol')}</th>
-                      <th className="px-3 py-2">{t('common:table.value')}</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {tokQuery.data.items.map((row, i) => (
-                      <tr key={`${row.tokenAddress ?? row.token}-${i}`} className="border-b border-border last:border-0">
-                        <td className="px-3 py-2">
-                          {row.tokenAddress ? (
-                            <div className="space-y-0.5">
-                              <Link className="text-accent" to={`/token/${row.tokenAddress}`}>
-                                {row.tokenSymbol ?? row.tokenName ?? row.tokenAddress}
-                              </Link>
-                              {(row.tokenSymbol || row.tokenName) && row.tokenAddress ? (
-                                <div className="font-mono text-xs text-slate-500">{row.tokenAddress}</div>
-                              ) : null}
-                            </div>
-                          ) : (
-                            '—'
-                          )}
-                        </td>
-                        <td className="px-3 py-2 font-mono text-xs">{row.value ?? '—'}</td>
+        <div className="space-y-4">
+          <p className="text-sm text-slate-500">{t('address:tokenHistory.hint')}</p>
+          <TabBody
+            loading={tokQuery.isPending}
+            error={tokQuery.isError ? tokQuery.error : null}
+            empty={!tokQuery.isPending && tokQuery.isSuccess && tokQuery.data.items.length === 0}
+            onRetry={() => void tokQuery.refetch()}
+          >
+            {tokQuery.isSuccess ? (
+              <>
+                <div className="overflow-x-auto rounded-lg border border-border bg-surface">
+                  <table className="min-w-full text-left text-sm">
+                    <thead className="border-b border-border bg-surface-muted text-xs uppercase text-slate-500">
+                      <tr>
+                        <th className="px-3 py-2">{t('token:symbol')}</th>
+                        <th className="px-3 py-2">{t('common:table.value')}</th>
                       </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-              <PaginationControls
-                hasPrev={tokPg.canGoPrev}
-                hasNext={keysetHasNext(tokQuery.data.nextPageParams)}
-                onPrev={tokPg.goPrev}
-                onNext={() => tokPg.goNext(tokQuery.data.nextPageParams)}
-              />
-            </>
+                    </thead>
+                    <tbody>
+                      {tokQuery.data.items.map((row, i) => {
+                        const tokenAddress = row.tokenAddress
+                        const selected = Boolean(
+                          selectedAsset && tokenAddress && tokenAddress.toLowerCase() === selectedAsset.toLowerCase(),
+                        )
+                        return (
+                          <tr
+                            key={`${tokenAddress ?? row.token}-${i}`}
+                            className={clsx(
+                              'border-b border-border last:border-0',
+                              tokenAddress && 'cursor-pointer hover:bg-surface-muted',
+                              selected && 'bg-accent/10',
+                            )}
+                            onClick={() => {
+                              if (tokenAddress) toggleAsset(tokenAddress)
+                            }}
+                          >
+                            <td className="px-3 py-2">
+                              {tokenAddress ? (
+                                <div className="space-y-0.5">
+                                  <button
+                                    type="button"
+                                    className="text-left text-accent hover:underline"
+                                    aria-expanded={selected}
+                                    title={t('address:tokenHistory.open')}
+                                    onClick={(event) => {
+                                      event.stopPropagation()
+                                      toggleAsset(tokenAddress)
+                                    }}
+                                  >
+                                    {row.tokenSymbol ?? row.tokenName ?? tokenAddress}
+                                  </button>
+                                  {row.tokenSymbol || row.tokenName ? (
+                                    <div className="font-mono text-xs text-slate-500">
+                                      <Link
+                                        className="hover:text-accent"
+                                        to={`/token/${tokenAddress}`}
+                                        onClick={(event) => event.stopPropagation()}
+                                      >
+                                        {tokenAddress}
+                                      </Link>
+                                    </div>
+                                  ) : null}
+                                </div>
+                              ) : (
+                                '—'
+                              )}
+                            </td>
+                            <td className="px-3 py-2 font-mono text-xs">{row.value ?? '—'}</td>
+                          </tr>
+                        )
+                      })}
+                    </tbody>
+                  </table>
+                </div>
+                <PaginationControls
+                  hasPrev={tokPg.canGoPrev}
+                  hasNext={keysetHasNext(tokQuery.data.nextPageParams)}
+                  onPrev={tokPg.goPrev}
+                  onNext={() => tokPg.goNext(tokQuery.data.nextPageParams)}
+                />
+              </>
+            ) : null}
+          </TabBody>
+          {selectedAsset ? (
+            <AddressTokenHistory
+              key={selectedAsset.toLowerCase()}
+              holderAddress={address}
+              tokenAddress={selectedAsset}
+              tokenLabel={selectedAssetLabel}
+              onClose={closeAssetHistory}
+            />
           ) : null}
-        </TabBody>
+        </div>
       ) : null}
 
       {tab === 'contract' && a.isContract ? (

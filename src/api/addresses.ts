@@ -54,11 +54,15 @@ export async function getAddressTransactions(
 export async function getAddressTokenTransfers(
   address: string,
   next?: NextPageParams,
+  filters?: { token?: string },
 ): Promise<PaginatedVM<ExplorerTokenTransferVM>> {
   const encoded = encodeURIComponent(address)
+  const params: Record<string, unknown> = { ...(mergeParams(next) ?? {}) }
+  const token = filters?.token?.trim()
+  if (token) params.token = token
   const data = await unwrap(
     apiClient.get<BlockscoutListEnvelope<unknown>>(`/v2/addresses/${encoded}/token-transfers`, {
-      params: mergeParams(next),
+      params: Object.keys(params).length > 0 ? params : undefined,
     }),
   )
   return mapAddressTokenTransfers(data)
