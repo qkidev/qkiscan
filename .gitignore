@@ -9,8 +9,10 @@ lerna-debug.log*
 
 node_modules
 dist
+dist-ipfs
 dist-ssr
 *.local
+dapp.cid
 
 # Editor directories and files
 .vscode/*

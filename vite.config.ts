@@ -9,8 +9,10 @@ const rootDir = path.dirname(fileURLToPath(import.meta.url))
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), '')
   const proxyTarget = env.VITE_DEV_BLOCKSCOUT_ORIGIN || 'http://127.0.0.1:4000'
+  const ipfsBuild = process.env.VITE_APP_IPFS === 'true' || env.VITE_APP_IPFS === 'true'
 
   return {
+    base: ipfsBuild ? './' : '/',
     plugins: [react(), tailwindcss()],
     resolve: {
       alias: {

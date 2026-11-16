@@ -5,8 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc -b && vite build && wrangler pages deploy dist --project-name=qkiscan",
-    "deploy": "wrangler pages deploy dist --project-name=qkiscan",
+    "build": "tsc -b && vite build",
+    "deploy": "pwsh -NoProfile -File scripts/deploy.ps1",
     "lint": "eslint .",
     "preview": "vite preview",
     "test": "vitest run",

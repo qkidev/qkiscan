@@ -14,6 +14,8 @@ interface ImportMetaEnv {
   readonly VITE_APP_WALLET_CHAIN_ID?: string
   /** 钱包 / 合约调用：JSON-RPC URL（与链 ID 成对配置；不填则默认以太坊主网公共 RPC） */
   readonly VITE_APP_WALLET_RPC_URL?: string
+  /** 为 true 时按 IPFS 网关构建：相对资源路径和 hash 路由 */
+  readonly VITE_APP_IPFS?: string
 }
 
 interface ImportMeta {

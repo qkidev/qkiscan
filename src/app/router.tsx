@@ -1,4 +1,4 @@
-import { createBrowserRouter, Navigate } from 'react-router-dom'
+import { createBrowserRouter, createHashRouter, Navigate } from 'react-router-dom'
 import { AppLayout } from '@/components/layout/AppLayout'
 import { HomePage } from '@/pages/home/HomePage'
 import { BlocksPage } from '@/pages/blocks/BlocksPage'
@@ -13,7 +13,7 @@ import { SearchPage } from '@/pages/search/SearchPage'
 import { StatsPage } from '@/pages/stats/StatsPage'
 import { NotFoundPage } from '@/pages/not-found/NotFoundPage'
 
-export const router = createBrowserRouter([
+const routes = [
   {
     path: '/',
     element: <AppLayout />,
@@ -33,4 +33,8 @@ export const router = createBrowserRouter([
       { path: '*', element: <Navigate to="/404" replace /> },
     ],
   },
-])
+]
+
+/** IPFS 网关没有路径回退，部署到 IPFS 时用 hash 路由；正式站仍用浏览器历史路径。 */
+export const router =
+  import.meta.env.VITE_APP_IPFS === 'true' ? createHashRouter(routes) : createBrowserRouter(routes)
