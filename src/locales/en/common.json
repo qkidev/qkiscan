@@ -33,7 +33,7 @@
     "from": "From",
     "to": "To",
     "value": "Value",
-    "fee": "Fee",
+    "fee": "Miner fee",
     "status": "Status",
     "hash": "Hash",
     "gas": "Gas",

@@ -29,6 +29,7 @@ import { CopyIconButton } from '@/components/common/CopyIconButton'
 import { getSmartContract } from '@/api/contracts'
 import { AddressTokenHistory } from '@/components/addresses/AddressTokenHistory'
 import { ContractSourcePanel } from '@/components/addresses/ContractSourcePanel'
+import { getNativeSymbol } from '@/config/nativeToken'
 
 const TABS = ['transactions', 'token-transfers', 'internal-txs', 'logs', 'tokens', 'contract'] as const
 type TabId = (typeof TABS)[number]
@@ -157,6 +158,7 @@ export function AddressDetailPage() {
 
   const a = detailQuery.data
   const counters = countersQuery.data
+  const nativeSymbol = getNativeSymbol()
   const selectedAssetRow = selectedAsset
     ? tokQuery.data?.items.find((row) => row.tokenAddress?.toLowerCase() === selectedAsset.toLowerCase())
     : undefined
@@ -266,8 +268,12 @@ export function AddressDetailPage() {
                       <span className="text-slate-400">→</span>
                       <AddressLink address={tx.to} label={tx.toName} />
                     </div>
-                    <div className="mt-2 text-xs font-mono">
+                    <div className="mt-2 flex flex-wrap items-center justify-between gap-2 text-xs">
                       <Amount wei={tx.valueWei} />
+                      <span className="font-mono">
+                        <span className="mr-1 font-sans text-slate-500">{t('common:table.fee')}</span>
+                        {tx.fee ? `${tx.fee}${nativeSymbol ? ` ${nativeSymbol}` : ''}` : '—'}
+                      </span>
                     </div>
                   </div>
                 ))}
@@ -284,6 +290,7 @@ export function AddressDetailPage() {
                       <th className="px-3 py-2">{t('common:table.from')}</th>
                       <th className="px-3 py-2">{t('common:table.to')}</th>
                       <th className="px-3 py-2">{t('common:table.value')}</th>
+                      <th className="px-3 py-2">{t('common:table.fee')}</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -307,6 +314,9 @@ export function AddressDetailPage() {
                         </td>
                         <td className="px-3 py-2">
                           <Amount wei={tx.valueWei} />
+                        </td>
+                        <td className="px-3 py-2 whitespace-nowrap font-mono text-xs">
+                          {tx.fee ? `${tx.fee}${nativeSymbol ? ` ${nativeSymbol}` : ''}` : '—'}
                         </td>
                       </tr>
                     ))}
