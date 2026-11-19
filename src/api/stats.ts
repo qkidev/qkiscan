@@ -18,6 +18,16 @@ function asNumber(value: string | number | null | undefined): number | null {
   return Number.isFinite(n) ? n : null
 }
 
+/**
+ * Blockscout `/v2/stats` 的 `average_block_time` 单位是毫秒（文档示例 25000 即 25 秒）。
+ * 直接当秒展示会把约 16.6 秒显示成 16,586 秒。
+ */
+export function toAverageBlockTimeSec(value: string | number | null | undefined): number | null {
+  const ms = asNumber(value)
+  if (ms == null) return null
+  return ms / 1000
+}
+
 function mapStats(raw: BlockscoutStatsRaw): ExplorerStatsVM {
   return {
     totalBlocks: asString(raw.total_blocks),
@@ -25,7 +35,7 @@ function mapStats(raw: BlockscoutStatsRaw): ExplorerStatsVM {
     totalAddresses: asString(raw.total_addresses),
     totalGasUsed: asString(raw.total_gas_used),
     transactionsToday: asString(raw.transactions_today),
-    averageBlockTimeSec: asNumber(raw.average_block_time),
+    averageBlockTimeSec: toAverageBlockTimeSec(raw.average_block_time),
     networkUtilizationPercent: asNumber(raw.network_utilization_percentage),
     coinPriceUsd: asNumber(raw.coin_price),
     coinPriceChangePercent: asNumber(raw.coin_price_change_percentage),

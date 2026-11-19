@@ -82,6 +82,7 @@ export interface BlockscoutStatsRaw {
   total_addresses?: string | number | null
   total_gas_used?: string | number | null
   transactions_today?: string | number | null
+  /** 毫秒。Blockscout 统计接口不返回秒。 */
   average_block_time?: string | number | null
   network_utilization_percentage?: string | number | null
   coin_price?: string | number | null
